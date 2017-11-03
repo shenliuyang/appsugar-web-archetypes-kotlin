@@ -1,0 +1,94 @@
+buildscript {
+	ext{
+		springBootVersion = "2.0.0.M5"
+	}
+	repositories {
+		maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
+		maven{url "http://nexus.ggxueche.cn/nexus/content/groups/public/"}
+		maven{url "https://repo.spring.io/milestone"}
+	}
+	dependencies{
+		classpath ("org.springframework:springloaded:1.2.8.RELEASE")
+		classpath ("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath ("org.junit.platform:junit-platform-gradle-plugin:1.0.1")
+		classpath ("io.github.divinespear:jpa-schema-gradle-plugin:0.2.4.3-SNAPSHOT")
+		classpath ("com.ferigma:dbunit-gradle-plugin:0.1.0")
+		classpath ("com.h2database:h2:1.4.196")
+		classpath ("org.springframework:spring-context:5.0.0.RELEASE")//fix generateSchema  get classload error
+	}
+}
+
+plugins {
+    id ("org.jetbrains.kotlin.plugin.spring")  version "1.1.51"
+    id ("org.jetbrains.kotlin.plugin.jpa") version "1.1.51"
+    id ("org.jetbrains.kotlin.jvm") version "1.1.51"
+	id ("io.spring.dependency-management") version "1.0.3.RELEASE"
+}
+
+apply plugin: "org.springframework.boot"
+apply plugin: "org.junit.platform.gradle.plugin"
+apply plugin: "jpa-schema-generate"
+apply plugin: "dbunit"
+
+repositories {
+   maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
+   maven{url "http://nexus.ggxueche.cn/nexus/content/groups/public/"}
+   maven{url "http://repo.spring.io/milestone"}
+}
+dependencies {
+    compile ("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2")
+    compile ("org.jetbrains.kotlin:kotlin-stdlib-jre8")
+	compile ("org.jetbrains.kotlin:kotlin-reflect")
+    compile ("org.springframework.boot:spring-boot-starter-web")
+	compile ("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile ("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
+	compile ("com.h2database:h2")
+	testCompile("org.springframework.boot:spring-boot-starter-test") {
+		 exclude module: "junit" 
+	}
+	testCompile ("com.h2database:h2")
+	testCompile("org.junit.jupiter:junit-jupiter-api")
+	testRuntime("org.junit.jupiter:junit-jupiter-engine")
+}
+
+def props = new Properties()
+file("src/test/resources/application-db.properties").withInputStream { props.load(it) }
+def testDriver = props["spring.datasource.driver-class-name"]
+def testUrl =  props["spring.datasource.url"]
+def testUserName = props["spring.datasource.username"]
+def testPassword = props["spring.datasource.password"]
+def dialect = props["spring.jpa.properties.hibernate.dialect"]
+
+generateSchema {
+	vendor = "hibernate"
+	databaseAction = "drop-and-create"
+	scriptAction = "drop-and-create"
+	packageToScan = [project.group]
+	jdbcDriver = testDriver
+	jdbcUrl = testUrl
+	jdbcUser = testUserName
+	jdbcPassword = testPassword
+	properties = ["hibernate.dialect":dialect,
+	              "hibernate.physical_naming_strategy":"org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"]
+}
+
+dbunit {
+		username = testUserName
+		password = testPassword
+		url = testUrl
+		driver = testDriver
+		dataTypeFactoryName  = props["spring.jpa.properties.dbunit.factory"]
+}
+task populateTestDb(type: com.ferigma.gradle.dbunit.tasks.OperationTask,dependsOn : "generateSchema") {
+	sources = [
+			new com.ferigma.gradle.dbunit.tasks.source.OperationSource(
+					transaction: true, type:"CLEAN_INSERT", format: "flat",
+					file: "src/test/resources/sample-data.xml")
+	]
+}
+
+test.dependsOn populateTestDb
+
+kotlin { 
+    experimental.coroutines = 'enable'
+}
