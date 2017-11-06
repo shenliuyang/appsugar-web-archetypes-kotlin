@@ -5,6 +5,7 @@ buildscript {
 	repositories {
 		maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
 		maven{url "http://nexus.ggxueche.cn/nexus/content/groups/public/"}
+		jcenter()
 		maven{url "https://repo.spring.io/milestone"}
 	}
 	dependencies{
@@ -35,6 +36,9 @@ repositories {
    maven{url "http://nexus.ggxueche.cn/nexus/content/groups/public/"}
    maven{url "http://repo.spring.io/milestone"}
 }
+ext{
+	shiroVersion = "1.4.0"
+}
 dependencies {
     compile ("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2")
     compile ("org.jetbrains.kotlin:kotlin-stdlib-jre8")
@@ -43,6 +47,8 @@ dependencies {
 	compile ("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile ("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
 	compile ("com.h2database:h2")
+	compile ("org.apache.shiro:shiro-spring:${shiroVersion}")
+	compile ("org.apache.shiro:shiro-web:${shiroVersion}")
 	testCompile("org.springframework.boot:spring-boot-starter-test") {
 		 exclude module: "junit" 
 	}

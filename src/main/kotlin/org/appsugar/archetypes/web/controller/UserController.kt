@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.controller
+package org.appsugar.archetypes.web.controller
 
 import org.springframework.web.bind.annotation.RestController
 import org.appsugar.archetypes.repository.UserRepository
