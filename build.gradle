@@ -10,7 +10,7 @@ buildscript {
 		env = loadGroovyConfig("base")
 		env.putAll(loadGroovyConfig(System.getProperty("profile")))
 		env.putAll(System.properties)
-		springBootVersion = "2.0.0.M5"
+		springBootVersion = "2.0.0.M6"
 	}
 	repositories {
 		maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
@@ -119,8 +119,14 @@ task populateTestDb(type: com.ferigma.gradle.dbunit.tasks.OperationTask,dependsO
 	]
 }
 
-test.dependsOn populateTestDb
+junitPlatformTest.dependsOn populateTestDb
 
 kotlin { 
     experimental.coroutines = 'enable'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+	kotlinOptions {
+		jvmTarget = "1.8"
+	}
 }
