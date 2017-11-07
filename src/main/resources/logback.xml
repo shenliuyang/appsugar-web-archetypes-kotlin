@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ 
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">   
+    	<file>./build/logs/app.log</file>
+	    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">   
+	      <fileNamePattern>./build/logs/app.%d{yyyy-MM-dd}.log</fileNamePattern>   
+	      <maxHistory>15</maxHistory>
+	    </rollingPolicy>   
+	    <encoder>
+			<pattern>%d{YYYY:MM:DD:HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+	    </encoder>   
+    </appender>   
+   
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework" level="WARN"/>
+	
+	<logger name="org.hibernate" level="WARN"/>
+	
+	<logger name="org.apache" level="WARN"/>
+
+	<logger name="org.appsugar" level="DEBUG"/>
+
+    <root level="WARN">
+   		<appender-ref ref="FILE" />
+    </root>
+    
+</configuration>

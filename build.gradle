@@ -1,5 +1,15 @@
 buildscript {
+	ext.loadGroovyConfig={ p ->
+		if(p == null){return new java.util.HashMap()}
+		def configFile = file("environment.groovy")
+		def profileObject = new ConfigSlurper(p).parse(configFile.toURL()).toProperties()
+		if(profileObject.isEmpty()){throw new InvalidUserDataException("profile not found name is "+p)}
+		return profileObject
+	}
 	ext{
+		env = loadGroovyConfig("base")
+		env.putAll(loadGroovyConfig(System.getProperty("profile")))
+		env.putAll(System.properties)
 		springBootVersion = "2.0.0.M5"
 	}
 	repositories {
@@ -57,39 +67,55 @@ dependencies {
 	testRuntime("org.junit.jupiter:junit-jupiter-engine")
 }
 
-def props = new Properties()
-file("src/test/resources/application-db.properties").withInputStream { props.load(it) }
-def testDriver = props["spring.datasource.driver-class-name"]
-def testUrl =  props["spring.datasource.url"]
-def testUserName = props["spring.datasource.username"]
-def testPassword = props["spring.datasource.password"]
-def dialect = props["spring.jpa.properties.hibernate.dialect"]
+processTestResources {
+	from(sourceSets.test.resources.srcDirs) {
+		include "**/*.properties"
+		filter(org.apache.tools.ant.filters.ReplaceTokens,tokens: env)
+	}
+}
+processResources {
+	from(sourceSets.main.resources.srcDirs) {
+		include '*.properties'
+		filter(org.apache.tools.ant.filters.ReplaceTokens,tokens: env)
+	}
+	doLast{
+		ant.delete() {
+			fileset(dir: "${processResources.destinationDir}") {
+				include(name: "**/ApplicationResources*.properties")
+			}
+		}
+		ant.native2ascii(src: "src/main/resources",
+				dest: "${processResources.destinationDir}",
+				includes: "**/ApplicationResources*.properties",
+				encoding: "UTF-8")
+	}
+}
 
 generateSchema {
 	vendor = "hibernate"
 	databaseAction = "drop-and-create"
 	scriptAction = "drop-and-create"
 	packageToScan = [project.group]
-	jdbcDriver = testDriver
-	jdbcUrl = testUrl
-	jdbcUser = testUserName
-	jdbcPassword = testPassword
-	properties = ["hibernate.dialect":dialect,
-	              "hibernate.physical_naming_strategy":"org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"]
+	jdbcDriver = env["test.jdbc.driverClassName"]
+	jdbcUrl = env["test.jdbc.url"]
+	jdbcUser = env["test.jdbc.username"]
+	jdbcPassword = env["test.jdbc.password"]
+	properties = ["hibernate.dialect":env["test.hibernate.dialect"], "hibernate.physical_naming_strategy":"org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"]
 }
 
 dbunit {
-		username = testUserName
-		password = testPassword
-		url = testUrl
-		driver = testDriver
-		dataTypeFactoryName  = props["spring.jpa.properties.dbunit.factory"]
+	username = env["test.jdbc.username"]
+	password = env["test.jdbc.password"]
+	url = env["test.jdbc.url"]
+	driver = env["test.jdbc.driverClassName"]
+	dataTypeFactoryName  = env["test.dbunit.dataTypeFactoryName"]
 }
+
 task populateTestDb(type: com.ferigma.gradle.dbunit.tasks.OperationTask,dependsOn : "generateSchema") {
 	sources = [
 			new com.ferigma.gradle.dbunit.tasks.source.OperationSource(
-					transaction: true, type:"CLEAN_INSERT", format: "flat",
-					file: "src/test/resources/sample-data.xml")
+					transaction: true, type:env["test.dbunit.operationType"], format: "flat",
+					file: "$projectDir"+env["test.dbunit.sampleData"])
 	]
 }
 
