@@ -10,7 +10,6 @@ buildscript {
 		env = loadGroovyConfig("base")
 		env.putAll(loadGroovyConfig(System.getProperty("profile")))
 		env.putAll(System.properties)
-		springBootVersion = "2.0.0.M6"
 	}
 	repositories {
 		maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
@@ -20,7 +19,7 @@ buildscript {
 	}
 	dependencies{
 		classpath ("org.springframework:springloaded:1.2.8.RELEASE")
-		classpath ("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath ("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M6")
 		classpath ("org.junit.platform:junit-platform-gradle-plugin:1.0.1")
 		classpath ("io.github.divinespear:jpa-schema-gradle-plugin:0.2.4.3-SNAPSHOT")
 		classpath ("com.ferigma:dbunit-gradle-plugin:0.1.0")
