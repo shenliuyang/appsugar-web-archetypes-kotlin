@@ -22,7 +22,7 @@ class UserRepositoryTest:BaseTestCase() {
 
 	@Test
 	fun testFindByCondition(){
-		val condition = UserCondition(name="NewYoung")
+		val condition = UserCondition(name="NewYoung",loginName = "123")
 		val users=repository.findAll(UserSpecification(condition))
 		logger.debug("testFindByCondition {} result is {} ",condition,users)
 	}

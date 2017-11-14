@@ -8,6 +8,7 @@ import org.apache.shiro.authz.AuthorizationInfo
 import org.apache.shiro.authz.SimpleAuthorizationInfo
 import org.apache.shiro.realm.AuthorizingRealm
 import org.apache.shiro.subject.PrincipalCollection
+import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -26,7 +27,7 @@ class ShiroRealm : AuthorizingRealm() {
             val user = userRepository.findByLoginName(loginName)
             user?.let{
                 when(user.password){
-                    password -> SimpleAuthenticationInfo(Principal(user.id, user.name),password,name)
+                    password -> SimpleAuthenticationInfo(Principal(user.id, user.name, user),password,name)
                     else -> null
                 }
             }
@@ -34,8 +35,18 @@ class ShiroRealm : AuthorizingRealm() {
         else -> null
     }
 
-    override fun doGetAuthorizationInfo(principals: PrincipalCollection?): AuthorizationInfo {
-        return SimpleAuthorizationInfo()
+    override fun doGetAuthorizationInfo(principals: PrincipalCollection): AuthorizationInfo {
+        val principal = principals.oneByType(Principal::class.java)
+        val user = principal.user
+        val info = SimpleAuthorizationInfo()
+        user?.let {
+            info.addStringPermissions(user.permissions)
+            for((name, permissions) in user.roles?: emptySet()){
+                info.addRole(name)
+                info.addStringPermissions(permissions ?: emptyList())
+            }
+        }
+        return info
     }
 }
 

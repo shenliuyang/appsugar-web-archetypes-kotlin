@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RestController
 @RequestMapping("/user")
 class UserController(val userRepository:UserRepository) {
-	
+
 	@GetMapping("")
 	fun users()=userRepository.findAll()
 	

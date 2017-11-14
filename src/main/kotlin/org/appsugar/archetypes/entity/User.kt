@@ -12,9 +12,9 @@ data class User(
 		var password:String="",
 		@get:Column(length = 2500)
 		@get:Convert(converter = StringListConverter::class)
-		var permissions:List<String>?=null
-):LongIdEntity() {
+		var permissions:List<String>?=emptyList()
+):LongIdEntity(){
 	@get:ManyToMany(fetch = FetchType.LAZY)
 	@get:JoinTable(name="user_role",joinColumns = arrayOf(JoinColumn(name = "user_id")), inverseJoinColumns = arrayOf(JoinColumn(name = "role_id")))
-	var roles:Set<Role>?=null
+	var roles:Set<Role>?=emptySet()
 }
