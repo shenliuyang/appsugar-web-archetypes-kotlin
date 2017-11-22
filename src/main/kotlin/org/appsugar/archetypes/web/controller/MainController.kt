@@ -22,14 +22,14 @@ class MainController{
         if(subject.isAuthenticated){
             subject.logout()
         }
-        try {
+        return try {
             subject.login(UsernamePasswordToken(username,password,false))
-            return Response.SUCCESS as Response<Void>
+            Response.SUCCESS as Response<Void>
         }catch (e: AuthenticationException){
-            return MainController.LOGIN_ERROR_RESPONSE
+            MainController.LOGIN_ERROR_RESPONSE
         }catch(e:Exception){
             logger.error("user login error ", e)
-            return Response.error("username or password error")
+            Response.error("username or password error")
         }
     }
 }

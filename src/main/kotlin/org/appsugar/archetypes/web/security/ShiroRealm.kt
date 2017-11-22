@@ -41,9 +41,9 @@ class ShiroRealm : AuthorizingRealm() {
         val info = SimpleAuthorizationInfo()
         user?.let {
             info.addStringPermissions(user.permissions)
-            for((name, permissions) in user.roles?: emptySet()){
+            for((_,name, permissions) in user.roles){
                 info.addRole(name)
-                info.addStringPermissions(permissions ?: emptyList())
+                info.addStringPermissions(permissions)
             }
         }
         return info

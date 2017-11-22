@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.extension
 
-import org.hibernate.loader.criteria.CriteriaLoader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import javax.persistence.criteria.CriteriaBuilder

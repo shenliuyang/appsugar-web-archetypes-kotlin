@@ -7,13 +7,14 @@ import org.appsugar.archetypes.extension.startWith
 import org.appsugar.archetypes.extension.then
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.jpa.repository.EntityGraph
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
 
-interface UserRepository : CrudRepository<User,Long>,JpaSpecificationExecutor<User>{
+interface UserRepository : JpaRepository<User,Long>,JpaSpecificationExecutor<User>{
 
 	/*find User by LoginName fetch with Roles*/
 	@EntityGraph(attributePaths = arrayOf("roles"))
