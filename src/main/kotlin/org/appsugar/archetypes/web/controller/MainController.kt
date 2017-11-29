@@ -5,10 +5,13 @@ import org.apache.shiro.authc.UsernamePasswordToken
 import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.web.security.ShiroUtils
 import org.appsugar.bean.domain.Response
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
-@RestController
+@Controller
 class MainController{
 
     private companion object {
@@ -16,6 +19,7 @@ class MainController{
         val logger =  getLogger<MainController>()
     }
 
+    @ResponseBody
     @RequestMapping("/login")
     fun login(username:String,password:String):Response<Void>{
         val subject = ShiroUtils.getSubject()
@@ -31,5 +35,11 @@ class MainController{
             logger.error("user login error ", e)
             Response.error("username or password error")
         }
+    }
+
+    @RequestMapping("/greeting")
+    fun hello(model:Model):String{
+        model.addAttribute("name","Hello World1")
+        return "greeting"
     }
 }

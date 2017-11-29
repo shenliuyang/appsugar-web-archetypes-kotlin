@@ -29,9 +29,9 @@ buildscript {
 }
 
 plugins {
-    id ("org.jetbrains.kotlin.plugin.spring")  version "1.1.60"
-    id ("org.jetbrains.kotlin.plugin.jpa") version "1.1.60"
-    id ("org.jetbrains.kotlin.jvm") version "1.1.60"
+    id ("org.jetbrains.kotlin.plugin.spring")  version "1.1.61"
+    id ("org.jetbrains.kotlin.plugin.jpa") version "1.1.61"
+    id ("org.jetbrains.kotlin.jvm") version "1.1.61"
 	id ("io.spring.dependency-management") version "1.0.3.RELEASE"
 }
 
@@ -40,20 +40,28 @@ apply plugin: "org.junit.platform.gradle.plugin"
 apply plugin: "jpa-schema-generate"
 apply plugin: "dbunit"
 
+
+
 repositories {
    maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
    maven{url "http://nexus.ggxueche.cn/nexus/content/groups/public/"}
    maven{url "http://repo.spring.io/milestone"}
 }
-ext{
+
+
+ext {
 	shiroVersion = "1.4.0"
 }
+ext["kotlin.version"]="1.1.61"
 dependencies {
-    compile ("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2")
+    compile ("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3")
     compile ("org.jetbrains.kotlin:kotlin-stdlib-jre8")
 	compile ("org.jetbrains.kotlin:kotlin-reflect")
     compile ("org.springframework.boot:spring-boot-starter-web")
 	compile ("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile ("org.springframework.boot:spring-boot-starter-thymeleaf")
+	compile ("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+	compile ("org.springframework.boot:spring-boot-devtools")
 	compile ("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
 	compile ("${env["jdbc.groupId"]}:${env["jdbc.artifactId"]}:${env["jdbc.version"]}")
 	compile ("org.apache.shiro:shiro-spring:${shiroVersion}")
@@ -66,29 +74,11 @@ dependencies {
 	testRuntime("org.junit.jupiter:junit-jupiter-engine")
 }
 
-processTestResources {
-	from(sourceSets.test.resources.srcDirs) {
-		include "**/*.properties"
-		filter(org.apache.tools.ant.filters.ReplaceTokens,tokens: env)
-	}
+
+bootRun{
+	sourceResources sourceSets.main
 }
-processResources {
-	from(sourceSets.main.resources.srcDirs) {
-		include '*.properties'
-		filter(org.apache.tools.ant.filters.ReplaceTokens,tokens: env)
-	}
-	doLast{
-		ant.delete() {
-			fileset(dir: "${processResources.destinationDir}") {
-				include(name: "**/ApplicationResources*.properties")
-			}
-		}
-		ant.native2ascii(src: "src/main/resources",
-				dest: "${processResources.destinationDir}",
-				includes: "**/ApplicationResources*.properties",
-				encoding: "UTF-8")
-	}
-}
+
 
 generateSchema {
 	vendor = "hibernate"
@@ -117,8 +107,8 @@ task populateTestDb(type: com.ferigma.gradle.dbunit.tasks.OperationTask,dependsO
 					file: "$projectDir"+env["test.dbunit.sampleData"])
 	]
 }
-
 junitPlatformTest.dependsOn populateTestDb
+
 
 kotlin { 
     experimental.coroutines = 'enable'
