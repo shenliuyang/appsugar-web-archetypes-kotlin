@@ -23,6 +23,6 @@ data class User(
         val EMPTY_USER = User()
     }
 	@get:ManyToMany(fetch = FetchType.LAZY)
-	@get:JoinTable(name="user_role",joinColumns = arrayOf(JoinColumn(name = "user_id")), inverseJoinColumns = arrayOf(JoinColumn(name = "role_id")))
+	@get:JoinTable(name="user_role",joinColumns = [JoinColumn(name = "user_id")], inverseJoinColumns = arrayOf(JoinColumn(name = "role_id")))
 	var roles=emptySet<Role>() //  let roles out of toString
 }

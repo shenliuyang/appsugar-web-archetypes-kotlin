@@ -13,5 +13,5 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/system/user")
 class UserController(val repository:UserRepository) {
 	@RequestMapping
-	fun list(condition:UserCondition,pageable:Pageable,model:Model)=model.addAttribute("page",repository.findAll(UserSpecification(condition),pageable)).let { "/system/user/list" }
+	fun list(condition:UserCondition,pageable:Pageable,model:Model)=model.addAttribute("page",repository.findAll(UserSpecification(condition),pageable)).let { "system/user/list" }
 }

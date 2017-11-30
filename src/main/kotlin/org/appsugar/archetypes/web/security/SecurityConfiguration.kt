@@ -21,7 +21,6 @@ import javax.servlet.Filter
 class SecurityConfiguration{
 
      companion object {
-        val EXT_FILTER_NAME="extAuthcFilter"
         @JvmStatic
         @Bean
         fun lifecycleBeanPostProcessor()= LifecycleBeanPostProcessor()
@@ -31,11 +30,12 @@ class SecurityConfiguration{
     fun shiroFilter(securityManager:SecurityManager) = ShiroFilterFactoryBean().let {
             it.securityManager=securityManager
             it.filterChainDefinitionMap=filterChainDefinitionMap()
-            it.filters= mutableMapOf<String, Filter>(EXT_FILTER_NAME to FormAuthenticationFilterExtension())
+            it.loginUrl="/login"
+            it.successUrl="/index"
             it
     }
 
-    fun filterChainDefinitionMap()= mapOf("/login" to "anon","/logout" to "logout","/**" to EXT_FILTER_NAME)
+    fun filterChainDefinitionMap()= mapOf("/login" to "authc","/logout" to "logout","/static/**" to "anon","/**" to "user")
 
     @Bean
     fun shiroAdvisor(sm:SecurityManager) = AuthorizationAttributeSourceAdvisor().let { it.securityManager= sm;  it}
