@@ -19,7 +19,7 @@
                             <input name="name" th:value="${param.name}" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="名称:前置匹配"/>
                             <label th:text="'账户:'"/>
                             <input name="loginName" th:value="${param.loginName}" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="登录账号:全文匹配"/>
-                            <button type="submit " class="btn btn-primary col-md-offset-1">Search</button>
+                            <button type="submit " class="btn btn-primary col-md-offset-1">查询</button>
                         </form>
                     </div>
                     <!-- /.panel-heading -->
@@ -44,7 +44,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div th:replace="layouts/fragments/sb_admin/paging"/>
                     </div>
                     <!-- /.panel-body -->
                 </div>

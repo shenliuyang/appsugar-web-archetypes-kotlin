@@ -1,4 +1,4 @@
-<div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
+<div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate" th:if="${page} != null">
     <ul class="pagination" th:with="startPage=${T(Math).max(0,page.number-5)},endPage=${T(Math).min(page.totalPages-1,page.number+5)}">
         <li th:class="'paginate_button previous ' + ${page.first?'disabled':''}" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">
             <a th:href="'javascript:jumpToPage('+${page.number-1}+')'">上一页</a>
