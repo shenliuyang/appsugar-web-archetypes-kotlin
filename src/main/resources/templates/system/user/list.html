@@ -32,6 +32,7 @@
                                 <th>密码</th>
                                 <th>创建时间</th>
                                 <th>修改时间</th>
+                                <th>详情</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -41,6 +42,7 @@
                                     <td th:text="${u.password}"/>
                                     <td th:text="${u.createdAt}"class="center"/>
                                     <td th:text="${u.updatedAt}"class="center"/>
+                                    <td><a th:href="'form?id='+${u.id}" th:text="'查看'"/></td>
                                 </tr>
                             </tbody>
                         </table>

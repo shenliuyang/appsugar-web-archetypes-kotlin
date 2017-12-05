@@ -2,6 +2,7 @@ package org.appsugar.archetypes.extension
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.ui.Model
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.Expression
 import javax.persistence.criteria.Predicate
@@ -16,3 +17,8 @@ inline fun <R> Boolean.then(block: () -> R?)=if(this)block()else null
  */
 fun CriteriaBuilder.startWith(exp:Expression<String>,value:String):Predicate=this.like(exp,value+"%")
 fun CriteriaBuilder.endWith(exp:Expression<String>,value:String):Predicate=this.like(exp,"%"+value)
+
+/**
+ * for spring mvc
+ */
+fun Model.attr(name:String, value:Any)=this.addAttribute(name,value)

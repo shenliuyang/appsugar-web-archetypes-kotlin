@@ -39,14 +39,20 @@ class ShiroRealm : AuthorizingRealm() {
         val principal = principals.oneByType(Principal::class.java)
         val user = principal.user
         val info = SimpleAuthorizationInfo()
-        user?.let {
-            info.addStringPermissions(user.permissions)
-            for((_,name, permissions) in user.roles){
-                info.addRole(name)
-                info.addStringPermissions(permissions)
-            }
+        info.addStringPermissionWithDependency(user.permissions)
+        for((_,name, permissions) in user.roles){
+            info.addRole(name)
+            info.addStringPermissionWithDependency(permissions)
         }
         return info
+    }
+   private fun SimpleAuthorizationInfo.addStringPermissionWithDependency(permissions:Collection<String>){
+        permissions.forEach{
+            this.addStringPermission(it)
+            Permission.GROUP_BY_VALUE[it]?.let {
+                this.addStringPermissions(it.dependencies.map { it.value })
+            }
+        }
     }
 }
 

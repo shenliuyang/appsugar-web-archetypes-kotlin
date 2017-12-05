@@ -1,7 +1,6 @@
 package org.appsugar.archetypes.repository
 
 import org.appsugar.archetypes.condition.UserCondition
-import org.springframework.data.repository.CrudRepository
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.extension.startWith
 import org.appsugar.archetypes.extension.then
@@ -17,7 +16,7 @@ import javax.persistence.criteria.Root
 interface UserRepository : JpaRepository<User,Long>,JpaSpecificationExecutor<User>{
 
 	/*find User by LoginName fetch with Roles*/
-	@EntityGraph(attributePaths = arrayOf("roles"))
+	@EntityGraph(attributePaths = ["roles"])
 	fun findByLoginName(loginName:String):User?
 
 }

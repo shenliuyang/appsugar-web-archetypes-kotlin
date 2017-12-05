@@ -21,6 +21,6 @@ class Menu(val name:String="", val url:String="", val permission:String="", val 
 
 val menus = listOf<Menu>(
         Menu(name="系统管理",children =  listOf(
-                Menu("用户管理","/system/user",Permission.USER_VIEW.value)
+                Menu("用户管理","/system/user/list",Permission.USER_VIEW.value)
         ))
 )

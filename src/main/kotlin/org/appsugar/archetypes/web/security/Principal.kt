@@ -5,6 +5,5 @@ import java.io.Serializable
 
 data class Principal(
         val id:Long=-1,val name:String="anonymous",
-        @Transient
-        val user:User?=null
+        val user:User
 ) : Serializable
