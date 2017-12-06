@@ -33,7 +33,7 @@ class SecurityConfiguration{
             it
     }
 
-    fun filterChainDefinitionMap()= mapOf("/login" to "authc","/logout" to "logout","/static/**" to "anon","/**" to "user")
+    fun filterChainDefinitionMap()= mapOf("/login" to "authc","/logout" to "logout","/static/**" to "anon","/favicon.ico" to "anon","/**" to "user")
 
     @Bean
     fun shiroAdvisor(sm:SecurityManager) = AuthorizationAttributeSourceAdvisor().let { it.securityManager= sm;  it}

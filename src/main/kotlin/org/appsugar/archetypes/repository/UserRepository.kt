@@ -19,6 +19,7 @@ interface UserRepository : JpaRepository<User,Long>,JpaSpecificationExecutor<Use
 	@EntityGraph(attributePaths = ["roles"])
 	fun findByLoginName(loginName:String):User?
 
+
 }
 
 class UserSpecification(private val c:UserCondition):Specification<User>{

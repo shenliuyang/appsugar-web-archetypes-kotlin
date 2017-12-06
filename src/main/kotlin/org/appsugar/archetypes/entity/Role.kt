@@ -9,11 +9,12 @@ import javax.persistence.*
 data class Role(
         @get:Id
         @get:GeneratedValue(strategy = GenerationType.IDENTITY)
+        @get:Column(insertable = false)
         var id:Long = Long.MIN_VALUE,
         var name:String="",
-        @get:Column(length = 2500)
+        @get:Column(columnDefinition="TEXT")
         @get:Convert(converter = StringListConverter::class)
-        var permissions:List<String> = emptyList(),
+        var permissions:List<String> = mutableListOf(),
         var createdAt: Date = Date(),
         var updatedAt: Date = Date()
 )

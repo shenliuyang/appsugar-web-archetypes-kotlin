@@ -17,7 +17,6 @@ class UserRepositoryTest:BaseTestCase() {
 		val user = repository.findByLoginName(loginName)
 		logger.debug("find user by loginName $loginName  result is $user")
 		Assertions.assertNotNull(user)
-		println("${user?.roles}")
 	}
 
 	@Test

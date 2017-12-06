@@ -11,26 +11,37 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
 @RequestMapping("/system/user")
 class UserController(val repository:UserRepository,val roleRepository: RoleRepository) {
 
 	@ModelAttribute("user")
-	fun modelAttribute(id:Long?)=when(id){
-		null -> User.EMPTY
-		else -> repository.findById(id).orElse(User.EMPTY)
+	fun modelAttribute(id:Long?) =when(id){
+		 null,Long.MIN_VALUE -> User()
+		 else -> repository.findById(id).get()
 	}
 
-
-	@RequestMapping("list")
+	@RequestMapping(value = ["","list"])
 	fun list(condition:UserCondition,pageable:Pageable,model:Model)=model.attr("page",repository.findAll(UserSpecification(condition),pageable)).let { "system/user/list" }
 
-	@RequestMapping("/form")
+	@RequestMapping("form")
 	fun form(model:Model):String{
 		model.attr("roles",roleRepository.findAll())
 		model.attr("permissionGroups", Permission.GROUP_BY_PREFIX)
 		return "system/user/form"
 	}
+
+	@PostMapping("save")
+	fun save(user:User,roleIds:Array<Long>?,permissions:Array<String>?,ra: RedirectAttributes):String{
+		user.roles = roleIds?.let{roleRepository.findByIdIn(roleIds.toList()).toMutableSet()} ?:  mutableSetOf()
+		user.permissions = permissions?.let { it.toMutableList() }?: mutableListOf()
+		repository.save(user)
+		ra.addFlashAttribute("msg","保存成功")
+		return "redirect:/system/user/list"
+	}
+
 }

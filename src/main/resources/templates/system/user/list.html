@@ -42,7 +42,7 @@
                                     <td th:text="${u.password}"/>
                                     <td th:text="${u.createdAt}"class="center"/>
                                     <td th:text="${u.updatedAt}"class="center"/>
-                                    <td><a th:href="'form?id='+${u.id}" th:text="'查看'"/></td>
+                                    <td><a th:href="@{/system/user/form?id=}+${u.id}" th:text="'查看'"/></td>
                                 </tr>
                             </tbody>
                         </table>

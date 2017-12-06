@@ -34,7 +34,7 @@ $(function() {
     //     return this.href == url;
     // }).addClass('active').parent().parent().addClass('in').parent();
     var element = $('ul.nav a').filter(function() {
-        return this.href == url;
+        return url.href.indexOf(this.href)!= -1;
     }).addClass('active').parent();
 
     while (true) {
