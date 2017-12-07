@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<role id="-1" name="ADMIN" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
+	<role id="-1" name="超级管理员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
 	<role id="-2" name="饲养员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
 	<role id="-3" name="安保员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
 	<role id="-5" name="接待员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>

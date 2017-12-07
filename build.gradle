@@ -70,13 +70,12 @@ dependencies {
 	compile ("org.springframework.boot:spring-boot-devtools")
 	compile ("com.fasterxml.jackson.module:jackson-module-kotlin")
 	compile ("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
-	compile ("${env["jdbc.groupId"]}:${env["jdbc.artifactId"]}:${env["jdbc.version"]}")
 	compile ("org.apache.shiro:shiro-spring:${shiroVersion}")
 	compile ("org.apache.shiro:shiro-web:${shiroVersion}")
+	compile ("com.h2database:h2:1.4.196") //compile ("mysql:mysql-connector-java:5.1.39")
 	testCompile("org.springframework.boot:spring-boot-starter-test") {
 		 exclude module: "junit" 
 	}
-	testCompile("${env["test.jdbc.groupId"]}:${env["test.jdbc.artifactId"]}:${env["test.jdbc.version"]}")
 	testCompile("org.junit.jupiter:junit-jupiter-api")
 	testRuntime("org.junit.jupiter:junit-jupiter-engine")
 }

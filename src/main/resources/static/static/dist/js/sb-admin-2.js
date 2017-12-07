@@ -45,3 +45,16 @@ $(function() {
         }
     }
 });
+
+//make form validation
+/**
+ * form验证
+ */
+$(document).ready(function(){
+	$("form").validate({onfocusout: function(element) {$(element).valid();},focusCleanup: true});
+});
+
+jQuery.extend(jQuery.validator.defaults, {
+	errorClass:"text-danger"
+});
+
