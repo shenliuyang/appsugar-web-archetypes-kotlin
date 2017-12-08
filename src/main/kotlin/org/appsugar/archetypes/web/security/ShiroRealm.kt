@@ -11,6 +11,7 @@ import org.apache.shiro.subject.PrincipalCollection
 import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
+import java.io.Serializable
 
 /**
  * 用户认证鉴权领域
@@ -27,7 +28,7 @@ class ShiroRealm : AuthorizingRealm() {
             val user = userRepository.findByLoginName(loginName)
             user?.let{
                 when(user.password){
-                    password -> SimpleAuthenticationInfo(Principal(user.id, user.name, user),password,name)
+                    password -> SimpleAuthenticationInfo(Principal(user.id, user.name),password,name)
                     else -> null
                 }
             }
@@ -37,7 +38,7 @@ class ShiroRealm : AuthorizingRealm() {
 
     override fun doGetAuthorizationInfo(principals: PrincipalCollection): AuthorizationInfo {
         val principal = principals.oneByType(Principal::class.java)
-        val user = principal.user
+        val user = userRepository.findById(principal.id).get()
         val info = SimpleAuthorizationInfo()
         info.addStringPermissionWithDependency(user.permissions)
         for((_,name, permissions) in user.roles){
@@ -56,4 +57,15 @@ class ShiroRealm : AuthorizingRealm() {
     }
 }
 
+data class Principal(
+        val id:Long=-1,val name:String="anonymous"
+) : Serializable{
+    private val attributes= mutableMapOf<String,Any>()
 
+    /**根据key查询值**/
+    fun <T> attr(key:String) = attributes[key] as T
+    /****/
+    fun attr(key:String,value:Any?){
+        if(value != null) attributes[key]=value else attributes.remove(key)
+    }
+}

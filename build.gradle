@@ -70,8 +70,7 @@ dependencies {
 	compile ("org.springframework.boot:spring-boot-devtools")
 	compile ("com.fasterxml.jackson.module:jackson-module-kotlin")
 	compile ("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
-	compile ("org.apache.shiro:shiro-spring:${shiroVersion}")
-	compile ("org.apache.shiro:shiro-web:${shiroVersion}")
+	compile ("org.apache.shiro:shiro-spring-boot-web-starter:1.4.0")
 	compile ("com.h2database:h2:1.4.196") //compile ("mysql:mysql-connector-java:5.1.39")
 	testCompile("org.springframework.boot:spring-boot-starter-test") {
 		 exclude module: "junit" 

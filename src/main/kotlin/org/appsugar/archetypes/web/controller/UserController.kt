@@ -31,12 +31,16 @@ class UserController(val repository:UserRepository,val roleRepository: RoleRepos
 	}
 
 	@RequestMapping(value = ["","list"])
-	fun list(condition:UserCondition, @PageableDefault(sort = ["id"],direction = Sort.Direction.DESC) pageable:Pageable, model:Model)=model.attr("page",repository.findAll(UserSpecification(condition),pageable)).let { "system/user/list" }
+	fun list(condition:UserCondition, @PageableDefault(sort = ["id"],direction = Sort.Direction.DESC) pageable:Pageable, model:Model):String{
+		model.attr("page",repository.findAll(UserSpecification(condition),pageable))
+		return "system/user/list"
+	}
 
 	@RequestMapping("form")
-	fun form(model:Model){
+	fun form(model:Model):String{
 		model.attr("roles",roleRepository.findAll(Sort.by(Sort.Direction.ASC,"id")))
-		model.attr("permissionGroups", Permission.GROUP_BY_PREFIX).let {"system/user/form"}
+		model.attr("permissionGroups", Permission.GROUP_BY_PREFIX)
+		return "system/user/form"
 	}
 
 	@PostMapping("save")

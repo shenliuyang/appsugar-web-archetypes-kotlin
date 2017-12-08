@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="/layouts/default">
+<head>
+    <meta charset="UTF-8">
+    <title>500</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="error-template">
+                    <h1>不得了啦,服务器异常拉!</h1>
+                    <h2>BUG写的好,单身活到老.</h2>
+                    <div class="error-details" th:text="${msg}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
