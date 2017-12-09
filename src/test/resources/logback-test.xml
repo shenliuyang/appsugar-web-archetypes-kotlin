@@ -12,6 +12,7 @@
 	<logger name="org.hibernate" level="WARN"/>
  	<logger name="com.zaxxer" level="WARN"/>
 	<logger name="org.apache.shiro" level="WARN"/>
+	<logger name="org.dbunit" level="WARN"/>
     <root level="debug">
    		<appender-ref ref="STDOUT" />
     </root>

@@ -2,7 +2,6 @@ package org.appsugar.archetypes.repository
 
 import org.appsugar.archetypes.BaseTestCase
 import org.appsugar.archetypes.condition.UserCondition
-import org.appsugar.archetypes.entity.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions
@@ -25,5 +24,4 @@ class UserRepositoryTest:BaseTestCase() {
 		val users=repository.findAll(UserSpecification(condition))
 		logger.debug("testFindByCondition {} result is {} ",condition,users)
 	}
-
 } 

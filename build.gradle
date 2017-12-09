@@ -1,16 +1,4 @@
 buildscript {
-	ext.loadGroovyConfig={ p ->
-		if(p == null){return new java.util.HashMap()}
-		def configFile = file("environment.groovy")
-		def profileObject = new ConfigSlurper(p).parse(configFile.toURL()).toProperties()
-		if(profileObject.isEmpty()){throw new InvalidUserDataException("profile not found name is "+p)}
-		return profileObject
-	}
-	ext{
-		env = loadGroovyConfig("base")
-		env.putAll(loadGroovyConfig(System.getProperty("profile")))
-		env.putAll(System.properties)
-	}
 	repositories {
 		maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
 		maven{url "http://nexus.ggxueche.cn/nexus/content/groups/public/"}
@@ -20,11 +8,7 @@ buildscript {
 	dependencies{
 		classpath ("org.springframework:springloaded:1.2.8.RELEASE")
 		classpath ("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M7")
-		classpath ("org.junit.platform:junit-platform-gradle-plugin:1.0.1")
-		classpath ("io.github.divinespear:jpa-schema-gradle-plugin:0.2.4.3-SNAPSHOT")
-		classpath ("com.ferigma:dbunit-gradle-plugin:0.1.0")
-		classpath ("com.h2database:h2:1.4.196")
-		classpath ("org.springframework:spring-context:5.0.0.RELEASE")//fix generateSchema  get classload error
+		classpath ("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
 	}
 }
 
@@ -37,8 +21,6 @@ plugins {
 
 apply plugin: "org.springframework.boot"
 apply plugin: "org.junit.platform.gradle.plugin"
-apply plugin: "jpa-schema-generate"
-apply plugin: "dbunit"
 apply plugin: 'idea'
 
 idea {
@@ -59,6 +41,7 @@ ext {
 	shiroVersion = "1.4.0"
 }
 ext["kotlin.version"]="1.2.0"
+
 dependencies {
     compile ("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3")
     compile ("org.jetbrains.kotlin:kotlin-stdlib-jre8")
@@ -72,10 +55,13 @@ dependencies {
 	compile ("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
 	compile ("org.apache.shiro:shiro-spring-boot-web-starter:1.4.0")
 	compile ("com.h2database:h2:1.4.196") //compile ("mysql:mysql-connector-java:5.1.39")
-	testCompile("org.springframework.boot:spring-boot-starter-test") {
-		 exclude module: "junit" 
-	}
+	testCompile ("org.apache.ant:ant:1.10.1")
+	testCompile ("org.dbunit:dbunit:2.5.4")
+	testCompile ("com.h2database:h2:1.4.196")
 	testCompile("org.junit.jupiter:junit-jupiter-api")
+	testCompile("org.springframework.boot:spring-boot-starter-test") {
+		exclude module: "junit"
+	}
 	testRuntime("org.junit.jupiter:junit-jupiter-engine")
 }
 
@@ -83,37 +69,6 @@ dependencies {
 bootRun{
 	sourceResources sourceSets.main
 }
-
-
-generateSchema {
-	vendor = "hibernate"
-	databaseAction = "drop-and-create"
-	scriptAction = "drop-and-create"
-	packageToScan = [project.group]
-	jdbcDriver = env["test.jdbc.driverClassName"]
-	jdbcUrl = env["test.jdbc.url"]
-	jdbcUser = env["test.jdbc.username"]
-	jdbcPassword = env["test.jdbc.password"]
-	properties = ["hibernate.dialect":env["test.hibernate.dialect"], "hibernate.physical_naming_strategy":"org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"]
-}
-
-dbunit {
-	username = env["test.jdbc.username"]
-	password = env["test.jdbc.password"]
-	url = env["test.jdbc.url"]
-	driver = env["test.jdbc.driverClassName"]
-	dataTypeFactoryName  = env["test.dbunit.dataTypeFactoryName"]
-}
-
-task populateTestDb(type: com.ferigma.gradle.dbunit.tasks.OperationTask,dependsOn : "generateSchema") {
-	sources = [
-			new com.ferigma.gradle.dbunit.tasks.source.OperationSource(
-					transaction: true, type:env["test.dbunit.operationType"], format: "flat",
-					file: "$projectDir"+env["test.dbunit.sampleData"])
-	]
-}
-junitPlatformTest.dependsOn populateTestDb
-
 
 kotlin { 
     experimental.coroutines = 'enable'
@@ -123,4 +78,9 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 	kotlinOptions {
 		jvmTarget = "1.8"
 	}
+}
+
+junitPlatformTest{
+	systemProperties["refreshDb"] = true
+	systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
 }
