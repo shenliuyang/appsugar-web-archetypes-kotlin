@@ -8,17 +8,18 @@ import javax.persistence.criteria.Expression
 import javax.persistence.criteria.Predicate
 
 /****/
-inline fun <reified T:Any> getLogger()= LoggerFactory.getLogger(T::class.java) as Logger
+inline fun <reified T : Any> getLogger() = LoggerFactory.getLogger(T::class.java) as Logger
 
-inline fun <R> Boolean.then(block: () -> R?)=if(this)block()else null
+inline fun <R> Boolean.then(block: () -> R?) = if (this) block() else null
 
 /**
  * for Jpa CriteriaBuilder
  */
-fun CriteriaBuilder.startWith(exp:Expression<String>,value:String):Predicate=this.like(exp,value+"%")
-fun CriteriaBuilder.endWith(exp:Expression<String>,value:String):Predicate=this.like(exp,"%"+value)
+fun CriteriaBuilder.startWith(exp: Expression<String>, value: String): Predicate = this.like(exp, value + "%")
+
+fun CriteriaBuilder.endWith(exp: Expression<String>, value: String): Predicate = this.like(exp, "%" + value)
 
 /**
  * for spring mvc
  */
-fun Model.attr(name:String, value:Any)=this.addAttribute(name,value)
+fun Model.attr(name: String, value: Any) = this.addAttribute(name, value)

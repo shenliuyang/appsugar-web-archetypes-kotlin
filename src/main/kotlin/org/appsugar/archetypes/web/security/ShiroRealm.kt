@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.web.security
 
-import org.apache.shiro.authc.AuthenticationInfo
 import org.apache.shiro.authc.AuthenticationToken
 import org.apache.shiro.authc.SimpleAuthenticationInfo
 import org.apache.shiro.authc.UsernamePasswordToken
@@ -8,7 +7,6 @@ import org.apache.shiro.authz.AuthorizationInfo
 import org.apache.shiro.authz.SimpleAuthorizationInfo
 import org.apache.shiro.realm.AuthorizingRealm
 import org.apache.shiro.subject.PrincipalCollection
-import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.Serializable
@@ -21,14 +19,14 @@ class ShiroRealm : AuthorizingRealm() {
     @Autowired
     lateinit var userRepository: UserRepository;
 
-    override fun doGetAuthenticationInfo(token: AuthenticationToken?)=when(token){
-        is UsernamePasswordToken ->{
-            val loginName=token.username
-            val password=String(token.password)
+    override fun doGetAuthenticationInfo(token: AuthenticationToken?) = when (token) {
+        is UsernamePasswordToken -> {
+            val loginName = token.username
+            val password = String(token.password)
             val user = userRepository.findByLoginName(loginName)
-            user?.let{
-                when(user.password){
-                    password -> SimpleAuthenticationInfo(Principal(user.id, user.name),password,name)
+            user?.let {
+                when (user.password) {
+                    password -> SimpleAuthenticationInfo(Principal(user.id, user.name), password, name)
                     else -> null
                 }
             }
@@ -41,14 +39,15 @@ class ShiroRealm : AuthorizingRealm() {
         val user = userRepository.findById(principal.id).get()
         val info = SimpleAuthorizationInfo()
         info.addStringPermissionWithDependency(user.permissions)
-        for((_,name, permissions) in user.roles){
+        for ((_, name, permissions) in user.roles) {
             info.addRole(name)
             info.addStringPermissionWithDependency(permissions)
         }
         return info
     }
-   private fun SimpleAuthorizationInfo.addStringPermissionWithDependency(permissions:Collection<String>){
-        permissions.forEach{
+
+    private fun SimpleAuthorizationInfo.addStringPermissionWithDependency(permissions: Collection<String>) {
+        permissions.forEach {
             this.addStringPermission(it)
             Permission.GROUP_BY_VALUE[it]?.let {
                 this.addStringPermissions(it.dependencies.map { it.value })
@@ -58,14 +57,15 @@ class ShiroRealm : AuthorizingRealm() {
 }
 
 data class Principal(
-        val id:Long=-1,val name:String="anonymous"
-) : Serializable{
-    private val attributes= mutableMapOf<String,Any>()
+        val id: Long = -1, val name: String = "anonymous"
+) : Serializable {
+    private val attributes = mutableMapOf<String, Any>()
 
     /**根据key查询值**/
-    fun <T> attr(key:String) = attributes[key] as T
+    fun <T> attr(key: String) = attributes[key] as T
+
     /****/
-    fun attr(key:String,value:Any?){
-        if(value != null) attributes[key]=value else attributes.remove(key)
+    fun attr(key: String, value: Any?) {
+        if (value != null) attributes[key] = value else attributes.remove(key)
     }
 }

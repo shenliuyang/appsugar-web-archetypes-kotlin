@@ -10,27 +10,27 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-class SecurityConfiguration{
+class SecurityConfiguration {
 
     @Bean
-    fun shiroFilterFactoryBean() = with(ShiroFilterFactoryBean()){
-        loginUrl="/login"
-        successUrl="/index"
+    fun shiroFilterFactoryBean() = with(ShiroFilterFactoryBean()) {
+        loginUrl = "/login"
+        successUrl = "/index"
         securityManager = securityManager()
-        filterChainDefinitionMap = mapOf("/login" to "authc","/logout" to "logout","/static/**" to "anon","/favicon.ico" to "anon","/**" to "user")
+        filterChainDefinitionMap = mapOf("/login" to "authc", "/logout" to "logout", "/static/**" to "anon", "/favicon.ico" to "anon", "/**" to "user")
         this
     }
 
 
     @Bean
-    fun securityManager() = with(DefaultWebSecurityManager()){
+    fun securityManager() = with(DefaultWebSecurityManager()) {
         realms = listOf(realm())
         cacheManager = cacheManager()
         this
     }
 
     @Bean
-    fun realm()= ShiroRealm()
+    fun realm() = ShiroRealm()
 
     @Bean
     fun cacheManager() = MemoryConstrainedCacheManager()

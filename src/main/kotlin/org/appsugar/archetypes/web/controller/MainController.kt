@@ -1,27 +1,23 @@
 package org.appsugar.archetypes.web.controller
 
-import org.apache.shiro.authc.AuthenticationException
-import org.apache.shiro.authc.UsernamePasswordToken
-import org.appsugar.archetypes.extension.getLogger
-import org.appsugar.archetypes.web.security.ShiroUtils
-import org.appsugar.bean.domain.Response
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-class MainController{
+class MainController {
 
     @GetMapping("/login")
-    fun login()="login"
+    fun login() = "login"
 
     @PostMapping("/login")
-    fun loginFailure(model:Model)=model.addAttribute("msg","账号或密码错误").let { "login" }
+    fun loginFailure(model: Model) = model.addAttribute("msg", "账号或密码错误").let { "login" }
 
-
-    @RequestMapping(value=["/","/index"])
-    fun index()="index"
+    @RequestMapping(value = ["/", "/index"])
+    fun index() = "index"
 
     @GetMapping("/index1")
-    fun index1()="index"
+    fun index1() = "index"
 }

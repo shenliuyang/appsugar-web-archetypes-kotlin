@@ -8,23 +8,23 @@ import org.appsugar.archetypes.web.security.ShiroUtils
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 
 
 @org.springframework.web.bind.annotation.ControllerAdvice
-class ControllerAdvice{
+class ControllerAdvice {
     companion object {
         val logger = getLogger<ControllerAdvice>()
     }
+
     @ModelAttribute("menus")
-    fun menus()=menus
+    fun menus() = menus
 
     /**
      * 处理权限不够异常
      */
     @ExceptionHandler(AuthorizationException::class)
-    fun handleUnAuthrizationException(model:Model) =  model.addMenus().let { "error/403.html"}
+    fun handleUnAuthrizationException(model: Model) = model.addMenus().let { "error/403.html" }
 
     /**
      *
@@ -32,33 +32,34 @@ class ControllerAdvice{
      *
      */
     @ExceptionHandler(Exception::class)
-    fun handleException(ex:Exception,req:HttpServletRequest,model: Model):String{
-        logger.error("|${ShiroUtils.getPrincipal().id}|${req.remoteHost}|${req.requestURI}|",ex)
+    fun handleException(ex: Exception, req: HttpServletRequest, model: Model): String {
+        logger.error("|${ShiroUtils.getPrincipal().id}|${req.remoteHost}|${req.requestURI}|", ex)
         val sb = StringBuilder(" 请求 ${req.requestURI} 发生异常: ")
-        var root:Throwable? = ex
-        do{
+        var root: Throwable? = ex
+        do {
             root?.let {
                 sb.append("|${it.message}")
                 root = it.cause
             }
-        }while(root != null)
+        } while (root != null)
         sb.append("|")
-        model.attr("msg",sb.toString())
+        model.attr("msg", sb.toString())
         model.addMenus()
         return "error/500.html"
     }
-    fun Model.addMenus()= this.attr("menus",menus)
+
+    fun Model.addMenus() = this.attr("menus", menus)
 }
 
-class Menu(val name:String="", val url:String="", val permission:String="", val children:List<Menu> = emptyList()){
-     /**
-      * 是否拥有查看该菜单的权限
-      */
-     fun hasPermission():Boolean=if(children.isEmpty())ShiroUtils.getSubject().isPermitted(permission) else children.indexOfFirst {it.hasPermission()}!=-1
+class Menu(val name: String = "", val url: String = "", val permission: String = "", val children: List<Menu> = emptyList()) {
+    /**
+     * 是否拥有查看该菜单的权限
+     */
+    fun hasPermission(): Boolean = if (children.isEmpty()) ShiroUtils.getSubject().isPermitted(permission) else children.indexOfFirst { it.hasPermission() } != -1
 }
 
 val menus = listOf<Menu>(
-        Menu(name="系统管理",children =  listOf(
-                Menu("用户管理","/system/user",Permission.USER_VIEW.value)
+        Menu(name = "系统管理", children = listOf(
+                Menu("用户管理", "/system/user", Permission.USER_VIEW.value)
         ))
 )
