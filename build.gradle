@@ -1,7 +1,6 @@
 buildscript {
     repositories {
         maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
-        maven { url "http://nexus.ggxueche.cn/nexus/content/groups/public/" }
         jcenter()
         maven { url "https://repo.spring.io/milestone" }
     }
@@ -32,7 +31,7 @@ idea {
 
 repositories {
     maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
-    maven { url "http://nexus.ggxueche.cn/nexus/content/groups/public/" }
+    jcenter()
     maven { url "http://repo.spring.io/milestone" }
 }
 
@@ -48,7 +47,6 @@ dependencies {
     compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
     compile("org.apache.shiro:shiro-spring-boot-web-starter:1.4.0")
     compile("com.h2database:h2:1.4.196") //compile ("mysql:mysql-connector-java:5.1.39")
     testCompile("org.apache.ant:ant:1.10.1")

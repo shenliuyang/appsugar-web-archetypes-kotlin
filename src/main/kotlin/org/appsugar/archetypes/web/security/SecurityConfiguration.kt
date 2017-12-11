@@ -18,7 +18,8 @@ class SecurityConfiguration {
         loginUrl = "/login"
         successUrl = "/index"
         securityManager = securityManager()
-        filterChainDefinitionMap = mapOf("/login" to "authc", "/logout" to "logout", "/static/**" to "anon", "/favicon.ico" to "anon", "/**" to "user")
+        filterChainDefinitionMap = mapOf("/login" to "authc", "/logout" to "logout"
+                , "/static/**" to "anon", "/favicon.ico" to "anon", "/webjars/**" to "anon", "/**" to "user")
         this
     }
 

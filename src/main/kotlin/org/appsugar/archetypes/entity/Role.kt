@@ -1,9 +1,8 @@
 package org.appsugar.archetypes.entity
 
-import org.appsugar.bean.convert.StringListConverter
+import org.appsugar.archetypes.entity.conversion.StringListConverter
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
-import java.util.*
 import javax.persistence.*
 
 @Entity
