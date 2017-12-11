@@ -1,5 +1,6 @@
-package org.appsugar.archetypes.web.controller
+package org.appsugar.archetypes.web.controller.system
 
+import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.appsugar.archetypes.condition.UserCondition
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.extension.attr
@@ -25,18 +26,22 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
         val logger = getLogger<UserController>()
     }
 
+
     @ModelAttribute("user")
     fun modelAttribute(id: Long?) = when (id) {
         null, Long.MIN_VALUE -> User()
         else -> repository.findById(id).get()
     }
 
-    @RequestMapping(value = ["", "list"])
+
+    @RequiresPermissions("user:view")
+    @RequestMapping
     fun list(condition: UserCondition, @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable, model: Model): String {
         model.attr("page", repository.findAll(UserSpecification(condition), pageable))
         return "system/user/list"
     }
 
+    @RequiresPermissions("user:view")
     @RequestMapping("form")
     fun form(model: Model): String {
         model.attr("roles", roleRepository.findAll(Sort.by(Sort.Direction.ASC, "id")))
@@ -44,6 +49,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
         return "system/user/form"
     }
 
+    @RequiresPermissions("user:edit")
     @PostMapping("save")
     fun save(user: User, roleIds: Array<Long>?, permissions: Array<String>?, ra: RedirectAttributes): String {
         logger.info("prepare to save User {}  new permissions {} new roles {}", user, permissions, roleIds)
@@ -51,6 +57,6 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
         user.permissions = permissions?.let { it.toMutableList() } ?: mutableListOf()
         repository.save(user)
         ra.addFlashAttribute("msg", "保存[${user.name}]成功")
-        return "redirect:/system/user/list"
+        return "redirect:/system/user"
     }
 }

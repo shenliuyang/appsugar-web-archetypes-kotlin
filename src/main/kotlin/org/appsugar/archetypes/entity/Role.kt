@@ -2,6 +2,7 @@ package org.appsugar.archetypes.entity
 
 import org.appsugar.bean.convert.StringListConverter
 import org.hibernate.annotations.DynamicUpdate
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
@@ -15,6 +16,6 @@ data class Role(
         @get:Column(columnDefinition = "TEXT")
         @get:Convert(converter = StringListConverter::class)
         var permissions: MutableList<String> = mutableListOf(),
-        var createdAt: Date = Date(),
-        var updatedAt: Date = Date()
+        var createdAt: LocalDateTime = LocalDateTime.now(),
+        var updatedAt: LocalDateTime = LocalDateTime.now()
 )

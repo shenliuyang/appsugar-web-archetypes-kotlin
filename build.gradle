@@ -1,22 +1,22 @@
 buildscript {
-	repositories {
-		maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
-		maven{url "http://nexus.ggxueche.cn/nexus/content/groups/public/"}
-		jcenter()
-		maven{url "https://repo.spring.io/milestone"}
-	}
-	dependencies{
-		classpath ("org.springframework:springloaded:1.2.8.RELEASE")
-		classpath ("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M7")
-		classpath ("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
-	}
+    repositories {
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+        maven { url "http://nexus.ggxueche.cn/nexus/content/groups/public/" }
+        jcenter()
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework:springloaded:1.2.8.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M7")
+        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
+    }
 }
 
 plugins {
-    id ("org.jetbrains.kotlin.plugin.spring")  version "1.2.0"
-    id ("org.jetbrains.kotlin.plugin.jpa") version "1.2.0"
-    id ("org.jetbrains.kotlin.jvm") version "1.2.0"
-	id ("io.spring.dependency-management") version "1.0.3.RELEASE"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.2.0"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.0"
+    id("org.jetbrains.kotlin.jvm") version "1.2.0"
+    id("io.spring.dependency-management") version "1.0.3.RELEASE"
 }
 
 apply plugin: "org.springframework.boot"
@@ -24,63 +24,59 @@ apply plugin: "org.junit.platform.gradle.plugin"
 apply plugin: 'idea'
 
 idea {
-	module {
-		inheritOutputDirs = false
-		outputDir = file("$buildDir/classes/kotlin/main/")
-	}
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/kotlin/main/")
+    }
 }
 
 repositories {
-   maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
-   maven{url "http://nexus.ggxueche.cn/nexus/content/groups/public/"}
-   maven{url "http://repo.spring.io/milestone"}
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+    maven { url "http://nexus.ggxueche.cn/nexus/content/groups/public/" }
+    maven { url "http://repo.spring.io/milestone" }
 }
 
-
-ext {
-	shiroVersion = "1.4.0"
-}
-ext["kotlin.version"]="1.2.0"
+ext["kotlin.version"] = "1.2.0"
 
 dependencies {
-    compile ("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3")
-    compile ("org.jetbrains.kotlin:kotlin-stdlib-jre8")
-	compile ("org.jetbrains.kotlin:kotlin-reflect")
-    compile ("org.springframework.boot:spring-boot-starter-web")
-	compile ("org.springframework.boot:spring-boot-starter-data-jpa")
-	compile ("org.springframework.boot:spring-boot-starter-thymeleaf")
-	compile ("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
-	compile ("org.springframework.boot:spring-boot-devtools")
-	compile ("com.fasterxml.jackson.module:jackson-module-kotlin")
-	compile ("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
-	compile ("org.apache.shiro:shiro-spring-boot-web-starter:1.4.0")
-	compile ("com.h2database:h2:1.4.196") //compile ("mysql:mysql-connector-java:5.1.39")
-	testCompile ("org.apache.ant:ant:1.10.1")
-	testCompile ("org.dbunit:dbunit:2.5.4")
-	testCompile ("com.h2database:h2:1.4.196")
-	testCompile("org.junit.jupiter:junit-jupiter-api")
-	testCompile("org.springframework.boot:spring-boot-starter-test") {
-		exclude module: "junit"
-	}
-	testRuntime("org.junit.jupiter:junit-jupiter-engine")
+    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3")
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
+    compile("org.jetbrains.kotlin:kotlin-reflect")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin")
+    compile("org.appsugar:appsugar-bean:2.4.4-SNAPSHOT")
+    compile("org.apache.shiro:shiro-spring-boot-web-starter:1.4.0")
+    compile("com.h2database:h2:1.4.196") //compile ("mysql:mysql-connector-java:5.1.39")
+    testCompile("org.apache.ant:ant:1.10.1")
+    testCompile("org.dbunit:dbunit:2.5.4")
+    testCompile("com.h2database:h2:1.4.196")
+    testCompile("org.junit.jupiter:junit-jupiter-api")
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude module: "junit"
+    }
+    testRuntime("org.junit.jupiter:junit-jupiter-engine")
 }
 
 
-bootRun{
-	sourceResources sourceSets.main
+bootRun {
+    sourceResources sourceSets.main
 }
 
-kotlin { 
+kotlin {
     experimental.coroutines = 'enable'
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-	kotlinOptions {
-		jvmTarget = "1.8"
-	}
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
-junitPlatformTest{
-	systemProperties["refreshDb"] = true
-	systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
+junitPlatformTest {
+    systemProperties["refreshDb"] = true
+    systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
 }

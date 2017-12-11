@@ -18,6 +18,4 @@ class MainController {
     @RequestMapping(value = ["/", "/index"])
     fun index() = "index"
 
-    @GetMapping("/index1")
-    fun index1() = "index"
 }

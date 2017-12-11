@@ -13,7 +13,7 @@
     </appender>   
    
 	<!-- 3rdparty Loggers -->
-	<logger name="org.springframework" level="WARN"/>
+	<logger name="org.springframework.mvc" level="INFO"/>
 	
 	<logger name="org.hibernate" level="WARN"/>
 	

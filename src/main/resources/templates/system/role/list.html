@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="/layouts/default">
 <head>
-    <title>用户列表</title>
+    <title>角色列表</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -15,14 +15,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <form method="post" class="form-inline">
-                        <label th:text="'名称:'"/>
-                        <input name="name" th:value="${param.name}" class="form-control mb-2 mr-sm-2 mb-sm-0"
-                               placeholder="名称:前置匹配"/>
-                        <label th:text="'账户:'"/>
-                        <input name="loginName" th:value="${param.loginName}" class="form-control mb-2 mr-sm-2 mb-sm-0"
-                               placeholder="登录账号:全文匹配"/>
-                        <button type="submit " class="btn btn-default col-md-offset-1">查询</button>
-                        <a class="btn btn-default" th:href="@{/system/user/form}" role="button">新建</a>
+                        <a class="btn btn-default" th:href="@{/system/role/form}" role="button">新建</a>
                     </form>
                 </div>
                 <!-- /.panel-heading -->
@@ -31,21 +24,17 @@
                         <thead>
                         <tr>
                             <th>名称</th>
-                            <th>登录名称</th>
-                            <th>密码</th>
                             <th>创建时间</th>
                             <th>修改时间</th>
                             <th>详情</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="odd gradeX" th:each="u : ${page.content}">
-                            <td th:text="${u.name}"/>
-                            <td th:text="${u.loginName}"/>
-                            <td th:text="${u.password}"/>
-                            <td th:text="${#temporals.format(u.createdAt,'yyyy-MM-dd HH:mm')}" class="center"/>
-                            <td th:text="${#temporals.format(u.updatedAt,'yyyy-MM-dd HH:mm')}" class="center"/>
-                            <td><a th:href="@{/system/user/form?id=}+${u.id}" th:text="'查看'"/></td>
+                        <tr class="odd gradeX" th:each="r : ${page.content}">
+                            <td th:text="${r.name}"/>
+                            <td th:text="${#temporals.format(r.createdAt,'yyyy-MM-dd HH:mm')}" class="center"/>
+                            <td th:text="${#temporals.format(r.updatedAt,'yyyy-MM-dd HH:mm')}" class="center"/>
+                            <td><a th:href="@{/system/role/form?id=}+${r.id}" th:text="'查看'"/></td>
                         </tr>
                         </tbody>
                     </table>

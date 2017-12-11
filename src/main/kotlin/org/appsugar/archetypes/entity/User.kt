@@ -3,6 +3,8 @@ package org.appsugar.archetypes.entity
 
 import org.appsugar.bean.convert.StringListConverter
 import org.hibernate.annotations.DynamicUpdate
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
@@ -19,8 +21,8 @@ data class User(
         @get:Column(columnDefinition = "TEXT")
         @get:Convert(converter = StringListConverter::class)
         var permissions: MutableList<String> = mutableListOf(),
-        var createdAt: Date = Date(),
-        var updatedAt: Date = Date()
+        var createdAt: LocalDateTime = LocalDateTime.now(),
+        var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
     @get:ManyToMany(fetch = FetchType.LAZY)
     @get:JoinTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id")], inverseJoinColumns = [JoinColumn(name = "role_id")])
