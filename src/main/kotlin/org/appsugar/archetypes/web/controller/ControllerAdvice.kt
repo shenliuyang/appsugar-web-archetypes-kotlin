@@ -20,6 +20,10 @@ class ControllerAdvice {
     @ModelAttribute("menus")
     fun menus() = menus
 
+    /**check permission with shiro  in thymeleaf**/
+    @ModelAttribute("shiro")
+    fun subject() = ShiroUtils.getSubject()
+
     /**
      * 处理权限不够异常
      */
@@ -27,9 +31,7 @@ class ControllerAdvice {
     fun handleUnAuthrizationException(model: Model) = model.addMenus().let { "error/403.html" }
 
     /**
-     *
      * 处理系统异常
-     *
      */
     @ExceptionHandler(Exception::class)
     fun handleException(ex: Exception, req: HttpServletRequest, model: Model): String {
