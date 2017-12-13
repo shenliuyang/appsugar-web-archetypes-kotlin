@@ -2,9 +2,9 @@ package org.appsugar.archetypes.repository
 
 import org.appsugar.archetypes.BaseTestCase
 import org.appsugar.archetypes.condition.UserCondition
-import org.springframework.beans.factory.annotation.Autowired
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 
 class UserRepositoryTest : BaseTestCase() {
     @Autowired
@@ -14,7 +14,7 @@ class UserRepositoryTest : BaseTestCase() {
     fun testFindByLoginName() {
         val loginName = "admin"
         val user = repository.findByLoginName(loginName)
-        logger.debug("find user by loginName $loginName  result is $user")
+        logger.debug("find user by loginName $loginName  result is $user roles is ${user?.roles}")
         Assertions.assertNotNull(user)
     }
 

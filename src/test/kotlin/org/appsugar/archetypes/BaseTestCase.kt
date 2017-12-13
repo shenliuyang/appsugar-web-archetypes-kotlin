@@ -6,49 +6,53 @@ import org.dbunit.database.DatabaseConnection
 import org.dbunit.database.DefaultMetadataHandler
 import org.dbunit.database.ForwardOnlyResultSetTableFactory
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.boot.test.context.SpringBootTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.core.env.get
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.io.File
 import java.sql.DriverManager
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-abstract class BaseTestCase{
-	protected val logger:Logger=LoggerFactory.getLogger(this::class.java)
+@SpringBootTest()
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+abstract class BaseTestCase {
+    protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-	companion object {
-	    private var flag = false
-	}
+    companion object {
+        private var flag = false
+    }
 
 
-	@Autowired
-	fun prepareImportSampleData(env: Environment){
-		env.getProperty("refreshDb") ?: return
-		if(flag) return else flag = true
-		logger.info("prepare to import test db data")
-		val con = DriverManager.getConnection(env["spring.datasource.url"],env["spring.datasource.username"],env["spring.datasource.password"])
-		val connection =  DatabaseConnection(con)
-		val config = connection.config
-		config.setProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY, ForwardOnlyResultSetTableFactory())
-		config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false)
-		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, Class.forName(env["spring.dbunit.data-factory"]).newInstance())
-		config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, DefaultMetadataHandler())
-		var operation = with(Operation()){
-			isTransaction = true
-			type = env["spring.dbunit.operationType"]
-			format = "flat"
-			src = File(env["spring.dbunit.sample-file"])
-			this
-		}
-		try {
-			operation.execute(connection)
-		}finally {
-			connection.close()
-		}
-	}
+    @Autowired
+    fun prepareImportSampleData(env: Environment) {
+        env.getProperty("refreshDb") ?: return
+        if (flag) return else flag = true
+        logger.info("prepare to import test db data")
+        val con = DriverManager.getConnection(env["spring.datasource.url"], env["spring.datasource.username"], env["spring.datasource.password"])
+        val connection = DatabaseConnection(con)
+        val config = connection.config
+        config.setProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY, ForwardOnlyResultSetTableFactory())
+        config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false)
+        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, Class.forName(env["spring.dbunit.data-factory"]).newInstance())
+        config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, DefaultMetadataHandler())
+        var operation = with(Operation()) {
+            isTransaction = true
+            type = env["spring.dbunit.operationType"]
+            format = "flat"
+            src = File(env["spring.dbunit.sample-file"])
+            this
+        }
+        try {
+            operation.execute(connection)
+        } finally {
+            connection.close()
+        }
+    }
 }
