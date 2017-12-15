@@ -24,4 +24,4 @@ class UserRepositoryTest : BaseTestCase() {
         val users = repository.findAll(UserSpecification(condition))
         logger.debug("testFindByCondition {} result is {} ", condition, users)
     }
-} 
+}

@@ -12,9 +12,9 @@ buildscript {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.plugin.spring") version "1.2.0"
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.0"
-    id("org.jetbrains.kotlin.jvm") version "1.2.0"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.2.10"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.10"
+    id("org.jetbrains.kotlin.jvm") version "1.2.10"
     id("io.spring.dependency-management") version "1.0.3.RELEASE"
 }
 
@@ -35,12 +35,13 @@ repositories {
     maven { url "http://repo.spring.io/milestone" }
 }
 
-ext["kotlin.version"] = "1.2.0"
+ext["kotlin.version"] = "1.2.10"
 
 dependencies {
-    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20")
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
+    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20")
+    compile("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.20")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
