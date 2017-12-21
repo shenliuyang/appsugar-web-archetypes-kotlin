@@ -51,10 +51,14 @@ $(function() {
  * form验证
  */
 $(document).ready(function(){
-	$("form").validate({onfocusout: function(element) {$(element).valid();},focusCleanup: true});
+    if($("form").validate){
+	    $("form").validate({onfocusout: function(element) {$(element).valid();},focusCleanup: true});
+	}
 });
 
-jQuery.extend(jQuery.validator.defaults, {
-	errorClass:"text-danger"
-});
+if(jQuery.validator){
+    jQuery.extend(jQuery.validator.defaults, {
+        errorClass:"text-danger"
+    });
+}
 

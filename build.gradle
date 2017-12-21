@@ -51,7 +51,8 @@ dependencies {
     compile("org.apache.shiro:shiro-spring-boot-web-starter:$shiroVersion")
     compile("org.apache.shiro:shiro-hazelcast:$shiroVersion")
 
-    compile("com.h2database:h2") //compile ("mysql:mysql-connector-java:5.1.45")
+    compile("com.h2database:h2")
+    compile("mysql:mysql-connector-java:5.1.45")
     testCompile("com.h2database:h2")
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")
