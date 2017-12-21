@@ -45,4 +45,16 @@
             <interface>10.10.1.*</interface>
         </interfaces>
     </network>
+    <map name="shiro-activeSessionCache">
+        <!-- Use sticky sessions with your load balancer for best performance. -->
+        <async-backup-count>1</async-backup-count>
+        <!-- 30 minutes = session timeout.  No need to use Shiro's session invalidation scheduler! -->
+        <time-to-live-seconds>1800</time-to-live-seconds>
+    </map>
+    <map name="org.appsugar.archetypes.web.security.ShiroRealm.authenticationCache">
+        <!-- Use sticky sessions with your load balancer for best performance. -->
+        <async-backup-count>1</async-backup-count>
+        <!-- 30 minutes = session timeout.  No need to use Shiro's session invalidation scheduler! -->
+        <time-to-live-seconds>1800</time-to-live-seconds>
+    </map>
 </hazelcast>

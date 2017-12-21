@@ -34,7 +34,11 @@ class SecurityConfiguration {
     fun securityManager(cacheManager: CacheManager) = with(DefaultWebSecurityManager()) {
         this.realms = listOf(realm())
         this.cacheManager = cacheManager
-        this.sessionManager = sessionManager()
+        this.sessionManager = with(DefaultWebSessionManager()) {
+            isSessionValidationSchedulerEnabled = false
+            sessionDAO = EnterpriseCacheSessionDAO()
+            this
+        }
         this
     }
 
@@ -54,10 +58,5 @@ class SecurityConfiguration {
     @Bean
     fun defaultAdvisorAutoProxyCreator() = DefaultAdvisorAutoProxyCreator().let { it.isProxyTargetClass = true;it }
 
-    @Bean
-    fun sessionDao() = EnterpriseCacheSessionDAO()
-
-    @Bean
-    fun sessionManager() = DefaultWebSessionManager().let { it.isSessionValidationSchedulerEnabled = false;it.sessionDAO = sessionDao();it }
-
+ 
 }

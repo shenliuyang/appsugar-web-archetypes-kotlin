@@ -17,7 +17,7 @@ import java.io.Serializable
 class ShiroRealm : AuthorizingRealm() {
 
     @Autowired
-    lateinit var userRepository: UserRepository;
+    private lateinit var userRepository: UserRepository
 
     override fun doGetAuthenticationInfo(token: AuthenticationToken?) = when (token) {
         is UsernamePasswordToken -> {
@@ -44,6 +44,10 @@ class ShiroRealm : AuthorizingRealm() {
             info.addStringPermissionWithDependency(permissions)
         }
         return info
+    }
+
+    override fun clearCache(principals: PrincipalCollection?) {
+        super.clearCache(principals)
     }
 
     private fun SimpleAuthorizationInfo.addStringPermissionWithDependency(permissions: Collection<String>) {
