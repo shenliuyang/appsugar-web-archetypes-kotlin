@@ -15,7 +15,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.2.10"
     id("org.jetbrains.kotlin.plugin.jpa") version "1.2.10"
     id("org.jetbrains.kotlin.jvm") version "1.2.10"
-    id("io.spring.dependency-management") version "1.0.3.RELEASE"
+    id("io.spring.dependency-management") version "1.0.4.RELEASE"
 }
 
 apply plugin: "org.springframework.boot"
@@ -36,19 +36,21 @@ repositories {
 }
 
 ext["kotlin.version"] = "1.2.10"
-
+ext["coroutineVersion"] = "0.20"
+ext["shiroVersion"] = "1.4.0"
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
-    compile("org.jetbrains.kotlin:kotlin-reflect")
-    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20")
-    compile("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.20")
+    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
+    compile("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutineVersion")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("org.apache.shiro:shiro-spring-boot-web-starter:1.4.0")
+    compile("org.apache.shiro:shiro-spring-boot-web-starter:$shiroVersion")
+    compile("org.apache.shiro:shiro-hazelcast:$shiroVersion")
+
     compile("com.h2database:h2") //compile ("mysql:mysql-connector-java:5.1.45")
     testCompile("com.h2database:h2")
     testCompile("org.apache.ant:ant:1.10.1")

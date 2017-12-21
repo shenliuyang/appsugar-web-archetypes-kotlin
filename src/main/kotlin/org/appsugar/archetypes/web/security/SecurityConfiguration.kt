@@ -1,7 +1,10 @@
 package org.appsugar.archetypes.web.security
 
 
-import org.apache.shiro.cache.MemoryConstrainedCacheManager
+import com.hazelcast.core.HazelcastInstance
+import org.apache.shiro.cache.CacheManager
+import org.apache.shiro.hazelcast.cache.HazelcastCacheManager
+import org.apache.shiro.mgt.SecurityManager
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager
@@ -14,10 +17,11 @@ import org.springframework.context.annotation.Configuration
 class SecurityConfiguration {
 
     @Bean
-    fun shiroFilterFactoryBean() = with(ShiroFilterFactoryBean()) {
+    fun shiroFilterFactoryBean(securityManager: SecurityManager) = with(ShiroFilterFactoryBean())
+    {
         loginUrl = "/login"
         successUrl = "/index"
-        securityManager = securityManager()
+        this.securityManager = securityManager
         filterChainDefinitionMap = mapOf("/login" to "authc", "/logout" to "logout"
                 , "/static/**" to "anon", "/favicon.ico" to "anon", "/webjars/**" to "anon", "/**" to "user")
         this
@@ -25,9 +29,9 @@ class SecurityConfiguration {
 
 
     @Bean
-    fun securityManager() = with(DefaultWebSecurityManager()) {
-        realms = listOf(realm())
-        cacheManager = cacheManager()
+    fun securityManager(cacheManager: CacheManager) = with(DefaultWebSecurityManager()) {
+        this.realms = listOf(realm())
+        this.cacheManager = cacheManager
         this
     }
 
@@ -35,7 +39,10 @@ class SecurityConfiguration {
     fun realm() = ShiroRealm()
 
     @Bean
-    fun cacheManager() = MemoryConstrainedCacheManager()
+    fun cacheManager(instance: HazelcastInstance) = with(HazelcastCacheManager()) {
+        this.hazelcastInstance = instance
+        this
+    }
 
     @Bean
     fun authorizer() = AuthorizationAttributeSourceAdvisor()
