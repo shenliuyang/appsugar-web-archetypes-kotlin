@@ -2,6 +2,7 @@ package org.appsugar.archetypes.web.security
 
 
 import com.hazelcast.core.HazelcastInstance
+import org.apache.shiro.SecurityUtils
 import org.apache.shiro.cache.CacheManager
 import org.apache.shiro.hazelcast.cache.HazelcastCacheManager
 import org.apache.shiro.mgt.SecurityManager
@@ -39,6 +40,7 @@ class SecurityConfiguration {
             sessionDAO = EnterpriseCacheSessionDAO()
             this
         }
+        SecurityUtils.setSecurityManager(this)//make sure always hava a securityManager
         this
     }
 

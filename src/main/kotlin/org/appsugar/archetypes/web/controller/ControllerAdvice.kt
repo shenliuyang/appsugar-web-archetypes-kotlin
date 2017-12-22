@@ -30,6 +30,7 @@ class ControllerAdvice {
     @ExceptionHandler(AuthorizationException::class)
     fun handleUnAuthrizationException(model: Model) = model.addMenus().let { "error/403.html" }
 
+
     /**
      * 处理系统异常
      */
