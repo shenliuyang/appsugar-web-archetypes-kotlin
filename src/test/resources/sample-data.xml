@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<role id="-1" name="超级管理员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
-	<role id="-2" name="饲养员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
-	<role id="-3" name="安保员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
-	<role id="-5" name="接待员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
-	<role id="-6" name="卫生员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
-	<user id="-1" name="NewYoung" login_name="admin" password="admin"
-		  permissions="*" created_at="2017-10-31" updated_at="2017-10-31"/>
-	<user_role user_id="-1" role_id="-1"/>
+    <role id="-1" name="超级管理员" permissions="*,user:*,role:edit" created_at="2017-11-07" updated_at="2017-11-07"/>
+    <role id="-2" name="饲养员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
+    <role id="-3" name="安保员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
+    <role id="-5" name="接待员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
+    <role id="-6" name="卫生员" permissions="*" created_at="2017-11-07" updated_at="2017-11-07"/>
+    <user id="-1" name="NewYoung" login_name="admin" password="admin"
+          permissions="*" created_at="2017-10-31" updated_at="2017-10-31"/>
+    <user_role user_id="-1" role_id="-1"/>
 </dataset>

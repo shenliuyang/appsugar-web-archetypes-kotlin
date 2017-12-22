@@ -25,7 +25,7 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
            http://www.hazelcast.com/schema/config/hazelcast-config-3.9.xsd">
-
+    <instance-name>spring-shiro-hibernate-cache</instance-name>
     <group>
         <name>appsugar</name>
         <password>dev-pass</password>

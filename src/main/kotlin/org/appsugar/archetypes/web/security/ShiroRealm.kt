@@ -38,17 +38,14 @@ class ShiroRealm : AuthorizingRealm() {
         val principal = principals.oneByType(Principal::class.java)
         val user = userRepository.findById(principal.id).get()
         val info = SimpleAuthorizationInfo()
-        info.addStringPermissionWithDependency(user.permissions)
+        info.addStringPermissionWithDependency(user.permissions.split(",").toList())
         for ((_, name, permissions) in user.roles) {
             info.addRole(name)
-            info.addStringPermissionWithDependency(permissions)
+            info.addStringPermissionWithDependency(permissions.split(",").toList())
         }
         return info
     }
 
-    override fun clearCache(principals: PrincipalCollection?) {
-        super.clearCache(principals)
-    }
 
     private fun SimpleAuthorizationInfo.addStringPermissionWithDependency(permissions: Collection<String>) {
         permissions.forEach {

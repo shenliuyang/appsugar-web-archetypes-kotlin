@@ -31,7 +31,7 @@
                                                     <div class="panel-body">
                                                         <div class="form-group">
                                                             <label class="checkbox-inline" th:each="permission : ${permissionEntry.value}">
-                                                                <input th:field="*{permissions}" th:value="${permission.value}" type="checkbox" th:checked="${#lists.contains(role.permissions,permission.value)}" /> <span th:text="${permission.code}"/>
+                                                                <input name="permissions" th:value="${permission.value}" type="checkbox" th:checked="${role.permissions.contains(permission.value)}" /> <span th:text="${permission.code}"/>
                                                             </label>
                                                         </div>
                                                     </div>

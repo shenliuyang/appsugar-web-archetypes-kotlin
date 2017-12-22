@@ -23,3 +23,4 @@ fun CriteriaBuilder.endWith(exp: Expression<String>, value: String): Predicate =
  * for spring mvc
  */
 fun Model.attr(name: String, value: Any) = this.addAttribute(name, value)
+

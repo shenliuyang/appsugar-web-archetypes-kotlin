@@ -1,10 +1,14 @@
 package org.appsugar.archetypes.entity
 
-import org.appsugar.archetypes.entity.conversion.StringListConverter
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.DynamicUpdate
+import java.io.Serializable
 import java.time.LocalDateTime
 import javax.persistence.*
 
+
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @DynamicUpdate
 data class Role(
@@ -13,8 +17,7 @@ data class Role(
         var id: Long = Long.MIN_VALUE,
         var name: String = "",
         @get:Column(columnDefinition = "TEXT")
-        @get:Convert(converter = StringListConverter::class)
-        var permissions: MutableList<String> = mutableListOf(),
+        var permissions: String = "",
         var createdAt: LocalDateTime = LocalDateTime.now(),
         var updatedAt: LocalDateTime = LocalDateTime.now()
-)
+) : Serializable

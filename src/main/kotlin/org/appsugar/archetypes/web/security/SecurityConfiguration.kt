@@ -58,5 +58,5 @@ class SecurityConfiguration {
     @Bean
     fun defaultAdvisorAutoProxyCreator() = DefaultAdvisorAutoProxyCreator().let { it.isProxyTargetClass = true;it }
 
- 
+
 }

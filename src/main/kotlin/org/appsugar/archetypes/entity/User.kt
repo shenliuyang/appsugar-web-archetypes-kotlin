@@ -1,13 +1,14 @@
 package org.appsugar.archetypes.entity
 
 
-import org.appsugar.archetypes.entity.conversion.StringListConverter
-import org.hibernate.annotations.DynamicUpdate
-import org.hibernate.annotations.Fetch
-import org.hibernate.annotations.FetchMode
+import org.hibernate.annotations.*
+import org.hibernate.annotations.Cache
+import java.io.Serializable
 import java.time.LocalDateTime
 import javax.persistence.*
+import javax.persistence.Entity
 
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @DynamicUpdate
 data class User(
@@ -19,11 +20,10 @@ data class User(
         var loginName: String = "",
         var password: String = "",
         @get:Column(columnDefinition = "TEXT")
-        @get:Convert(converter = StringListConverter::class)
-        var permissions: MutableList<String> = mutableListOf(),
+        var permissions: String = "",
         var createdAt: LocalDateTime = LocalDateTime.now(),
         var updatedAt: LocalDateTime = LocalDateTime.now()
-) {
+) : Serializable {
     @get:ManyToMany(fetch = FetchType.LAZY)
     @get:Fetch(FetchMode.SUBSELECT)
     @get:JoinTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id")], inverseJoinColumns = [JoinColumn(name = "role_id")])

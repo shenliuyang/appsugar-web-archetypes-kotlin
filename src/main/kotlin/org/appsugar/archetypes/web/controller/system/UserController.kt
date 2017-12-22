@@ -54,7 +54,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     fun save(user: User, roleIds: Array<Long>?, permissions: Array<String>?, ra: RedirectAttributes): String {
         logger.info("prepare to save User {}  new permissions {} new roles {}", user, permissions, roleIds)
         user.roles = roleIds?.let { roleRepository.findByIdIn(roleIds.toList()).toMutableSet() } ?: mutableSetOf()
-        user.permissions = permissions?.let { it.toMutableList() } ?: mutableListOf()
+        user.permissions = permissions?.joinToString(",") ?: ""
         repository.save(user)
         ra.addFlashAttribute("msg", "保存[${user.name}]成功")
         return "redirect:/system/user"
