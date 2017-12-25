@@ -48,7 +48,7 @@ class SecurityConfiguration {
     fun realm() = ShiroRealm()
 
     @Bean
-    fun cacheManager(instance: HazelcastInstance) = with(HazelcastCacheManager()) {
+    fun shiroCacheManager(instance: HazelcastInstance) = with(HazelcastCacheManager()) {
         this.hazelcastInstance = instance
         this
     }

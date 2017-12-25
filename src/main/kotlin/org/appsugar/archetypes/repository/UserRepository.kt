@@ -27,6 +27,7 @@ class UserSpecification(private val c: UserCondition) : Specification<User> {
         val p = mutableListOf<Predicate>()
         c.name.isNotBlank().then { p.add(cb.startWith(root.get<String>(UserCondition::name.name), c.name)) }
         c.loginName.isNotBlank().then { p.add(cb.equal(root.get<String>(UserCondition::loginName.name), c.loginName)) }
+        //performance impact when  p is empty
         return cb.and(*p.toTypedArray())
     }
 }

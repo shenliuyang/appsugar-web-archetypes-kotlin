@@ -24,6 +24,7 @@ data class User(
         var createdAt: LocalDateTime = LocalDateTime.now(),
         var updatedAt: LocalDateTime = LocalDateTime.now()
 ) : Serializable {
+    @get:Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @get:ManyToMany(fetch = FetchType.LAZY)
     @get:Fetch(FetchMode.SUBSELECT)
     @get:JoinTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id")], inverseJoinColumns = [JoinColumn(name = "role_id")])
