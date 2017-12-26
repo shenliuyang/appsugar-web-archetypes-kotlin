@@ -6,7 +6,6 @@ import org.appsugar.archetypes.extension.attr
 import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.web.security.Permission
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -23,8 +22,6 @@ class RoleController(val repository: RoleRepository) {
         private val logger = getLogger<RoleController>()
     }
 
-    @Autowired
-    lateinit var controller: UserController
 
     @ModelAttribute("role")
     fun modelAttribute(id: Long?) = when (id) {

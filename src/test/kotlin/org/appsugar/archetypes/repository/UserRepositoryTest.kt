@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 class UserRepositoryTest : BaseTestCase() {
     @Autowired
     lateinit var repository: UserRepository
-
+    
 
     @Test
     fun testFindByLoginName() {
