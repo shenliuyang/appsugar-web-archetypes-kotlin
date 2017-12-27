@@ -2,6 +2,8 @@ package org.appsugar.archetypes.repository
 
 import org.appsugar.archetypes.condition.UserCondition
 import org.appsugar.archetypes.entity.User
+import org.appsugar.archetypes.extension.getString
+import org.appsugar.archetypes.extension.isNotBlankThen
 import org.appsugar.archetypes.extension.startWith
 import org.appsugar.archetypes.extension.then
 import org.springframework.data.jpa.domain.Specification
@@ -20,11 +22,12 @@ interface UserRepository : JpaRepository<User, Long>, JpaSpecificationExecutor<U
     fun findByLoginName(loginName: String): User?
 }
 
+private typealias U = UserCondition
 class UserSpecification(private val c: UserCondition) : Specification<User> {
     override fun toPredicate(root: Root<User>, query: CriteriaQuery<*>, cb: CriteriaBuilder): Predicate? {
         val p = mutableListOf<Predicate>()
-        c.name.isNotBlank().then { p.add(cb.startWith(root.get<String>(UserCondition::name.name), c.name)) }
-        c.loginName.isNotBlank().then { p.add(cb.equal(root.get<String>(UserCondition::loginName.name), c.loginName)) }
+        c.name.isNotBlankThen { p.add(cb.startWith(root.getString(U::name), this)) }
+        c.loginName.isNotBlankThen { p.add(cb.equal(root.getString(U::loginName), this)) }
         return p.isNotEmpty().then { cb.and(* p.toTypedArray()) }
     }
 }

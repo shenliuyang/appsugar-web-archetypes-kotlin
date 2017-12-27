@@ -20,45 +20,38 @@ import org.springframework.context.annotation.Configuration
 class SecurityConfiguration {
 
     @Bean
-    fun shiroFilterFactoryBean(securityManager: SecurityManager) = with(ShiroFilterFactoryBean())
-    {
+    fun shiroFilterFactoryBean(securityManager: SecurityManager) = ShiroFilterFactoryBean().apply {
         loginUrl = "/login"
         successUrl = "/index"
         this.securityManager = securityManager
         filterChainDefinitionMap = mapOf("/login" to "authc", "/logout" to "logout"
                 , "/static/**" to "anon", "/favicon.ico" to "anon", "/webjars/**" to "anon", "/**" to "user")
-        this
     }
 
 
     @Bean
-    fun securityManager(cacheManager: CacheManager) = with(DefaultWebSecurityManager()) {
-        this.realms = listOf(realm())
-        this.cacheManager = cacheManager
-        this.sessionManager = with(DefaultWebSessionManager()) {
+    fun securityManager(shiroCacheManager: CacheManager) = DefaultWebSecurityManager().apply {
+        realms = listOf(realm())
+        cacheManager = shiroCacheManager
+        sessionManager = DefaultWebSessionManager().apply {
             isSessionValidationSchedulerEnabled = false
             sessionDAO = EnterpriseCacheSessionDAO()
-            this
         }
         SecurityUtils.setSecurityManager(this)//make sure always hava a securityManager
-        this
     }
 
     @Bean
     fun realm() = ShiroRealm()
 
     @Bean
-    fun shiroCacheManager(instance: HazelcastInstance) = with(HazelcastCacheManager()) {
-        this.hazelcastInstance = instance
-        this
-    }
+    fun shiroCacheManager(instance: HazelcastInstance) = HazelcastCacheManager().apply { hazelcastInstance = instance }
 
     @Bean
     fun authorizer() = AuthorizationAttributeSourceAdvisor()
 
     /**fix 404 not found ,  default proxy is jdk dynamic proxy**/
     @Bean
-    fun defaultAdvisorAutoProxyCreator() = DefaultAdvisorAutoProxyCreator().let { it.isProxyTargetClass = true;it }
+    fun defaultAdvisorAutoProxyCreator() = DefaultAdvisorAutoProxyCreator().apply { isProxyTargetClass = true }
 
 
 }

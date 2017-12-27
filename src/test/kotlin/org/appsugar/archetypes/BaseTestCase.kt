@@ -21,7 +21,7 @@ import java.sql.DriverManager
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("h2")
 abstract class BaseTestCase {
-    protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
+    protected val logger: Logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
     companion object {
         private var flag = false

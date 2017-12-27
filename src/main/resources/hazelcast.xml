@@ -1,26 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright (c) 2008-2017, Hazelcast, Inc. All Rights Reserved.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<!--
-    The default Hazelcast configuration. This is used when no hazelcast.xml is present.
-    Please see the schema for how to configure Hazelcast at https://hazelcast.com/schema/config/hazelcast-config-3.10.xsd
-    or the documentation at https://hazelcast.org/documentation/
--->
-<!--suppress XmlDefaultAttributeValue -->
 <hazelcast xmlns="http://www.hazelcast.com/schema/config"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
@@ -33,28 +11,21 @@
     <network>
         <port auto-increment="true" port-count="100">5701</port>
         <join>
-            <multicast enabled="true">
-                <multicast-group>224.2.2.3</multicast-group>
-                <multicast-port>54327</multicast-port>
-            </multicast>
-            <tcp-ip enabled="false">
-                <interface>127.0.0.1</interface>
-            </tcp-ip>
+            <multicast enabled="true"/>
         </join>
         <interfaces enabled="false">
             <interface>10.10.1.*</interface>
         </interfaces>
     </network>
     <map name="shiro-activeSessionCache">
-        <!-- Use sticky sessions with your load balancer for best performance. -->
         <async-backup-count>1</async-backup-count>
-        <!-- 30 minutes = session timeout.  No need to use Shiro's session invalidation scheduler! -->
         <time-to-live-seconds>1800</time-to-live-seconds>
     </map>
     <map name="org.appsugar.archetypes.web.security.ShiroRealm.authenticationCache">
-        <!-- Use sticky sessions with your load balancer for best performance. -->
         <async-backup-count>1</async-backup-count>
-        <!-- 30 minutes = session timeout.  No need to use Shiro's session invalidation scheduler! -->
         <time-to-live-seconds>1800</time-to-live-seconds>
     </map>
+    <properties>
+        <property name="hazelcast.max.no.heartbeat.seconds">5</property>
+    </properties>
 </hazelcast>
