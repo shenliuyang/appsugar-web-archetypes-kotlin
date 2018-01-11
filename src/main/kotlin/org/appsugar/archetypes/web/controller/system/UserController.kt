@@ -9,7 +9,6 @@ import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.UserSpecification
 import org.appsugar.archetypes.web.security.Permission
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -26,7 +25,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     companion object {
         val logger = getLogger<UserController>()
     }
-    
+
     @ModelAttribute("user")
     fun modelAttribute(id: Long?) = when (id) {
         null, Long.MIN_VALUE -> User()
@@ -44,7 +43,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     @RequiresPermissions("user:view")
     @RequestMapping("form")
     fun form(model: Model): String {
-        model.attr("roles", roleRepository.findAll(Sort.by(Sort.Direction.ASC, "id")))
+        model.attr("roles", roleRepository.findAll().sortedBy { it.id })
         model.attr("permissionGroups", Permission.GROUP_BY_PREFIX)
         return "system/user/form"
     }
