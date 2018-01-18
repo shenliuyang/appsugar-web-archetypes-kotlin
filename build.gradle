@@ -55,6 +55,8 @@ dependencies {
     compile("com.hazelcast:hazelcast-spring")
     compile("com.h2database:h2")
     compile("mysql:mysql-connector-java:5.1.45")
+    //webjars
+    compile("org.webjars:font-awesome:4.6.3")
     testCompile("com.h2database:h2")
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")
@@ -67,16 +69,15 @@ dependencies {
 
 task copyToLib(type: Copy) {
     into "$buildDir/libs/lib"
-    from configurations.runtime {
-        exclude module: 'spring-boot-devtools'
-    }
+    from configurations.runtime
+    exclude '*spring-boot-devtools*.jar'
 }
 
 jar {
     enabled = true
     manifest {
         attributes(
-                'Main-Class': bootJar.mainClassName, 'Class-Path': configurations.compile.collect {
+                'Main-Class': bootJar.mainClassName, 'Class-Path': configurations.runtime.collect {
             'lib/' + it.getName()
         }.join(' '))
     }
