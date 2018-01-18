@@ -36,7 +36,7 @@ repositories {
 }
 
 ext["kotlin.version"] = "1.2.10"
-ext["coroutineVersion"] = "0.20"
+ext["coroutineVersion"] = "0.21.2"
 ext["shiroVersion"] = "1.4.0"
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
@@ -65,19 +65,28 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine")
 }
 
-
-bootRun {
-    sourceResources sourceSets.main
-}
-
-kotlin {
-    experimental.coroutines = 'enable'
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        jvmTarget = "1.8"
+task copyToLib(type: Copy) {
+    into "$buildDir/libs/lib"
+    from configurations.runtime {
+        exclude module: 'spring-boot-devtools'
     }
+}
+
+jar {
+    enabled = true
+    manifest {
+        attributes(
+                'Main-Class': bootJar.mainClassName, 'Class-Path': configurations.compile.collect {
+            'lib/' + it.getName()
+        }.join(' '))
+    }
+    //dependsOn copyToLib
+}
+bootJar { classifier = 'boot' }//set boot jar different name
+bootRun { sourceResources sourceSets.main } //enable spring dev tools scan resource directory
+kotlin { experimental.coroutines = 'enable' }//enable coroutine
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions { jvmTarget = "1.8" }
 }
 
 junitPlatformTest {
