@@ -23,6 +23,7 @@ interface UserRepository : JpaRepository<User, Long>, JpaSpecificationExecutor<U
 }
 
 private typealias U = UserCondition
+
 class UserSpecification(private val c: UserCondition) : Specification<User> {
     override fun toPredicate(root: Root<User>, query: CriteriaQuery<*>, cb: CriteriaBuilder): Predicate? {
         val p = mutableListOf<Predicate>()
