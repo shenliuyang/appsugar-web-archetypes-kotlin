@@ -12,9 +12,9 @@ buildscript {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.plugin.spring") version "1.2.20"
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.20"
-    id("org.jetbrains.kotlin.jvm") version "1.2.20"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.2.21"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.21"
+    id("org.jetbrains.kotlin.jvm") version "1.2.21"
     id("io.spring.dependency-management") version "1.0.4.RELEASE"
 }
 
@@ -35,8 +35,8 @@ repositories {
     maven { url "http://repo.spring.io/milestone" }
 }
 
-ext["kotlin.version"] = "1.2.10"
-ext["coroutineVersion"] = "0.21.2"
+ext["kotlin.version"] = "1.2.21"
+ext["coroutineVersion"] = "0.22.1"
 ext["shiroVersion"] = "1.4.0"
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
@@ -55,6 +55,8 @@ dependencies {
     compile("com.hazelcast:hazelcast-spring")
     compile("com.h2database:h2")
     compile("mysql:mysql-connector-java:5.1.45")
+    //暂时解决kotlin1.20bug
+    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '2.0.3.RELEASE'
     //webjars
     compile("org.webjars:font-awesome:4.6.3")
     testCompile("com.h2database:h2")
