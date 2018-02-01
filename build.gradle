@@ -16,6 +16,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.jpa") version "1.2.21"
     id("org.jetbrains.kotlin.jvm") version "1.2.21"
     id("io.spring.dependency-management") version "1.0.4.RELEASE"
+    id("net.researchgate.release") version "2.6.0"
 }
 
 apply plugin: "org.springframework.boot"
