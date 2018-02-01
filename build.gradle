@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework:springloaded:1.2.8.RELEASE")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M7")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RC1")
         classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
     }
 }
@@ -54,9 +54,7 @@ dependencies {
     compile("com.hazelcast:hazelcast-hibernate52:1.2.2")
     compile("com.hazelcast:hazelcast-spring")
     compile("com.h2database:h2")
-    compile("mysql:mysql-connector-java:5.1.45")
-    //暂时解决kotlin1.20bug
-    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '2.0.3.RELEASE'
+    compile("mysql:mysql-connector-java")
     //webjars
     compile("org.webjars:font-awesome:4.6.3")
     testCompile("com.h2database:h2")
