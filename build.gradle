@@ -17,7 +17,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.2.21"
     id("io.spring.dependency-management") version "1.0.4.RELEASE"
     id("net.researchgate.release") version "2.6.0"
-    
+
 }
 
 apply plugin: "org.springframework.boot"
@@ -66,7 +66,8 @@ dependencies {
     compile("org.webjars:startbootstrap-sb-admin-2:3.3.7+1")
     compile("org.webjars:morrisjs:0.5.0")
     compile("org.webjars.bower:datatables-responsive:1.0.6")
-
+    //wro4j
+    compile("eu.michael-simons:wro4j-spring-boot-starter:0.3.10")
     testCompile("com.h2database:h2")
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")

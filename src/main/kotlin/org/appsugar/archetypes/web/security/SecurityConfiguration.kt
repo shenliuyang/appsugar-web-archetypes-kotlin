@@ -25,7 +25,7 @@ class SecurityConfiguration {
         successUrl = "/index"
         this.securityManager = securityManager
         filterChainDefinitionMap = mapOf("/login" to "authc", "/logout" to "logout"
-                , "/static/**" to "anon", "/favicon.ico" to "anon", "/webjars/**" to "anon", "/**" to "user")
+                , "/wro4j/*" to "anon", "/static/**" to "anon", "/favicon.ico" to "anon", "/webjars/**" to "anon", "/**" to "user")
     }
 
 

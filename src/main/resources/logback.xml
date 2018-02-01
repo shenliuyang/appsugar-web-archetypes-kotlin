@@ -25,6 +25,8 @@
 
     <logger name="org.apache" level="WARN"/>
 
+    <logger name="ro.isdc.wro" level="ERROR"/>
+
     <logger name="org.appsugar" level="DEBUG"/>
 
     <root level="INFO">
