@@ -61,4 +61,3 @@ if(jQuery.validator){
         errorClass:"text-danger"
     });
 }
-
