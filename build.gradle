@@ -37,7 +37,7 @@ repositories {
     maven { url "http://repo.spring.io/milestone" }
 }
 
-ext["kotlin.version"] = "1.2.21"
+ext["kotlin.version"] = "1.2.30"
 ext["coroutineVersion"] = "0.22.3"
 ext["shiroVersion"] = "1.4.0"
 dependencies {

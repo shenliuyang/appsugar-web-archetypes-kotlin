@@ -3,8 +3,6 @@ package org.appsugar.archetypes.entity
 
 import org.hibernate.annotations.*
 import org.hibernate.annotations.Cache
-import java.io.Serializable
-import java.time.LocalDateTime
 import javax.persistence.*
 import javax.persistence.Entity
 
@@ -12,18 +10,13 @@ import javax.persistence.Entity
 @Entity
 @DynamicUpdate
 data class User(
-        @get:Id
-        @get:GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Long = Long.MIN_VALUE,
         var name: String = "",
         @get:Column(unique = true)
         var loginName: String = "",
         var password: String = "",
         @get:Column(columnDefinition = "TEXT")
-        var permissions: String = "",
-        var createdAt: LocalDateTime = LocalDateTime.now(),
-        var updatedAt: LocalDateTime = LocalDateTime.now()
-) : Serializable {
+        var permissions: String = ""
+) : IdEntity() {
     @get:Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @get:ManyToMany(fetch = FetchType.LAZY)
     @get:Fetch(FetchMode.SUBSELECT)
