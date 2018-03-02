@@ -38,7 +38,7 @@ repositories {
 }
 
 ext["kotlin.version"] = "1.2.21"
-ext["coroutineVersion"] = "0.22.1"
+ext["coroutineVersion"] = "0.22.3"
 ext["shiroVersion"] = "1.4.0"
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
@@ -53,7 +53,7 @@ dependencies {
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("org.apache.shiro:shiro-spring-boot-web-starter:$shiroVersion")
     compile("org.apache.shiro:shiro-hazelcast:$shiroVersion")
-    compile("com.hazelcast:hazelcast-hibernate52:1.2.2")
+    compile("com.hazelcast:hazelcast-hibernate52:1.2.3")
     compile("com.hazelcast:hazelcast-spring")
     compile("com.h2database:h2")
     compile("mysql:mysql-connector-java")
