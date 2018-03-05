@@ -4,5 +4,8 @@ spring:
                     username: root
                     password: 123456
                     driver-class-name: com.mysql.jdbc.Driver
+        jpa:
+            hibernate:
+                       ddl-auto: none
         dbunit:
                 data-factory: org.dbunit.ext.mysql.MySqlDataTypeFactory
