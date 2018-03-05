@@ -1,0 +1,29 @@
+spring:
+        jpa:
+             open-in-view: true
+             profiles:
+                       active: h2
+             hibernate:
+                        ddl-auto: none
+             properties:
+                         hibernate:
+                                    cache:
+                                          use_second_level_cache: true
+                                          use_query_cache: true
+                                          region:
+                                                  factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+                                          hazelcast:
+                                                     instance_name: spring-shiro-hibernate-cache
+        datasource:
+                    max-wait: 10000
+                    max-active: 5
+                    test-on-borrow: true
+        dbunit:
+                operationType: CLEAN_INSERT
+                sample-file: src/test/resources/sample-data.xml
+db:
+   name: appsugar_kotlin
+server:
+        compression:
+                     enabled: true
+                     mime-types: application/json,application/xml,text/html,text/xml,text/plain

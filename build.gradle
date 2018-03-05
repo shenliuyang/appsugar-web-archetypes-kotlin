@@ -35,7 +35,7 @@ ext["kotlin.version"] = "1.2.30"
 ext["coroutineVersion"] = "0.22.3"
 ext["shiroVersion"] = "1.4.0"
 dependencies {
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
     compile("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutineVersion")
     compile("org.springframework.boot:spring-boot-starter-web")

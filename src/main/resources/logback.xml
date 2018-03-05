@@ -16,16 +16,10 @@
             <Pattern>%d{YYYY:MM:DD:HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
         </layout>
     </appender>
-
     <!-- 3rdparty Loggers -->
     <logger name="org.springframework" level="WARN"/>
-    <logger name="org.springframework.cache" level="DEBUG"/>
-
     <logger name="org.hibernate" level="WARN"/>
-
     <logger name="org.apache" level="WARN"/>
-    
-
     <logger name="org.appsugar" level="DEBUG"/>
 
     <root level="INFO">

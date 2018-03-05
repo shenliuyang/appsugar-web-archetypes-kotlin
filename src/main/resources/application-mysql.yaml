@@ -1,0 +1,8 @@
+spring:
+        datasource:
+                    url: jdbc:mysql://localhost:3306/${db.name}?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8
+                    username: root
+                    password: 123456
+                    driver-class-name: com.mysql.jdbc.Driver
+        dbunit:
+                data-factory: org.dbunit.ext.mysql.MySqlDataTypeFactory
