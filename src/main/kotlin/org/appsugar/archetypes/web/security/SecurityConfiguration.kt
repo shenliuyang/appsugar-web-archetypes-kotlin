@@ -1,6 +1,8 @@
 package org.appsugar.archetypes.web.security
 
 
+import com.hazelcast.config.Config
+import com.hazelcast.config.XmlConfigBuilder
 import com.hazelcast.core.HazelcastInstance
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.cache.CacheManager
@@ -14,6 +16,12 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.AbstractEnvironment
+import org.springframework.core.env.EnumerablePropertySource
+import org.springframework.core.env.Environment
+import org.springframework.core.env.PropertySource
+import java.util.*
+import java.util.stream.StreamSupport
 
 
 @Configuration
@@ -45,6 +53,20 @@ class SecurityConfiguration {
 
     @Bean
     fun shiroCacheManager(instance: HazelcastInstance) = HazelcastCacheManager().apply { hazelcastInstance = instance }
+
+    /**把spring跟hazelcast配置结合**/
+    @Bean
+    fun hazelcastConfig(springEnv: Environment): Config {
+        val props = Properties()
+        val propSrcs = (springEnv as AbstractEnvironment).propertySources
+        StreamSupport.stream<PropertySource<*>>(propSrcs.spliterator(), false)
+                .filter { ps -> ps is EnumerablePropertySource<*> }
+                .map { ps -> (ps as EnumerablePropertySource<*>).propertyNames }
+                .flatMap(Arrays::stream)
+                .forEach { propName -> props.setProperty(propName, springEnv.getProperty(propName)) }
+
+        return XmlConfigBuilder(SecurityConfiguration::class.java.classLoader.getResourceAsStream("hazelcast.xml")).setProperties(props).build()
+    }
 
     @Bean
     fun authorizer() = AuthorizationAttributeSourceAdvisor()

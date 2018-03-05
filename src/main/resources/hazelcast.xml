@@ -3,18 +3,18 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
            http://www.hazelcast.com/schema/config/hazelcast-config-3.9.xsd">
-    <instance-name>spring-shiro-hibernate-cache</instance-name>
+    <instance-name>${spring.hazelcast.instance-name}</instance-name>
     <group>
-        <name>appsugar</name>
-        <password>dev-pass</password>
+        <name>${spring.hazelcast.group.name}</name>
+        <password>${spring.hazelcast.group.password}</password>
     </group>
     <network>
         <port auto-increment="true" port-count="100">5701</port>
         <join>
             <multicast enabled="true"/>
         </join>
-        <interfaces enabled="false">
-            <interface>10.10.1.*</interface>
+        <interfaces enabled="${spring.hazelcast.network.interfaces.enabled}">
+            <interface>${spring.hazelcast.network.interfaces.interface}</interface>
         </interfaces>
     </network>
     <map name="shiro-activeSessionCache">

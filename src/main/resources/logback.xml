@@ -20,6 +20,7 @@
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.apache" level="WARN"/>
+    <logger name="ro.isdc.wro" level="WARN"/>
     <logger name="org.appsugar" level="DEBUG"/>
 
     <root level="INFO">
