@@ -19,11 +19,11 @@
     </network>
     <map name="shiro-activeSessionCache">
         <async-backup-count>1</async-backup-count>
-        <time-to-live-seconds>1800</time-to-live-seconds>
+        <time-to-live-seconds>${spring.hazelcast.session.timeout}</time-to-live-seconds>
     </map>
     <map name="org.appsugar.archetypes.web.security.ShiroRealm.authenticationCache">
         <async-backup-count>1</async-backup-count>
-        <time-to-live-seconds>1800</time-to-live-seconds>
+        <time-to-live-seconds>${spring.hazelcast.session.timeout}</time-to-live-seconds>
     </map>
     <properties>
         <property name="hazelcast.max.no.heartbeat.seconds">5</property>

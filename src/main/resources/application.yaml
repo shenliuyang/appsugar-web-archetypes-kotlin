@@ -1,8 +1,8 @@
 spring:
+        profiles:
+                  active: h2
         jpa:
              open-in-view: true
-             profiles:
-                       active: h2
              properties:
                          hibernate:
                                     cache:
@@ -28,6 +28,8 @@ spring:
                                           enabled: false
                                           interface: 192.168.199.*
                     instance-name: spring-shiro-hibernate-cache
+                    session:
+                             timeout: 1800
 db:
    name: appsugar_kotlin
 server:
