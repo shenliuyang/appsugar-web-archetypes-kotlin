@@ -11,7 +11,6 @@ import javax.persistence.EntityManager
 class CustomSimpleJpaRepository<T, ID : Serializable>(entityInformation: JpaEntityInformation<T, ID>, entityManager: EntityManager) : QuerydslJpaRepository<T, ID>(entityInformation, entityManager) {
 
     override fun <S : T> save(entity: S): S {
-        print("save $entity")
         if (entity is IdEntity) {
             entity.updatedAt = LocalDateTime.now()
         }
