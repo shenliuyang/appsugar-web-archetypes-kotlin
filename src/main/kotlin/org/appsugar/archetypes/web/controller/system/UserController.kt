@@ -7,7 +7,7 @@ import org.appsugar.archetypes.extension.attr
 import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserRepository
-import org.appsugar.archetypes.repository.UserSpecification
+import org.appsugar.archetypes.repository.toPredicate
 import org.appsugar.archetypes.web.security.Permission
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -36,7 +36,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     @RequiresPermissions("user:view")
     @RequestMapping
     fun list(condition: UserCondition, @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable, model: Model): String {
-        model.attr("page", repository.findAll(UserSpecification(condition), pageable))
+        model.attr("page", repository.findAll(repository.toPredicate(condition), pageable))
         return "system/user/list"
     }
 

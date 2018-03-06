@@ -7,16 +7,15 @@ buildscript {
         classpath("org.springframework:springloaded:1.2.8.RELEASE")
     }
 }
-
 plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.2.30"
     id("org.jetbrains.kotlin.plugin.jpa") version "1.2.30"
     id("org.jetbrains.kotlin.jvm") version "1.2.30"
+    id("org.jetbrains.kotlin.kapt") version "1.2.30"
     id("io.spring.dependency-management") version "1.0.4.RELEASE"
     id("net.researchgate.release") version "2.6.0"
     id("org.springframework.boot") version "2.0.0.RELEASE"
 }
-
 apply plugin: "idea"
 
 idea {
@@ -42,8 +41,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-cache")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
     compile("org.springframework.boot:spring-boot-devtools")
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    compile("com.querydsl:querydsl-jpa")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("org.apache.shiro:shiro-spring-boot-web-starter:$shiroVersion")
     compile("org.apache.shiro:shiro-hazelcast:$shiroVersion")
@@ -62,6 +62,7 @@ dependencies {
     compile("org.webjars.bower:datatables-responsive:1.0.6")
     //wro4j
     compile("eu.michael-simons:wro4j-spring-boot-starter:0.3.10")
+    kapt "com.querydsl:querydsl-apt:4.1.4:jpa"
     testCompile("com.h2database:h2")
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")

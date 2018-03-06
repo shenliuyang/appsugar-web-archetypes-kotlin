@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 class UserRepositoryTest : BaseTestCase() {
     @Autowired
     lateinit var repository: UserRepository
-    
+
 
     @Test
     fun testFindByLoginName() {
@@ -23,7 +23,7 @@ class UserRepositoryTest : BaseTestCase() {
     @Test
     fun testFindByCondition() {
         val condition = UserCondition(name = "NewYoung", loginName = "123")
-        val users = repository.findAll(UserSpecification(condition))
+        val users = repository.findAll(repository.toPredicate(condition))
         logger.debug("testFindByCondition {} result is {} ", condition, users)
         async { }
     }
