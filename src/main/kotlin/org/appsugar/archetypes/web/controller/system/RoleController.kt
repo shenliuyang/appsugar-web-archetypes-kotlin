@@ -25,7 +25,7 @@ class RoleController(val repository: RoleRepository) {
 
     @ModelAttribute("role")
     fun modelAttribute(id: Long?) = when (id) {
-        null, Long.MIN_VALUE -> Role()
+        null, 0L -> Role()
         else -> repository.findById(id).get()
     }
 

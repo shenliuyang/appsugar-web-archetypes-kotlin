@@ -16,6 +16,7 @@ import java.io.Serializable
  */
 class ShiroRealm : AuthorizingRealm() {
 
+
     @Autowired
     private lateinit var userRepository: UserRepository
 
@@ -47,6 +48,7 @@ class ShiroRealm : AuthorizingRealm() {
     }
 
 
+
     private fun SimpleAuthorizationInfo.addStringPermissionWithDependency(permissions: Collection<String>) {
         permissions.forEach {
             this.addStringPermission(it)
@@ -61,14 +63,14 @@ class ShiroRealm : AuthorizingRealm() {
 data class Principal(
         val id: Long = -1, val name: String = "anonymous"
 ) : Serializable {
-    private val attributes = mutableMapOf<String, Any>()
+    private val attributes = mutableMapOf<String, Serializable>()
 
     /**根据key查询值**/
     @Suppress("UNCHECKED_CAST")
-    fun <T> attr(key: String) = attributes[key] as T
+    fun <T> attr(key: String) = attributes[key] as T?
 
     /**添加或移除熟悉**/
-    fun attr(key: String, value: Any?) {
+    fun attr(key: String, value: Serializable?) {
         if (value != null) attributes[key] = value else attributes.remove(key)
     }
 }
