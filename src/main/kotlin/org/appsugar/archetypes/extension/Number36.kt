@@ -20,7 +20,7 @@ data class Number36(val value:String="0"){
             do{
                 val position = changedValue%size
                 sb.append(NUMBER_ARRAY[position])
-                changedValue /= 36
+                changedValue /= size
                 if(changedValue<=0)break
             }while(true)
             return Number36(sb.reverse().toString())
@@ -30,9 +30,7 @@ data class Number36(val value:String="0"){
     private fun checkValue(){
         val first = FIRST_NUMBER
         val last = LAST_NUMBER
-        value.forEach {
-            if(it !in first..last)  throw IllegalArgumentException("$value is not a valid number36  invalid char is '$it'")
-        }
+        value.forEach { if(it !in first..last)  throw IllegalArgumentException("$value is not a valid number36  invalid char is '$it'") }
     }
 
     fun toInt():Int{
@@ -49,4 +47,6 @@ data class Number36(val value:String="0"){
         }
         return total
     }
+
+    fun  increase(num:Int=1)= valueOf(toInt()+num)
 }
