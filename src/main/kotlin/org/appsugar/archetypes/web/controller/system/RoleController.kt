@@ -24,7 +24,7 @@ class RoleController(val repository: RoleRepository) {
 
 
     @ModelAttribute("role")
-    fun modelAttribute(id: Long?) = when (id) {
+    fun modelAttribute(id: Long? = 0) = when (id) {
         null, 0L -> Role()
         else -> repository.findById(id).get()
     }
@@ -42,7 +42,7 @@ class RoleController(val repository: RoleRepository) {
 
     @RequiresPermissions("role:edit")
     @RequestMapping("save")
-    fun save(role: Role, permissions: Array<String>?, model: Model, ra: RedirectAttributes): String {
+    fun save(role: Role, permissions: Array<String>?, ra: RedirectAttributes): String {
         logger.info("prepare to save role {}, new permissions is {} ", role, permissions)
         role.permissions = permissions?.joinToString(",") ?: ""
         repository.save(role)

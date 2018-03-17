@@ -15,6 +15,20 @@ inline fun String.isNotBlankThen(block: String.() -> Unit): String {
     return this
 }
 
+inline fun Long.notZero(block: Long.() -> Unit): Long {
+    if (this != 0L) {
+        block()
+    }
+    return this
+}
+
+inline fun Long?.notZero(block: Long.() -> Unit): Long? {
+    if (this != null && this != 0L) {
+        block()
+    }
+    return this
+}
+
 /**
  * for spring mvc
  */

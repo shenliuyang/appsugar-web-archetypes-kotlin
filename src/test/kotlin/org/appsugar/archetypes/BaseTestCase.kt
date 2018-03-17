@@ -14,11 +14,13 @@ import org.springframework.core.env.Environment
 import org.springframework.core.env.get
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.transaction.annotation.Transactional
 import java.io.File
 import java.sql.DriverManager
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@Transactional
 @ActiveProfiles("h2")
 abstract class BaseTestCase {
     protected val logger: Logger by lazy { LoggerFactory.getLogger(this::class.java) }

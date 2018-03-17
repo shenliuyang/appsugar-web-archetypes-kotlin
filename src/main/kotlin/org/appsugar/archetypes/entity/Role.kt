@@ -10,8 +10,8 @@ import javax.persistence.Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @DynamicUpdate
-data class Role(
-        var name: String = "",
+open class Role(
+        open var name: String = "",
         @get:Column(columnDefinition = "TEXT")
-        var permissions: String = ""
+        open var permissions: String = ""
 ) : IdEntity()

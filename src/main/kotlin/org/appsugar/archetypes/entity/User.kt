@@ -9,17 +9,17 @@ import javax.persistence.Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @DynamicUpdate
-data class User(
-        var name: String = "",
+open class User(
+        open var name: String = "",
         @get:Column(unique = true)
-        var loginName: String = "",
-        var password: String = "",
+        open var loginName: String = "",
+        open var password: String = "",
         @get:Column(columnDefinition = "TEXT")
-        var permissions: String = ""
+        open var permissions: String = ""
 ) : IdEntity() {
     @get:Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @get:ManyToMany(fetch = FetchType.LAZY)
     @get:Fetch(FetchMode.SUBSELECT)
     @get:JoinTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id")], inverseJoinColumns = [JoinColumn(name = "role_id")])
-    var roles: MutableSet<Role> = mutableSetOf() //  let roles out of toString
+    open var roles: MutableSet<Role> = mutableSetOf() //  let roles out of toString
 }

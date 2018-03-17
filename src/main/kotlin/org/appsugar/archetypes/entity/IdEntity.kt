@@ -10,5 +10,6 @@ import javax.persistence.MappedSuperclass
 @MappedSuperclass
 abstract class IdEntity(@get:Id
                         @get:GeneratedValue(strategy = GenerationType.IDENTITY)
-                        var id: Long = 0L, var createdAt: LocalDateTime = LocalDateTime.now(),
-                        var updatedAt: LocalDateTime = LocalDateTime.now()) : Serializable
+                        open var id: Long = 0L,
+                        open var createdAt: LocalDateTime = LocalDateTime.now(),
+                        open var updatedAt: LocalDateTime = LocalDateTime.now()) : Serializable

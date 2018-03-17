@@ -40,13 +40,14 @@ class ShiroRealm : AuthorizingRealm() {
         val user = userRepository.findById(principal.id).get()
         val info = SimpleAuthorizationInfo()
         info.addStringPermissionWithDependency(user.permissions.split(",").toList())
-        for ((name, permissions) in user.roles) {
+        for (role in user.roles) {
+            val name = role.name
+            val permissions = role.permissions
             info.addRole(name)
             info.addStringPermissionWithDependency(permissions.split(",").toList())
         }
         return info
     }
-
 
 
     private fun SimpleAuthorizationInfo.addStringPermissionWithDependency(permissions: Collection<String>) {
