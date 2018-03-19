@@ -12,4 +12,18 @@ abstract class IdEntity(@get:Id
                         @get:GeneratedValue(strategy = GenerationType.IDENTITY)
                         open var id: Long = 0L,
                         open var createdAt: LocalDateTime = LocalDateTime.now(),
-                        open var updatedAt: LocalDateTime = LocalDateTime.now()) : Serializable
+                        open var updatedAt: LocalDateTime = LocalDateTime.now()) : Serializable {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is IdEntity) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
