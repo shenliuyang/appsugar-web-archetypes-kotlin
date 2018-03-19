@@ -26,7 +26,7 @@ class RoleController(val repository: RoleRepository) {
     @ModelAttribute("role")
     fun modelAttribute(id: Long? = 0) = when (id) {
         null, 0L -> Role()
-        else -> repository.findById(id).get()
+        else -> repository.getOne(id)
     }
 
     @RequiresPermissions("role:view")

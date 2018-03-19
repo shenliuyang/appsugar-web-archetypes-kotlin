@@ -4,7 +4,6 @@ import org.appsugar.archetypes.condition.OrganizationCondition
 import org.appsugar.archetypes.entity.Organization
 import org.appsugar.archetypes.extension.attr
 import org.appsugar.archetypes.extension.getLogger
-import org.appsugar.archetypes.extension.notZero
 import org.appsugar.archetypes.repository.OrganizationRepository
 import org.appsugar.archetypes.repository.toPredicate
 import org.appsugar.archetypes.service.OrganizationService
@@ -26,7 +25,7 @@ class OrganizationController(val organizationRepository: OrganizationRepository,
     @ModelAttribute("org")
     fun modelAttribute(id: Long?) = when (id) {
         null, 0L -> Organization()
-        else -> organizationRepository.findById(id).get()
+        else -> organizationRepository.getOne(id)
     }
 
     @RequestMapping(value = ["list", ""])
@@ -34,11 +33,19 @@ class OrganizationController(val organizationRepository: OrganizationRepository,
 
 
     @RequestMapping("form")
-    fun form() = "/system/org/form"
+    fun form(@ModelAttribute("org") org: Organization, model: Model): String {
+        model.attr("o", org)
+        return "/system/org/form"
+    }
 
     @RequestMapping("/save")
-    fun save(parentId: Long?, org: Organization, ra: RedirectAttributes): String {
-        parentId.notZero { org.parent = organizationRepository.getOne(this) }
+    fun save(org: Organization, ra: RedirectAttributes): String {
+        org.parent = org.parent?.let {
+            when (it.id) {
+                0L -> null
+                else -> organizationRepository.getOne(it.id)
+            }
+        }
         val saved = organizationService.save(org)
         logger.info("save before {} and after {} ${org.parent}", org, saved)
         ra.addFlashAttribute("msg", "保存[${saved.name}]成功")
