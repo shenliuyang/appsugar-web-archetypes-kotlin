@@ -21,8 +21,9 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-6">
-                                <div class="form-group"><label>名称</label><input  class="form-control" th:field="*{name}" placeholder="请输入机构名称"  required></div>
+                                <div class="form-group" th:if="${org.parent != null}"><label>父机构</label><input  class="form-control" th:field="*{parent.name}" disabled></div>
                                 <div class="form-group"><label>代码</label><input  class="form-control" th:field="*{code}" readonly></div>
+                                <div class="form-group"><label>名称</label><input  class="form-control" th:field="*{name}" placeholder="请输入机构名称"  required></div>
                                 <div class="form-group"><label>描述</label><textarea  class="form-control" rows="3" th:field="*{description}" required/></div>
                             </div>
                          </div>
