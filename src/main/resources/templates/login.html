@@ -41,8 +41,16 @@
                                 <div class="form-group">
                                     <input class="form-control" placeholder="密码" name="password" type="password" th:value="${param.password}">
                                 </div>
-                                <!-- Change this to a button or input when using this as a form -->
-                                <button type="submit" class="btn btn-lg btn-success btn-block">确认</button>
+                                <div class="row">
+                                    <div class="col-lg-9"></div>
+                                    <div class="col-lg-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label"  for="exampleCheck1">记住我</label>
+                                            <input type="checkbox" class="form-check-input" name="rememberMe" id="exampleCheck1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-lg btn-success btn-block">登录</button>
                             </fieldset>
                         </form>
                         <div class="alert alert-danger alert-dismissable" id="warn-alert" th:if="${msg != null}">
