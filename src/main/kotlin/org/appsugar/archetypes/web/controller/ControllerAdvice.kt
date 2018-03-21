@@ -6,8 +6,15 @@ import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.web.security.Permission
 import org.appsugar.archetypes.web.security.ShiroUtils
 import org.springframework.ui.Model
+import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.ModelAttribute
+import java.beans.PropertyEditorSupport
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.servlet.http.HttpServletRequest
 
 
@@ -15,6 +22,9 @@ import javax.servlet.http.HttpServletRequest
 class ControllerAdvice {
     companion object {
         val logger = getLogger<ControllerAdvice>()
+        val LOCAL_DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")!!
+        val LOCAL_DATE_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd")!!
+        val TIME_PATTERN = DateTimeFormatter.ofPattern("HH:mm:ss")
     }
 
     @ModelAttribute("menus")
@@ -49,6 +59,28 @@ class ControllerAdvice {
         model.attr("msg", sb.toString())
         model.addMenus()
         return "error/500.html"
+    }
+
+
+    @InitBinder
+    fun initWebBinder(webDataBinder: WebDataBinder) {
+        webDataBinder.registerCustomEditor(LocalDateTime::class.java, object : PropertyEditorSupport() {
+            override fun setAsText(text: String) {
+                value = LocalDateTime.parse(text, LOCAL_DATE_TIME_PATTERN)
+            }
+        })
+
+        webDataBinder.registerCustomEditor(LocalDate::class.java, object : PropertyEditorSupport() {
+            override fun setAsText(text: String) {
+                value = LocalDate.parse(text, LOCAL_DATE_PATTERN)
+            }
+        })
+
+        webDataBinder.registerCustomEditor(LocalTime::class.java, object : PropertyEditorSupport() {
+            override fun setAsText(text: String) {
+                value = LocalTime.parse(text, TIME_PATTERN)
+            }
+        })
     }
 
     fun Model.addMenus() = this.attr("menus", menus)

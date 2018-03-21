@@ -50,7 +50,7 @@ class SecurityConfiguration {
             crmm.cipherKey = Base64.getDecoder().decode(environment.getProperty("shiro.cipher.key", "u39fskcJooyWj2jA6Vs2lA=="))
             rememberMeManager = crmm
         }
-        SecurityUtils.setSecurityManager(this)//make sure always hava a securityManager
+        SecurityUtils.setSecurityManager(this)//make sure always have a securityManager
     }
 
     @Bean
