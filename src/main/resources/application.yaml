@@ -21,7 +21,7 @@ spring:
                 sample-file: src/test/resources/sample-data.xml
         hazelcast:
                     group:
-                           name: appsugar
+                           name: ${random.uuid}
                            password: dev-pass
                     network:
                              interfaces:

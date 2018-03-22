@@ -22,7 +22,7 @@ class OrganizationController(val organizationRepository: OrganizationRepository,
         private val logger = getLogger<OrganizationController>()
     }
 
-    @ModelAttribute("org")
+    @ModelAttribute("organization")
     fun modelAttribute(id: Long?) = when (id) {
         null, 0L -> Organization()
         else -> organizationRepository.getOne(id)
@@ -33,21 +33,17 @@ class OrganizationController(val organizationRepository: OrganizationRepository,
 
 
     @RequestMapping("form")
-    fun form(@ModelAttribute("org") org: Organization, model: Model): String {
-        model.attr("o", org)
+    fun form(organization: Organization, model: Model): String {
         return "/system/org/form"
     }
 
     @RequestMapping("/save")
-    fun save(org: Organization, ra: RedirectAttributes): String {
-        org.parent = org.parent?.let {
-            when (it.id) {
-                0L -> null
-                else -> organizationRepository.getOne(it.id)
-            }
+    fun save(organization: Organization, ra: RedirectAttributes): String {
+        if (organization.parent?.id == 0L) {
+            organization.parent = null
         }
-        val saved = organizationService.save(org)
-        logger.info("save before {} and after {} ${org.parent}", org, saved)
+        val saved = organizationService.save(organization)
+        logger.info("save before {} and after {} ${organization.parent}", organization, saved)
         ra.addFlashAttribute("msg", "保存[${saved.name}]成功")
         return "redirect:/system/org/list"
     }

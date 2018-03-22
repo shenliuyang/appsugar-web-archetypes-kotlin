@@ -28,4 +28,10 @@ open class Organization(
     @get:ManyToOne(fetch = FetchType.LAZY)
     @get:JoinColumn(name = "parent_id")
     open var parent: Organization? = null
+
+    override fun toString(): String {
+        return "Organization(name='$name', code='$code', codeLength=$codeLength, description='$description')"
+    }
+
+
 }
