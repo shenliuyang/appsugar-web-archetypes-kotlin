@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        dynamicJarNames = ["spring"]
+        dynamicJarNames = ["change_me"]
         isMatchAny = { name, any ->
             for (String p : any) {
                 if (name.contains(p)) {
