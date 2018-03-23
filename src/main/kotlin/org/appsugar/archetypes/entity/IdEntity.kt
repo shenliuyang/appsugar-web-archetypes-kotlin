@@ -26,4 +26,6 @@ abstract class IdEntity(@get:Id
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
+    abstract override fun toString(): String
 }

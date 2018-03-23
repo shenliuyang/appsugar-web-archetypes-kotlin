@@ -8,6 +8,9 @@
         <name>${spring.hazelcast.group.name}</name>
         <password>${spring.hazelcast.group.password}</password>
     </group>
+    <management-center enabled="${spring.hazelcast.management.enabled}">
+        ${spring.hazelcast.management.url}
+    </management-center>
     <network>
         <port auto-increment="true" port-count="100">5701</port>
         <join>
@@ -26,6 +29,8 @@
         <time-to-live-seconds>${spring.hazelcast.session.timeout}</time-to-live-seconds>
     </map>
     <properties>
-        <property name="hazelcast.max.no.heartbeat.seconds">5</property>
+        <property name="hazelcast.max.no.heartbeat.seconds">
+            ${spring.hazelcast.heartbeat.seconds}
+        </property>
     </properties>
 </hazelcast>

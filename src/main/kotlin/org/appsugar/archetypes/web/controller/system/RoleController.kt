@@ -44,7 +44,7 @@ class RoleController(val repository: RoleRepository) {
     @RequestMapping("save")
     fun save(role: Role, permissions: Array<String>?, ra: RedirectAttributes): String {
         logger.info("prepare to save role {}, new permissions is {} ", role, permissions)
-        role.permissions = permissions?.joinToString(",") ?: ""
+        role.permissions = permissions?.toMutableList() ?: mutableListOf()
         repository.save(role)
         ra.addFlashAttribute("msg", "保存[${role.name}]成功")
         return "redirect:/system/role"

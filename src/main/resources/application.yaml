@@ -23,6 +23,9 @@ spring:
                     group:
                            name: ${random.uuid}
                            password: dev-pass
+                    management:
+                               enabled: false
+                               url: http://localhost:8080/mancenter
                     network:
                              interfaces:
                                           enabled: false
@@ -30,6 +33,8 @@ spring:
                     instance-name: spring-shiro-hibernate-cache
                     session:
                              timeout: 1800
+                    heartbeat:
+                              seconds: 5
 db:
    name: appsugar_kotlin
 server:

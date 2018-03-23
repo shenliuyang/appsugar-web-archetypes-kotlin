@@ -7,6 +7,7 @@ import org.apache.shiro.authz.AuthorizationInfo
 import org.apache.shiro.authz.SimpleAuthorizationInfo
 import org.apache.shiro.realm.AuthorizingRealm
 import org.apache.shiro.subject.PrincipalCollection
+import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.Serializable
@@ -15,7 +16,9 @@ import java.io.Serializable
  * 用户认证鉴权领域
  */
 class ShiroRealm : AuthorizingRealm() {
-
+    companion object {
+        val logger = getLogger<ShiroRealm>()
+    }
 
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -38,13 +41,14 @@ class ShiroRealm : AuthorizingRealm() {
     override fun doGetAuthorizationInfo(principals: PrincipalCollection): AuthorizationInfo {
         val principal = principals.oneByType(Principal::class.java)
         val user = userRepository.findById(principal.id).get()
+        logger.debug("doGetAuthorizationInfo by id ${principal.id} user is $user roles is ${user.roles}")
         val info = SimpleAuthorizationInfo()
-        info.addStringPermissionWithDependency(user.permissions.split(",").toList())
+        info.addStringPermissionWithDependency(user.permissions)
         for (role in user.roles) {
             val name = role.name
             val permissions = role.permissions
             info.addRole(name)
-            info.addStringPermissionWithDependency(permissions.split(",").toList())
+            info.addStringPermissionWithDependency(permissions)
         }
         return info
     }
