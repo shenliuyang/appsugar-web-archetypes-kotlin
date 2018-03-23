@@ -15,12 +15,14 @@ import org.apache.shiro.web.mgt.CookieRememberMeManager
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.AbstractEnvironment
 import org.springframework.core.env.EnumerablePropertySource
 import org.springframework.core.env.Environment
 import org.springframework.core.env.PropertySource
+import org.springframework.core.io.Resource
 import java.util.*
 import java.util.stream.StreamSupport
 
@@ -61,7 +63,7 @@ class SecurityConfiguration {
 
     /**把spring跟hazelcast配置结合**/
     @Bean
-    fun hazelcastConfig(springEnv: Environment): Config {
+    fun hazelcastConfig(springEnv: Environment, @Value("classpath:hazelcast.xml") resource: Resource): Config {
         val props = Properties()
         val propSrcs = (springEnv as AbstractEnvironment).propertySources
         StreamSupport.stream<PropertySource<*>>(propSrcs.spliterator(), false)
@@ -70,8 +72,9 @@ class SecurityConfiguration {
                 .flatMap(Arrays::stream)
                 .forEach { propName -> props.setProperty(propName, springEnv.getProperty(propName)) }
 
-        return XmlConfigBuilder(SecurityConfiguration::class.java.classLoader.getResourceAsStream("hazelcast.xml")).setProperties(props).build()
+        return XmlConfigBuilder(resource.inputStream).setProperties(props).build()
     }
+
 
     @Bean
     fun authorizer() = AuthorizationAttributeSourceAdvisor()
