@@ -19,10 +19,10 @@ buildscript {
     }
 }
 plugins {
-    id("org.jetbrains.kotlin.plugin.spring") version "1.2.30"
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.30"
-    id("org.jetbrains.kotlin.jvm") version "1.2.30"
-    id("org.jetbrains.kotlin.kapt") version "1.2.30"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.2.31"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.31"
+    id("org.jetbrains.kotlin.jvm") version "1.2.31"
+    id("org.jetbrains.kotlin.kapt") version "1.2.31"
     id("io.spring.dependency-management") version "1.0.4.RELEASE"
     id("net.researchgate.release") version "2.6.0"
     id("org.springframework.boot") version "2.0.0.RELEASE"
