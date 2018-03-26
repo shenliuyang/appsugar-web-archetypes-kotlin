@@ -42,7 +42,7 @@ repositories {
     jcenter()
 }
 
-ext["kotlin.version"] = "1.2.30"
+ext["kotlin.version"] = "1.2.31"
 ext["coroutineVersion"] = "0.22.5"
 ext["shiroVersion"] = "1.4.0"
 dependencies {
