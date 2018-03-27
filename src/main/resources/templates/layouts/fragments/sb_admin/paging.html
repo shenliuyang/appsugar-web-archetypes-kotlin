@@ -4,7 +4,7 @@
             <a th:href="'javascript:jumpToPage('+${page.number-1}+')'">上一页</a>
         </li>
         <li th:each="pageNo : ${#numbers.sequence(startPage,endPage)}" th:class="'paginate_button ' + ${page.number==pageNo?'active':''}" aria-controls="dataTables-example" tabindex="0" th:if="${page.totalPages>0}">
-            <a th:href="'javascript:jumpToPage('+${page.number}+')'" th:text="${pageNo+1}">1</a>
+            <a th:href="'javascript:jumpToPage('+${pageNo}+')'" th:text="${pageNo+1}">1</a>
         </li>
         <li th:class="'paginate_button next ' + ${page.last?'disabled':''} " aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next">
             <a th:href="'javascript:jumpToPage('+${page.number+1}+')'">下一页</a>
