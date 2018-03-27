@@ -13,6 +13,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean
 import org.apache.shiro.web.mgt.CookieRememberMeManager
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager
+import org.apache.shiro.web.servlet.SimpleCookie
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator
 import org.springframework.beans.factory.annotation.Value
@@ -47,10 +48,14 @@ class SecurityConfiguration {
         sessionManager = DefaultWebSessionManager().apply {
             isSessionValidationSchedulerEnabled = false
             sessionDAO = EnterpriseCacheSessionDAO()
+            sessionIdCookie = SimpleCookie().apply {
+                name = environment.getProperty("shiro.session.name", "sessionid")
+            }
             val crmm = CookieRememberMeManager()
             //val key = Base64.getEncoder().encode(AesCipherService().generateNewKey().getEncoded()) generate new key
             crmm.cipherKey = Base64.getDecoder().decode(environment.getProperty("shiro.cipher.key", "u39fskcJooyWj2jA6Vs2lA=="))
             rememberMeManager = crmm
+
         }
         SecurityUtils.setSecurityManager(this)//make sure always have a securityManager
     }

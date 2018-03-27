@@ -44,3 +44,5 @@ server:
 shiro:
       cipher:
              key: u39fskcJooyWj2jA6Vs2lA==
+      session:
+             name: appsession
