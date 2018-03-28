@@ -29,12 +29,12 @@ class OrganizationController(val organizationRepository: OrganizationRepository,
     }
 
     @RequestMapping(value = ["list", ""])
-    fun list(condition: OrganizationCondition, @PageableDefault(sort = ["code"]) pageable: Pageable, model: Model) = model.attr("page", organizationRepository.findAll(organizationRepository.toPredicate(condition), pageable)).attr("condition", condition).let { "/system/org/list" }
+    fun list(condition: OrganizationCondition, @PageableDefault(sort = ["code"]) pageable: Pageable, model: Model) = model.attr("page", organizationRepository.findAll(organizationRepository.toPredicate(condition), pageable)).attr("condition", condition).let { "system/org/list" }
 
 
     @RequestMapping("form")
     fun form(organization: Organization, model: Model): String {
-        return "/system/org/form"
+        return "system/org/form"
     }
 
     @RequestMapping("/save")

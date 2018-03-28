@@ -29,7 +29,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     @ModelAttribute("user")
     fun modelAttribute(id: Long? = 0) = when (id) {
         null, 0L -> User()
-        else -> repository.getOne(id)
+        else -> repository.findById(id).get()
     }
 
 
