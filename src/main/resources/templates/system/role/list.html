@@ -10,50 +10,68 @@
             <h1 class="page-header"></h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="app" v-cloak>
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <form method="post" class="form-inline">
-                        <a class="btn btn-default" th:href="@{/system/role/form}" role="button">新建</a>
+                    <form method="post" class="el-form-listPage cf">
+                        <a th:href="@{/system/role/form}"><button type="button" class="el-button el-button--primary">新建</button></a>
                     </form>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped" id="dataTables">
-                        <thead>
-                        <tr>
-                            <th>名称</th>
-                            <th>创建时间</th>
-                            <th>修改时间</th>
-                            <th>详情</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="odd gradeX" th:each="r : ${page.content}">
-                            <td th:text="${r.name}"/>
-                            <td th:text="${#temporals.format(r.createdAt,'yyyy-MM-dd HH:mm')}" class="center"/>
-                            <td th:text="${#temporals.format(r.updatedAt,'yyyy-MM-dd HH:mm')}" class="center"/>
-                            <td><a th:href="@{/system/role/form?id=}+${r.id}" th:text="'查看'"/></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div class="el-table el-table--enable-row-hover">
+                        <table class="el-table__body" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="is-center is-leaf">
+                                        名称
+                                    </th>
+                                    <th class="is-center is-leaf">
+                                        创建时间
+                                    </th>
+                                    <th class="is-center is-leaf">
+                                        修改时间
+                                    </th>
+                                    <th class="is-center is-leaf">
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="el-table__row" th:each="row : ${page.content}">
+                                    <td class="is-center" th:text="${row.name}"/>
+                                    <td class="is-center" th:text="${row.createdAt}"/>
+                                    <td class="is-center" th:text="${row.updatedAt}"/>
+                                    <td class="is-center">
+                                        <div class="cell">
+                                            <a th:href="@{/system/role/form?id=}+${row.id}">
+                                                <button type="button" class="el-button el-button--primary el-button--mini">查看</button>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- /.panel-body -->
             </div>
-            <div class="alert alert-danger alert-dismissable" id="warn-alert" th:if="${msg != null}">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <div th:text="${msg}"></div>
-                <script language="JavaScript">
-                        $("#warn-alert").fadeTo(2000, 500).slideUp(500, function(){
-                            $("#warn-alert").slideUp(500);
-                        });
-                </script>
-            </div>
+            <saas-message :message="msg"></saas-message>
             <!-- /.panel -->
         </div>
         <!-- /.col-lg-12 -->
     </div>
+    <script th:inline="javascript">
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    msg: [[${msg}]]
+                }
+            }
+        });
+    </script>
 </div>
 </body>
 </html>

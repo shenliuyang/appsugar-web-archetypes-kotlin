@@ -19,10 +19,10 @@ buildscript {
     }
 }
 plugins {
-    id("org.jetbrains.kotlin.plugin.spring") version "1.2.31"
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.31"
-    id("org.jetbrains.kotlin.jvm") version "1.2.31"
-    id("org.jetbrains.kotlin.kapt") version "1.2.31"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.2.40"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.40"
+    id("org.jetbrains.kotlin.jvm") version "1.2.40"
+    id("org.jetbrains.kotlin.kapt") version "1.2.40"
     id("io.spring.dependency-management") version "1.0.4.RELEASE"
     id("net.researchgate.release") version "2.6.0"
     id("org.springframework.boot") version "2.0.1.RELEASE"
@@ -42,7 +42,7 @@ repositories {
     jcenter()
 }
 
-ext["kotlin.version"] = "1.2.31"
+ext["kotlin.version"] = "1.2.40"
 ext["coroutineVersion"] = "0.22.5"
 ext["shiroVersion"] = "1.4.0"
 dependencies {
@@ -72,7 +72,7 @@ dependencies {
     compile("org.webjars:startbootstrap-sb-admin-2:3.3.7+1")
     compile("org.webjars:morrisjs:0.5.0")
     compile("org.webjars.bower:datatables-responsive:1.0.6")
-    
+
     kapt("com.querydsl:querydsl-apt:4.1.4:jpa")
     testCompile("com.h2database:h2")
     testCompile("org.apache.ant:ant:1.10.1")

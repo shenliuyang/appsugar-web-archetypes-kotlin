@@ -36,8 +36,9 @@ class SecurityConfiguration {
         loginUrl = "/login"
         successUrl = "/index"
         this.securityManager = securityManager
+        val staticDefinitionMap = mapOf("/css" to "anon", "/images" to "anon", "/js" to "anon", "/scss" to "anon")
         filterChainDefinitionMap = mapOf("/login" to "authc", "/logout" to "logout"
-                , "/wro4j/*" to "anon", "/static/**" to "anon", "/favicon.ico" to "anon", "/webjars/**" to "anon", "/**" to "user")
+                , "/wro4j/*" to "anon", "/static/**" to "anon", "/favicon.ico" to "anon", "/webjars/**" to "anon", "/**" to "user") + staticDefinitionMap
     }
 
 

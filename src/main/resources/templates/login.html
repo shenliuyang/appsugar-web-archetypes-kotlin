@@ -11,7 +11,11 @@
     <title>Appsugar-后台登录</title>
 
     <link th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/webjars/startbootstrap-sb-admin-2/3.3.7+1/css/sb-admin-2.min.css}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome-4.7.0/css/font-awesome.min.css}" rel="stylesheet">
+    <!-- element-ui css样式 -->
+    <link th:href="@{/css/element-ui@2.2.1/index.css}" rel="stylesheet">
+    <link th:href="@{/css/login.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,52 +26,48 @@
     <!-- Main JS -->
     <script th:src="@{/webjars/jquery/3.1.1-1/jquery.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
-
 </head>
 
 <body>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">登录</h3>
+    <div class="saas-message" id="warn-alert" th:if="${msg != null}">
+        <i class="fa fa-times-circle"></i><span th:text="${msg}"></span>
+        <script>
+            $("#warn-alert").fadeTo(2000, 500).delay(800).slideUp(500);
+        </script>
+    </div>
+    <div class="saas-login">
+        <div class="title">应用糖- <span>管理系统</span></div>
+        <form class="login-cell" role="form" method="post" th:action="@{/login}">
+            <fieldset>
+                <div class="el-input el-input--prefix mb-25">
+                    <input class="el-input__inner" placeholder="用户名" name="username" type="input" th:value="${param.username}" autofocus>
+                    <span class="el-input__prefix">
+                        <i class="fa fa-user fa-fw"></i>
+                    </span>
+                </div>
+                <div class="el-input el-input--prefix mb-25">
+                    <input class="el-input__inner" placeholder="密码" name="password" type="password" th:value="${param.password}">
+                    <span class="el-input__prefix">
+                        <i class="fa fa-lock fa-fw"></i>
+                    </span>
+                </div>
+                <div class="el-row mb-25">
+                    <div class="el-col el-col-12">
+                        <label role="checkbox" aria-checked="true" class="el-checkbox is-checked">
+                            <span aria-checked="mixed" class="el-checkbox__input is-checked">
+                                <span class="el-checkbox__inner"></span>
+                                <input type="checkbox" class="el-checkbox__original" value="">
+                            </span>
+                            <span class="el-checkbox__label">自动登录</span>
+                        </label>
                     </div>
-                    <div class="panel-body">
-                        <form role="form" method="post" th:action="@{/login}">
-                            <fieldset>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="账号" name="username" type="input" th:value="${param.username}" autofocus>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="密码" name="password" type="password" th:value="${param.password}">
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-9"></div>
-                                    <div class="col-lg-3">
-                                        <div class="form-check">
-                                            <label class="form-check-label"  for="exampleCheck1">记住我</label>
-                                            <input type="checkbox" class="form-check-input" name="rememberMe" id="exampleCheck1">
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-lg btn-success btn-block">登录</button>
-                            </fieldset>
-                        </form>
-                        <div class="alert alert-danger alert-dismissable" id="warn-alert" th:if="${msg != null}">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <div th:text="${msg}"></div>
-                            <script>
-                                $("#warn-alert").fadeTo(2000, 500).slideUp(500, function(){
-                                    $("#warn-alert").slideUp(500);
-                                });
-                            </script>
-                        </div>
+                    <div class="el-col el-col-12" style="text-align: right;">
+                        <a href="#/login" class="router-link-exact-active router-link-active">忘记密码？</a>
                     </div>
                 </div>
-            </div>
-        </div>
+                <button type="submit" class="el-button el-button--primary"><span>登 录</span></button>
+            </fieldset>
+        </form>
     </div>
 </body>
 

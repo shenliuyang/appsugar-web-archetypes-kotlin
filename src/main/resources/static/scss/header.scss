@@ -1,0 +1,44 @@
+.saas-header {
+	height: $--header-height;
+	margin-left: -$--layout-base;
+	margin-right: -$--layout-base;
+	border-bottom: $--border-base;
+	.header-right {
+		float: right;
+		.school-list {
+			margin-top: 9px;
+			.select2-container--default {
+				.select2-selection--single {
+					border-width: 0;
+				}
+				&.select2-container--open.select2-container--below .select2-selection--single {
+					border-width: 1px;
+				}
+			}
+			.select2-selection__clear {
+				display: none;
+			}
+		}
+		> li {
+			float: left;
+			> a {
+				display: inline-block;
+				height: $--header-height;
+				line-height: $--header-height;
+				font-size: 15px;
+				color: $--header-right-color;
+				padding: 0 15px;
+				@include postcss(transition, $--all-transition);
+				&:hover {
+					color: $--header-right-color-lighter;
+					background-color: $--header-right-background-lighter;
+				}
+			}
+		}
+	}
+	.dropdown-menu {
+		right: 0;
+		left: auto;
+		top: 90%;
+	}
+}

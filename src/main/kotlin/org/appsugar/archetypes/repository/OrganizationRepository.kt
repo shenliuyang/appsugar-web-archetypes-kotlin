@@ -9,6 +9,7 @@ import org.appsugar.archetypes.extension.notZero
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.querydsl.QuerydslPredicateExecutor
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface OrganizationRepository : JpaRepository<Organization, Long>, QuerydslPredicateExecutor<Organization> {
@@ -17,7 +18,7 @@ interface OrganizationRepository : JpaRepository<Organization, Long>, QuerydslPr
      */
     @Query("select max(code) from Organization where codeLength=:codeLength")
     fun findMaxCodeByCodeLength(codeLength: Int = 2): Optional<String>
-
+    
     @Query("select max(code) from Organization where parent.id=:parentId and codeLength=:codeLength")
     fun findMaxCodeByParentIdAndCodeLength(parentId: Long, codeLength: Int = 2): Optional<String>
 
