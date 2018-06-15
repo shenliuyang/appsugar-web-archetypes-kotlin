@@ -1,6 +1,7 @@
 package org.appsugar.archetypes.web.security
 
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.hazelcast.config.Config
 import com.hazelcast.config.XmlConfigBuilder
 import com.hazelcast.core.HazelcastInstance
@@ -11,10 +12,12 @@ import org.apache.shiro.mgt.SecurityManager
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean
+import org.apache.shiro.web.filter.AccessControlFilter
 import org.apache.shiro.web.mgt.CookieRememberMeManager
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager
 import org.apache.shiro.web.servlet.SimpleCookie
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager
+import org.appsugar.archetypes.common.domain.Response
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -26,6 +29,9 @@ import org.springframework.core.env.PropertySource
 import org.springframework.core.io.Resource
 import java.util.*
 import java.util.stream.StreamSupport
+import javax.servlet.Filter
+import javax.servlet.ServletRequest
+import javax.servlet.ServletResponse
 
 
 @Configuration
@@ -33,12 +39,10 @@ class SecurityConfiguration {
 
     @Bean
     fun shiroFilterFactoryBean(securityManager: SecurityManager) = ShiroFilterFactoryBean().apply {
-        loginUrl = "/login"
-        successUrl = "/index"
         this.securityManager = securityManager
-        val staticDefinitionMap = mapOf("/css/**" to "anon", "/images/**" to "anon", "/js/**" to "anon", "/scss/**" to "anon")
-        filterChainDefinitionMap = staticDefinitionMap + mapOf("/login" to "authc", "/logout" to "logout"
-                , "/wro4j/*" to "anon", "/static/**" to "anon", "/favicon.ico" to "anon", "/webjars/**" to "anon", "/**" to "user")
+        val customAuthcKey = "customAuth"
+        filters = mutableMapOf<String, Filter>(customAuthcKey to CustomFormAuthentication())
+        filterChainDefinitionMap = mapOf("/login" to "anon", "/**" to customAuthcKey)
     }
 
 
@@ -90,4 +94,18 @@ class SecurityConfiguration {
     fun defaultAdvisorAutoProxyCreator() = DefaultAdvisorAutoProxyCreator().apply { isProxyTargetClass = true }
 
 
+}
+
+class CustomFormAuthentication : AccessControlFilter() {
+    companion object {
+        val om = ObjectMapper()
+        val body = om.writeValueAsBytes(Response.UN_AUTHENTICATED)
+    }
+
+    override fun isAccessAllowed(request: ServletRequest?, response: ServletResponse?, mappedValue: Any?) = getSubject(request, response).isAuthenticated
+
+    override fun onAccessDenied(request: ServletRequest, response: ServletResponse) = false.apply {
+        val out = response.outputStream
+        out.write(body)
+    }
 }
