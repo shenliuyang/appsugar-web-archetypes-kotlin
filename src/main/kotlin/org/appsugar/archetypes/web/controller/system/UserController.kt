@@ -11,13 +11,13 @@ import org.appsugar.archetypes.repository.toPredicate
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
-import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
+@RestController
 @RequestMapping("/system/user")
 class UserController(val repository: UserRepository, val roleRepository: RoleRepository) {
     companion object {

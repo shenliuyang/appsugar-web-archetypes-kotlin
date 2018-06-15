@@ -35,6 +35,9 @@ spring:
                              timeout: 1800
                     heartbeat:
                               seconds: 5
+        jackson:
+                  serialization:
+                                  write_dates_as_timestamps: true
 db:
    name: appsugar_kotlin
 server:
