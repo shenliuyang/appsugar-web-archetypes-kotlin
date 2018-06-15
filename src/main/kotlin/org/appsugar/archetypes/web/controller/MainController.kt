@@ -30,7 +30,7 @@ class MainController(val roleRepository: RoleRepository, val userRepository: Use
     }
 
     @RequestMapping("logout")
-    fun loginOut(): Response {
+    fun logout(): Response {
         ShiroUtils.getSubject().logout()
         return Response.SUCCESS
     }

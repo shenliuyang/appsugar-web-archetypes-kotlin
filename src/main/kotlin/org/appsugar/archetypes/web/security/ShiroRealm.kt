@@ -28,12 +28,7 @@ class ShiroRealm : AuthorizingRealm() {
             val loginName = token.username
             val password = String(token.password)
             val user = userRepository.findByLoginName(loginName)
-            user?.let {
-                when (user.password) {
-                    password -> SimpleAuthenticationInfo(Principal(user.id, user.name), password, name)
-                    else -> null
-                }
-            }
+            user?.let { if (password == user.password) SimpleAuthenticationInfo(Principal(user.id, user.name), password, name) else null }
         }
         else -> null
     }

@@ -8,8 +8,4 @@
     <user id="-1" name="NewYoung" login_name="admin" password="admin"
           permissions="*" created_at="2017-10-31" updated_at="2017-10-31"/>
     <user_role user_id="-1" role_id="-1"/>
-    <organization id="-1" name="技术部" code="01" code_length="2" description="没有可描述的" created_at="2018-03-16"
-                  updated_at="2018-03-16"/>
-    <organization id="-2" name="技术部一组" code="0101" code_length="4" description="没有可描述的" created_at="2018-03-16"
-                  updated_at="2018-03-16" parent_id="-1"/>
 </dataset>
