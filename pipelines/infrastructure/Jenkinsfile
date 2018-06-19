@@ -1,0 +1,6 @@
+node {
+    checkout scm
+	stage('build project'){
+	    sh 'gradlew clean build'
+	}
+}
