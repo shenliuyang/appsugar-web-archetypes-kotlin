@@ -1,10 +1,14 @@
 buildscript {
     ext {
         dynamicJarNames = [""]
-        isMatchAny = { name ->  dynamicJarNames.contains(name) }
-        repos = ["https://jcenter.bintray.com/","http://maven.aliyun.com/nexus/content/groups/public"]
+        isMatchAny = { name -> dynamicJarNames.contains(name) }
+        repos = ["http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/"]
     }
-    repositories { for(String u: repos){maven{url = u}} }
+    repositories {
+        for (String u : repos) {
+            maven { url = u }
+        }
+    }
     dependencies {
         classpath("org.springframework:springloaded:1.2.8.RELEASE")
     }
@@ -27,7 +31,12 @@ idea {
     }
 }
 
-repositories { for(String u: repos){maven{url = u}} }
+repositories {
+    for (String u : repos) {
+        maven { url = u }
+    }
+}
+
 configurations { dynamic }
 ext["kotlin.version"] = "1.2.50"
 ext["coroutineVersion"] = "0.23.1"
@@ -56,7 +65,7 @@ dependencies {
     }
     testCompile("org.junit.jupiter:junit-jupiter-api")
     testRuntime("org.junit.jupiter:junit-jupiter-engine")
-    configurations.dynamic.each{ dynamicJarNames.push(it.name) }
+    configurations.dynamic.each { dynamicJarNames.push(it.name) }
 }
 
 task copyToLib(type: Copy) {
@@ -64,6 +73,7 @@ task copyToLib(type: Copy) {
     from configurations.runtime
     exclude '*spring-boot-devtools*.jar'
     exclude { isMatchAny(it.file.name) }
+    outputs.upToDateWhen { true }
 }
 
 task copyToLibDynamic(type: Copy) {
@@ -83,7 +93,7 @@ jar {
     }
     dependsOn copyToLib, copyToLibDynamic
 }
-springBoot{ buildInfo() }
+springBoot { buildInfo() }
 bootJar { classifier = 'boot' }//set boot jar different name
 bootRun { sourceResources sourceSets.main } //enable spring dev tools scan resource directory
 kotlin { experimental.coroutines = 'enable' }//enable coroutine
