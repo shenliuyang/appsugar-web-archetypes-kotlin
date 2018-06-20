@@ -1,0 +1,2 @@
+FROM openjdk:8u171-jdk-alpine
+ADD  build/libs/lib /root/lib
