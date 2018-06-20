@@ -85,6 +85,7 @@ task copyToLibDynamic(type: Copy) {
 
 jar {
     enabled = true
+    archiveName = "${project.name}.jar"
     manifest {
         attributes(
                 'Main-Class': 'org.appsugar.archetypes.ApplicationKt', 'Class-Path': configurations.runtime.collect {

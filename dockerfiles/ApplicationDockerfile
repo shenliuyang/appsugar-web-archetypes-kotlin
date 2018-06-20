@@ -1,0 +1,6 @@
+FROM appsugar-web-archetypes-kotlin-infrastructure:latest
+WORKDIR /root
+ENV JAVA_OPTS="-server -Xms256m -Xmx4096m -Xss512k"
+ADD  build/libs/lib-dynamic /root/lib-dynamic
+ADD  build/libs/appsugar-web-archetypes-kotlin.jar /root/app.jar
+ENTRYPOINT java $JAVA_OPTS -jar app.jar
