@@ -41,6 +41,7 @@ configurations { dynamic }
 ext["kotlin.version"] = "1.2.50"
 ext["coroutineVersion"] = "0.23.1"
 ext["shiroVersion"] = "1.4.0"
+ext["configVersion"] = "2.0.0.RELEASE"
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
@@ -48,6 +49,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-cache")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.cloud:spring-cloud-starter-config:${configVersion}")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("com.querydsl:querydsl-jpa")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")

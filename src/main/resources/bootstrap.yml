@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: appsugar
+  cloud:
+        config:
+               enabled : false
+---
+spring:
+  profiles: test
+  cloud:
+    config:
+            uri: http://172.16.10.12
+            enabled : true
+            fail-fast: true
+---
+spring:
+  profiles: prod
+  cloud:
+    config:
+            uri: http://config
+            enabled : true
+            fail-fast: true
