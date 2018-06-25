@@ -21,7 +21,7 @@ import java.sql.DriverManager
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @Transactional
-@ActiveProfiles("h2")
+@ActiveProfiles("dev")
 abstract class BaseTestCase {
     protected val logger: Logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
