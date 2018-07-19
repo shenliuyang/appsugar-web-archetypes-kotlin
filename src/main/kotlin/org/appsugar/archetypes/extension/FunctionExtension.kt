@@ -28,3 +28,18 @@ inline fun Long?.notZero(block: Long.() -> Unit): Long? {
     return this
 }
 
+/**
+ * for Collections
+ */
+inline fun <reified E> Collection<String>.toNumberList(): List<E> {
+    return if (this.isEmpty()) {
+        emptyList()
+    } else {
+        //filter null or empty string
+        val list = this.filter { it.isNotBlank() }.toList()
+        val cls = E::class.java
+        val method = cls.getMethod("parse" + cls.simpleName.substring(0, 1).toUpperCase() + cls.simpleName.substring(1), String::class.java)
+        list.map { method.invoke(null, it) }.toList() as List<E>
+    }
+}
+

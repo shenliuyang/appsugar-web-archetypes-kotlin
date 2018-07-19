@@ -1,5 +1,7 @@
 package org.appsugar.archetypes.web.security
 
+import org.appsugar.archetypes.entity.User
+
 enum class Permission(
         val value: String, val code: String, val dependencies: List<Permission> = emptyList()
 ) {
@@ -11,5 +13,24 @@ enum class Permission(
     companion object {
         val GROUP_BY_PREFIX = Permission.values().groupBy { it.name.substringBefore("_") }
         val GROUP_BY_VALUE = Permission.values().associateBy { it.value }
+
+        fun getPermissionDtoGroupByPrefix(): MutableList<PermissionGroupDto> {
+            var permissionDtoGroupByPrefix = mutableListOf<PermissionGroupDto>()
+            GROUP_BY_PREFIX.forEach { k, v ->
+                permissionDtoGroupByPrefix.add(PermissionGroupDto(k, v.map {
+                    PermissionDto(it.value, it.code)
+                }.toList()))
+            }
+            return permissionDtoGroupByPrefix
+        }
+
+        fun permissionMap(): MutableMap<String, String> {
+            val mutableMap = mutableMapOf<String, String>()
+            return Permission.values().forEach { mutableMap[it.value] = it.code }.let { mutableMap }
+        }
     }
 }
+
+data class PermissionDto(val value: String, val code: String)
+
+data class PermissionGroupDto(val code: String, val permissions: List<PermissionDto>)
