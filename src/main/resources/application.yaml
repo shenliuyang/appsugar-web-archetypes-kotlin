@@ -1,8 +1,9 @@
 spring:
-        profiles:
-                  active: dev
         jpa:
              open-in-view: true
+             show-sql: true
+             hibernate:
+                        ddl-auto: none
              properties:
                          hibernate:
                                     cache:
@@ -16,9 +17,14 @@ spring:
                     max-wait: 10000
                     max-active: 5
                     test-on-borrow: true
+                    url: jdbc:h2:~/tmp/${db.name}
+                    username: sa
+                    password:
+                    driver-class-name: org.h2.Driver
         dbunit:
                 operationType: CLEAN_INSERT
                 sample-file: src/test/resources/sample-data.xml
+                data-factory: org.dbunit.ext.h2.H2DataTypeFactory
         hazelcast:
                     group:
                            name: ${random.uuid}
@@ -49,31 +55,3 @@ shiro:
              key: u39fskcJooyWj2jA6Vs2lA==
       session:
              name: appsession
-
----
-spring:
-      profiles: dev
-      datasource:
-                  url: jdbc:h2:~/tmp/${db.name}
-                  username: sa
-                  password:
-                  driver-class-name: org.h2.Driver
-      dbunit:
-             data-factory: org.dbunit.ext.h2.H2DataTypeFactory
-      jpa:
-          show-sql: true
-          hibernate:
-                      ddl-auto: none
----
-spring:
-      profiles: dev_mysql
-      datasource:
-                  url: jdbc:mysql://localhost:3306/${db.name}?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8
-                  username: root
-                  password: 123456
-                  driver-class-name: com.mysql.jdbc.Driver
-      jpa:
-          hibernate:
-                     ddl-auto: update
-      dbunit:
-              data-factory: org.dbunit.ext.mysql.MySqlDataTypeFactory

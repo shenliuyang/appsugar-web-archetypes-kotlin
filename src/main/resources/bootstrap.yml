@@ -1,6 +1,6 @@
 spring:
   application:
-    name: appsugar
+    name: archetypes_kotlin
   cloud:
         config:
                enabled : false

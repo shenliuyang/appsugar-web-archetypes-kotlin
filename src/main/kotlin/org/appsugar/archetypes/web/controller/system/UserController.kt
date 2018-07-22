@@ -5,6 +5,7 @@ import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.condition.UserCondition
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.extension.getLogger
+import org.appsugar.archetypes.extension.toNumberList
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
@@ -24,28 +25,29 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
         val logger = getLogger<UserController>()
     }
 
-    @ModelAttribute("user")
-    fun modelAttribute(id: Long? = 0) = when (id) {
-        null, 0L -> User()
-        else -> repository.findById(id).get()
+    @RequiresPermissions("user:view")
+    @RequestMapping(value = ["list", ""])
+    fun list(condition: UserCondition, @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): Response {
+        val page = repository.findAll(repository.toPredicate(condition), pageable)
+        return Response(page)
     }
 
-
     @RequiresPermissions("user:view")
-    @RequestMapping
-    fun list(condition: UserCondition, @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable, model: Model) = Response(repository.findAll(repository.toPredicate(condition), pageable))
-
-    @RequiresPermissions("user:view")
-    @RequestMapping("form")
-    fun form(user: User) = Response(user)
+    @RequestMapping("detail")
+    fun form(id: Long): Response {
+        return Response(repository.findById(id).get())
+    }
 
     @RequiresPermissions("user:edit")
     @PostMapping("save")
-    fun save(user: User, roleIds: Array<Long>?, permissions: Array<String>?): Response {
-        logger.info("prepare to save User {}  new permissions {} new roles {}", user, permissions, roleIds)
-        user.roles = roleIds?.let { roleRepository.findByIdIn(roleIds.toList()).toMutableSet() } ?: mutableSetOf()
-        user.permissions = permissions?.toMutableList() ?: mutableListOf()
+    fun save(user: User, roleIds: String?, permissions: String?): Response {
+        logger.info("prepare to save User {}  new permissions {} new roles {}  ", user, permissions, roleIds)
+        roleIds?.let {
+            user.roles = it.let { roleRepository.findByIdIn(roleIds.split(",").toNumberList()).toMutableSet() }
+        }
+        user.permissions = permissions?.split(",")?.toMutableList()?: mutableListOf()
         repository.save(user)
         return Response.SUCCESS
     }
+
 }
