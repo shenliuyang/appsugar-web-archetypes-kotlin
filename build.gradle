@@ -39,7 +39,7 @@ repositories {
 
 configurations { dynamic }
 ext["kotlin.version"] = "1.2.51"
-ext["coroutineVersion"] = "0.23.1"
+ext["coroutineVersion"] = "0.23.4"
 ext["shiroVersion"] = "1.4.0"
 ext["configVersion"] = "2.0.0.RELEASE"
 dependencies {
