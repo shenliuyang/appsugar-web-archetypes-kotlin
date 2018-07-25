@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: appsugar-web-archetypes-kotlin
+  namespace: default
+spec:
+  selector:
+    app: appsugar-web-archetypes-kotlin
+  ports:
+    - name: http
+      port: 80
+  type: LoadBalancer

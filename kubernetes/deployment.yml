@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: appsugar-web-archetypes-kotlin
+  name: appsugar-web-archetypes-kotlin
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: appsugar-web-archetypes-kotlin
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: appsugar-web-archetypes-kotlin
+        version: v1
+    spec:
+      containers:
+      - image: docker.bj1580.top/appsugar-web-archetypes-kotlin-application:latest
+        name: appsugar-web-archetypes-kotlin
+        ports:
+        - containerPort: 80

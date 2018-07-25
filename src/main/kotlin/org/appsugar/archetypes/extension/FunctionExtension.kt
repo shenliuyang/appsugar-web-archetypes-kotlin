@@ -2,6 +2,7 @@ package org.appsugar.archetypes.extension
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.*
 
 
 /****/
@@ -42,4 +43,3 @@ inline fun <reified E> Collection<String>.toNumberList(): List<E> {
         list.map { method.invoke(null, it) }.toList() as List<E>
     }
 }
-
