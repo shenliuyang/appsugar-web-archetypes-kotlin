@@ -47,6 +47,7 @@ spring:
 db:
    name: appsugar_kotlin
 server:
+        port: 80
         compression:
                      enabled: true
                      mime-types: application/json,application/xml,text/html,text/xml,text/plain
