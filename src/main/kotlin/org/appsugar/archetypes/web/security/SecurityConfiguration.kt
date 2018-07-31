@@ -32,6 +32,7 @@ import java.util.stream.StreamSupport
 import javax.servlet.Filter
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
+import javax.servlet.http.HttpServletResponse
 
 
 @Configuration
@@ -106,6 +107,8 @@ class CustomFormAuthentication : AccessControlFilter() {
 
     override fun onAccessDenied(request: ServletRequest, response: ServletResponse) = false.apply {
         val out = response.outputStream
+        val res = response as HttpServletResponse
+        res.contentType = "application/json;charset=UTF-8"
         out.write(body)
     }
 }

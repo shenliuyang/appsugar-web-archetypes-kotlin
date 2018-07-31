@@ -3,7 +3,7 @@ package org.appsugar.archetypes.common.domain
 import com.fasterxml.jackson.annotation.JsonInclude
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class Response(val code: Int = 0, val msg: String = "success", val data: Any? = null) {
+data class Response(val code: Int = 0, val msg: String = "success", val data: Any? = null) {
     constructor(data: Any) : this(0, "success", data)
 
     companion object {
