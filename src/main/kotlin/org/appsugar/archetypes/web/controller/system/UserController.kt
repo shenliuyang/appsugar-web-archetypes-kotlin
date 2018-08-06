@@ -5,20 +5,15 @@ import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.condition.UserCondition
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.extension.getLogger
-import org.appsugar.archetypes.extension.toNumberList
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
-import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
-import javax.xml.bind.DatatypeConverter
 
 @RestController
 @RequestMapping("/system/user")
@@ -45,9 +40,9 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     fun save(user: User, roleIds: String?, permissions: String?): Response {
         logger.info("prepare to save User {}  new permissions {} new roles {}  ", user, permissions, roleIds)
         roleIds?.let {
-            user.roles = it.let { roleRepository.findByIdIn(roleIds.split(",").toNumberList()).toMutableSet() }
+            user.roles = it.let { roleRepository.findByIdIn(roleIds.split(",").map { it.toLong() }).toMutableSet() }
         }
-        user.permissions = permissions?.split(",")?.toMutableList()?: mutableListOf()
+        user.permissions = permissions?.split(",")?.toMutableList() ?: mutableListOf()
         repository.save(user)
         return Response.SUCCESS
     }

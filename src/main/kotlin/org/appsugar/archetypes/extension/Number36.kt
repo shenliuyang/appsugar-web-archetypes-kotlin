@@ -15,13 +15,13 @@ data class Number36(val value: String = "0") {
             }
         }
 
-        fun valueOf(value: Int): Number36 {
+        fun valueOf(value: Long): Number36 {
             val sb = StringBuilder()
             val size = NUMBER_ARRAY.size
             var changedValue = value
             do {
                 val position = changedValue % size
-                sb.append(NUMBER_ARRAY[position])
+                sb.append(NUMBER_ARRAY[position.toInt()])
                 changedValue /= size
                 if (changedValue <= 0) break
             } while (true)
@@ -35,10 +35,10 @@ data class Number36(val value: String = "0") {
         value.forEach { if (it !in first..last) throw IllegalArgumentException("$value is not a valid number36  invalid char is '$it'") }
     }
 
-    fun toInt(): Int {
+    fun toLong(): Long {
         val numberPosition = NUMBER_POSITION_ARRAY
         val v = value
-        var total = numberPosition[value[value.lastIndex].toInt()]
+        var total = numberPosition[value[value.lastIndex].toInt()].toLong()
         var times = 36
         for (i in v.length - 2 downTo 0) {
             val n = numberPosition[v[i].toInt()]
@@ -48,5 +48,5 @@ data class Number36(val value: String = "0") {
         return total
     }
 
-    fun increase(num: Int = 1) = valueOf(toInt() + num)
+    fun increase(num: Int = 1) = valueOf(toLong() + num)
 }
