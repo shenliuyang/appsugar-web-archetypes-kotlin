@@ -37,12 +37,10 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @RequiresPermissions("user:edit")
     @PostMapping("save")
-    fun save(user: User, roleIds: String?, permissions: String?): Response {
+    fun save(user: User, roleIds: Array<Long>?, permissions: Array<String>?): Response {
         logger.info("prepare to save User {}  new permissions {} new roles {}  ", user, permissions, roleIds)
-        roleIds?.let {
-            user.roles = it.let { roleRepository.findByIdIn(roleIds.split(",").map { it.toLong() }).toMutableSet() }
-        }
-        user.permissions = permissions?.split(",")?.toMutableList() ?: mutableListOf()
+        user.roles = roleIds?.let { roleRepository.findByIdIn(it.toList()).toMutableSet() } ?: mutableSetOf()
+        user.permissions = permissions?.toMutableList() ?: mutableListOf()
         repository.save(user)
         return Response.SUCCESS
     }
