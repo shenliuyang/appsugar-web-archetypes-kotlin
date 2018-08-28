@@ -9,17 +9,14 @@ buildscript {
             maven { url = u }
         }
     }
-    dependencies {
-        classpath("org.springframework:springloaded:1.2.8.RELEASE")
-    }
 }
 plugins {
-    id("org.jetbrains.kotlin.plugin.spring") version "1.2.60"
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.60"
-    id("org.jetbrains.kotlin.jvm") version "1.2.60"
-    id("org.jetbrains.kotlin.kapt") version "1.2.60"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.2.61"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.2.61"
+    id("org.jetbrains.kotlin.jvm") version "1.2.61"
+    id("org.jetbrains.kotlin.kapt") version "1.2.61"
     id("net.researchgate.release") version "2.7.0"
-    id("org.springframework.boot") version "2.0.3.RELEASE"
+    id("org.springframework.boot") version "2.0.4.RELEASE"
 }
 apply plugin: "idea"
 apply plugin: 'io.spring.dependency-management'
@@ -38,8 +35,8 @@ repositories {
 }
 
 configurations { dynamic }
-ext["kotlin.version"] = "1.2.60"
-ext["coroutineVersion"] = "0.23.4"
+ext["kotlin.version"] = "1.2.61"
+ext["coroutineVersion"] = "0.24.0"
 ext["shiroVersion"] = "1.4.0"
 ext["configVersion"] = "2.0.0.RELEASE"
 dependencies {

@@ -29,5 +29,4 @@ open class User(
         return "User(id='$id',name='$name', loginName='$loginName', permissions=$permissions)"
     }
 
-
 }

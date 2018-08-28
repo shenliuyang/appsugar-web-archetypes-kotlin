@@ -44,5 +44,4 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
         repository.save(user)
         return Response.SUCCESS
     }
-
 }
