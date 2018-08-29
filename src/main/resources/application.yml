@@ -1,58 +1,58 @@
 spring:
-        jpa:
-             open-in-view: true
-             show-sql: true
-             hibernate:
-                        ddl-auto: none
-             properties:
-                         hibernate:
-                                    cache:
-                                          use_second_level_cache: true
-                                          use_query_cache: true
-                                          region:
-                                                  factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
-                                          hazelcast:
-                                                     instance_name: ${spring.hazelcast.instance-name}
-        datasource:
-                    max-wait: 10000
-                    max-active: 5
-                    test-on-borrow: true
-                    url: jdbc:h2:~/tmp/${db.name}
-                    username: sa
-                    password:
-                    driver-class-name: org.h2.Driver
-        dbunit:
-                operationType: CLEAN_INSERT
-                sample-file: src/test/resources/sample-data.xml
-                data-factory: org.dbunit.ext.h2.H2DataTypeFactory
-        hazelcast:
-                    group:
-                           name: ${random.uuid}
-                           password: dev-pass
-                    management:
-                               enabled: false
-                               url: http://localhost:8080/mancenter
-                    network:
-                             interfaces:
-                                          enabled: false
-                                          interface: 192.168.199.*
-                    instance-name: spring-shiro-hibernate-cache
-                    session:
-                             timeout: 1800
-                    heartbeat:
-                              seconds: 5
-        jackson:
-                  serialization:
-                                  write_dates_as_timestamps: true
+  jpa:
+    open-in-view: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+          hazelcast:
+            instance_name: ${spring.hazelcast.instance-name}
+  datasource:
+    max-wait: 10000
+    max-active: 5
+    test-on-borrow: true
+    url: jdbc:h2:~/tmp/${db.name}
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  dbunit:
+    operationType: CLEAN_INSERT
+    sample-file: src/test/resources/sample-data.xml
+    data-factory: org.dbunit.ext.h2.H2DataTypeFactory
+  hazelcast:
+    group:
+      name: ${random.uuid}
+      password: dev-pass
+    management:
+      enabled: false
+      url: http://localhost:8080/mancenter
+    network:
+      interfaces:
+        enabled: false
+        interface: 192.168.199.*
+    instance-name: spring-shiro-hibernate-cache
+    session:
+      timeout: 1800
+    heartbeat:
+      seconds: 5
+  jackson:
+    serialization:
+      write_dates_as_timestamps: true
 db:
-   name: appsugar_kotlin
+  name: appsugar_kotlin
 server:
-        port: 80
-        compression:
-                     enabled: true
-                     mime-types: application/json,application/xml,text/html,text/xml,text/plain
+  port: 80
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
 shiro:
-      cipher:
-             key: u39fskcJooyWj2jA6Vs2lA==
-      session:
-             name: appsession
+  cipher:
+    key: u39fskcJooyWj2jA6Vs2lA==
+  session:
+    name: appsession

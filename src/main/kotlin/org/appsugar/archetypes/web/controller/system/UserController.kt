@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.web.controller.system
 
-import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.condition.UserCondition
 import org.appsugar.archetypes.entity.User
@@ -11,6 +10,7 @@ import org.appsugar.archetypes.repository.toPredicate
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -22,20 +22,22 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
         val logger = getLogger<UserController>()
     }
 
-    @RequiresPermissions("user:view")
+
+    @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
     fun list(condition: UserCondition, @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): Response {
         val page = repository.findAll(repository.toPredicate(condition), pageable)
         return Response(page)
     }
 
-    @RequiresPermissions("user:view")
+    @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping("detail")
     fun form(id: Long): Response {
         return Response(repository.findById(id).get())
     }
 
-    @RequiresPermissions("user:edit")
+
+    @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
     fun save(user: User, roleIds: Array<Long>?, permissions: Array<String>?): Response {
         logger.info("prepare to save User {}  new permissions {} new roles {}  ", user, permissions, roleIds)

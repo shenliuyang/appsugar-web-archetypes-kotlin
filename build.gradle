@@ -37,7 +37,6 @@ repositories {
 configurations { dynamic }
 ext["kotlin.version"] = "1.2.61"
 ext["coroutineVersion"] = "0.24.0"
-ext["shiroVersion"] = "1.4.0"
 ext["configVersion"] = "2.0.0.RELEASE"
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -50,8 +49,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-devtools")
     compile("com.querydsl:querydsl-jpa")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("org.apache.shiro:shiro-spring-boot-web-starter:$shiroVersion")
-    compile("org.apache.shiro:shiro-hazelcast:$shiroVersion")
+    compile('org.springframework.boot:spring-boot-starter-security')
     compile("com.hazelcast:hazelcast-hibernate52:1.2.3")
     compile("com.hazelcast:hazelcast-spring")
     compile dynamic("com.h2database:h2")

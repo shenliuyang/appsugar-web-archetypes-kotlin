@@ -1,8 +1,8 @@
 package org.appsugar.archetypes.web.controller
 
-import org.apache.shiro.authz.AuthorizationException
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.extension.getLogger
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.ui.Model
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -26,7 +26,7 @@ class ControllerAdvice {
     /**
      * 处理权限不够异常
      */
-    @ExceptionHandler(AuthorizationException::class)
+    @ExceptionHandler(AccessDeniedException::class)
     fun handleUnAuthrizationException(model: Model) = Response.UN_AUTHROIZED
 
 
