@@ -53,6 +53,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile("com.hazelcast:hazelcast-hibernate52:1.2.3")
     compile("com.hazelcast:hazelcast-spring")
+    compile("org.springframework.session:spring-session-hazelcast")
     compile dynamic("com.h2database:h2")
     compile dynamic("mysql:mysql-connector-java")
     kapt("com.querydsl:querydsl-apt:4.1.4:jpa")

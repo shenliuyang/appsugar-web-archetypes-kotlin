@@ -29,6 +29,7 @@ class UserDetailServiceJdbcImpl(val userRepository: UserRepository, val password
     val logger = getLogger<UserDetailServiceJdbcImpl>()
 
     override fun loadUserByUsername(username: String): UserDetails {
+
         if (username == name && name.isNotBlank()) return UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf())
         val user = userRepository.findByLoginName(username)
                 ?: throw UsernameNotFoundException("user $username not found")

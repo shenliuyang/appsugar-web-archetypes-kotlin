@@ -3,6 +3,8 @@ package org.appsugar.archetypes.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.hazelcast.config.Config
+import com.hazelcast.config.MapAttributeConfig
+import com.hazelcast.config.MapIndexConfig
 import org.appsugar.archetypes.common.domain.Response
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -12,6 +14,8 @@ import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.session.hazelcast.HazelcastSessionRepository
+import org.springframework.session.hazelcast.PrincipalNameExtractor
 
 
 @Configuration
@@ -39,6 +43,15 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
                 interfaces = c.network.interfaces.interfaces
             }
         }
+        //config spring session
+        val attributeConfig = MapAttributeConfig()
+                .setName(HazelcastSessionRepository.PRINCIPAL_NAME_ATTRIBUTE)
+                .setExtractor(PrincipalNameExtractor::class.java.name)
+        getMapConfig(HazelcastSessionRepository.DEFAULT_SESSION_MAP_NAME)
+                .addMapAttributeConfig(attributeConfig)
+                .addMapIndexConfig(MapIndexConfig(
+                        HazelcastSessionRepository.PRINCIPAL_NAME_ATTRIBUTE, false))
+
     }
 
 
