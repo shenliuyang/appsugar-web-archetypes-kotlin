@@ -3,39 +3,41 @@ package org.appsugar.archetypes.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.hazelcast.config.Config
-import com.hazelcast.config.XmlConfigBuilder
 import org.appsugar.archetypes.common.domain.Response
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.AbstractEnvironment
-import org.springframework.core.env.EnumerablePropertySource
-import org.springframework.core.env.Environment
-import org.springframework.core.env.PropertySource
-import org.springframework.core.io.Resource
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
-import java.util.*
-import java.util.stream.StreamSupport
 
 
 @Configuration
 class WebConfiguration : WebSecurityConfigurerAdapter() {
 
 
-    /**把spring跟hazelcast配置结合**/
     @Bean
-    fun hazelcastConfig(springEnv: Environment, @Value("classpath:hazelcast.xml") resource: Resource): Config {
-        val props = Properties()
-        val propSrcs = (springEnv as AbstractEnvironment).propertySources
-        StreamSupport.stream<PropertySource<*>>(propSrcs.spliterator(), false)
-                .filter { ps -> ps is EnumerablePropertySource<*> }
-                .map { ps -> (ps as EnumerablePropertySource<*>).propertyNames }
-                .flatMap(Arrays::stream)
-                .forEach { propName -> props.setProperty(propName, springEnv.getProperty(propName)) }
+    @ConfigurationProperties("spring.hazelcast")
+    fun hazelcastConfigProperties() = HazelcastConfig()
 
-        return XmlConfigBuilder(resource.inputStream).setProperties(props).build()
+    @Bean
+    fun hazelcastConfig(c: HazelcastConfig) = Config().apply {
+        println(c)
+        instanceName = c.name
+        groupConfig.apply {
+            name = c.group.name
+            password = c.group.password
+        }
+        managementCenterConfig.apply {
+            isEnabled = c.management.enabled
+            url = c.management.url
+        }
+        networkConfig.apply {
+            interfaces.apply {
+                isEnabled = c.network.interfaces.enabled
+                interfaces = c.network.interfaces.interfaces
+            }
+        }
     }
 
 
@@ -63,4 +65,47 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
                 }
                 .and().csrf().disable()
     }
+}
+
+
+class HazelcastConfig {
+    var group = HazelcastGroupConfig()
+    var management = HazelcastManagementConfig()
+    var network = HazelcastNetworkConfig()
+    var name = ""
+    override fun toString(): String {
+        return "HazelcastConfig(group=$group, management=$management, network=$network)"
+    }
+}
+
+class HazelcastGroupConfig {
+    var name = ""
+    var password = ""
+    override fun toString(): String {
+        return "HazelcastGroupConfig(name='$name', password='$password')"
+    }
+}
+
+class HazelcastManagementConfig {
+    var enabled = false
+    var url = ""
+    override fun toString(): String {
+        return "HazelcastManagementConfig(enabled=$enabled, url='$url')"
+    }
+}
+
+class HazelcastNetworkConfig {
+    var interfaces = HazelcastInterfacesConfig()
+    override fun toString(): String {
+        return "HazelcastNetworkConfig(interfaces=$interfaces)"
+    }
+}
+
+class HazelcastInterfacesConfig {
+    var enabled = false
+    var interfaces = mutableListOf<String>()
+    override fun toString(): String {
+        return "HazelcastInterfacesConfig(enabled=$enabled, interfaces=$interfaces)"
+    }
+
 }
