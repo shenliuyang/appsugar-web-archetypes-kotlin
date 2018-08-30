@@ -4,9 +4,11 @@ package org.appsugar.archetypes.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.hazelcast.config.Config
 import org.appsugar.archetypes.common.domain.Response
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
@@ -22,7 +24,6 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
 
     @Bean
     fun hazelcastConfig(c: HazelcastConfig) = Config().apply {
-        println(c)
         instanceName = c.name
         groupConfig.apply {
             name = c.group.name
@@ -47,24 +48,43 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
         val accessDenine = om.writeValueAsBytes(Response.UN_AUTHROIZED)
         val loginFailure = om.writeValueAsBytes(Response("用户名或账号密码错误"))
         val success = om.writeValueAsBytes(Response.SUCCESS)
+        val contentType = "application/json; charset=utf-8"
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .and().formLogin().failureHandler { _, response, _ ->
+                    response.contentType = contentType
                     response.outputStream.write(loginFailure)
                 }.successHandler { _, response, _ ->
+                    response.contentType = contentType
                     response.outputStream.write(success)
                 }
                 .and().exceptionHandling().authenticationEntryPoint { _, response, _ ->
+                    response.contentType = contentType
                     response.outputStream.write(unAuthentication)
                 }.accessDeniedHandler { _, response, _ ->
+                    response.contentType = contentType
                     response.outputStream.write(accessDenine)
                 }
                 .and().logout().logoutRequestMatcher(AntPathRequestMatcher("/logout")).logoutSuccessHandler { _, response, _ ->
+                    response.contentType = contentType
                     response.outputStream.write(success)
                 }
                 .and().csrf().disable()
     }
+}
+
+@Configuration
+@Order(1)
+class ActuatorSecurity : WebSecurityConfigurerAdapter() {
+
+    override fun configure(http: HttpSecurity) {
+        http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic()
+    }
+
 }
 
 

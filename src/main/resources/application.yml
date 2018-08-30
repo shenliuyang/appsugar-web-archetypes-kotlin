@@ -41,6 +41,10 @@ spring:
   jackson:
     serialization:
       write_dates_as_timestamps: true
+  security:
+    user:
+      name: changeme
+      password: changeme
 db:
   name: appsugar_kotlin
 server:

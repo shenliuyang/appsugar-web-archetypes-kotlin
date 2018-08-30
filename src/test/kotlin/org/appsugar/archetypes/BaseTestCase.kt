@@ -50,7 +50,7 @@ abstract class BaseTestCase {
         val response = responseEntity.body!!
         logger.debug("login  result is {}", response)
         Assertions.assertEquals(Response.SUCCESS.code, response.code, "login error with $username  and password $password")
-        val loginHeader = responseEntity.headers!!
+        val loginHeader = responseEntity.headers
         restTemplate.restTemplate.interceptors = listOf(ClientHttpRequestInterceptor { request, body, execution ->
             request.headers["Cookie"] = loginHeader["Set-Cookie"]
             return@ClientHttpRequestInterceptor execution.execute(request, body)

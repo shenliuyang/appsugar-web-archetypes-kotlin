@@ -3,8 +3,10 @@ package org.appsugar.archetypes.service
 import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.web.security.Permission
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
@@ -17,12 +19,17 @@ import org.springframework.stereotype.Service
 import java.io.Serializable
 
 @Service
+@Primary
+@ConfigurationProperties("spring.security.user")
 class UserDetailServiceJdbcImpl(val userRepository: UserRepository, val passwordEncoder: PasswordEncoder) : UserDetailsService {
+
+    var name = "user"
+    var password = System.currentTimeMillis().toString()
 
     val logger = getLogger<UserDetailServiceJdbcImpl>()
 
     override fun loadUserByUsername(username: String): UserDetails {
-        logger.debug("prepare to load user by username  {}", username)
+        if (username == name && name.isNotBlank()) return UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf())
         val user = userRepository.findByLoginName(username)
                 ?: throw UsernameNotFoundException("user $username not found")
         var permissions = mutableSetOf<String>().apply { user.permissions }
