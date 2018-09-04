@@ -26,11 +26,14 @@ class UserDetailServiceJdbcImpl(val userRepository: UserRepository, val password
     var name = "user"
     var password = System.currentTimeMillis().toString()
 
+    companion object {
+        var endpointPermission = "endpoint"
+    }
+
     val logger = getLogger<UserDetailServiceJdbcImpl>()
 
     override fun loadUserByUsername(username: String): UserDetails {
-
-        if (username == name && name.isNotBlank()) return UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf())
+        if (username == name) return UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf(SimpleGrantedAuthority(endpointPermission)))
         val user = userRepository.findByLoginName(username)
                 ?: throw UsernameNotFoundException("user $username not found")
         var permissions = mutableSetOf<String>().apply { user.permissions }

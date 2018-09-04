@@ -6,6 +6,7 @@ import com.hazelcast.config.Config
 import com.hazelcast.config.MapAttributeConfig
 import com.hazelcast.config.MapIndexConfig
 import org.appsugar.archetypes.common.domain.Response
+import org.appsugar.archetypes.service.UserDetailServiceJdbcImpl
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -59,7 +60,7 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
         val om = ObjectMapper()
         val unAuthentication = om.writeValueAsBytes(Response.UN_AUTHENTICATED)
         val accessDenine = om.writeValueAsBytes(Response.UN_AUTHROIZED)
-        val loginFailure = om.writeValueAsBytes(Response("用户名或账号密码错误"))
+        val loginFailure = om.writeValueAsBytes(Response(-1, "用户名或账号密码错误"))
         val success = om.writeValueAsBytes(Response.SUCCESS)
         val contentType = "application/json; charset=utf-8"
         http.authorizeRequests()
@@ -93,9 +94,8 @@ class ActuatorSecurity : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic()
+                .anyRequest().hasAuthority(UserDetailServiceJdbcImpl.endpointPermission)
+                .and().httpBasic()
     }
 
 }

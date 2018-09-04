@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.context.annotation.DependsOn
+import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
 import org.springframework.core.env.get
 import org.springframework.http.client.ClientHttpRequestInterceptor
@@ -38,6 +40,7 @@ abstract class BaseTestCase {
         private var loginFlag = false
     }
 
+    @DependsOn("prepareImportSampleData")
     @Autowired
     fun prepareLogin(restTemplate: TestRestTemplate) {
         this.restTemplate = restTemplate
@@ -52,7 +55,9 @@ abstract class BaseTestCase {
         Assertions.assertEquals(Response.SUCCESS.code, response.code, "login error with $username  and password $password")
         val loginHeader = responseEntity.headers
         restTemplate.restTemplate.interceptors = listOf(ClientHttpRequestInterceptor { request, body, execution ->
-            request.headers["Cookie"] = loginHeader["Set-Cookie"]
+            loginHeader["Set-Cookie"]?.let {
+                request.headers["Cookie"] = it
+            }
             return@ClientHttpRequestInterceptor execution.execute(request, body)
         })
     }

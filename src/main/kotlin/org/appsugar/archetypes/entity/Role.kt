@@ -1,6 +1,6 @@
 package org.appsugar.archetypes.entity
 
-import org.appsugar.archetypes.common.hibernate.StringListConverter
+import org.appsugar.archetypes.repository.hibernate.StringListConverter
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.DynamicUpdate
