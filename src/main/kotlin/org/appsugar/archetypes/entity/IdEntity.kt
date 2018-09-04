@@ -10,9 +10,9 @@ import javax.persistence.MappedSuperclass
 @MappedSuperclass
 abstract class IdEntity(@get:Id
                         @get:GeneratedValue(strategy = GenerationType.IDENTITY)
-                        open var id: Long = 0L,
-                        open var createdAt: Date = Date(),
-                        open var updatedAt: Date = Date()) : Serializable {
+                        var id: Long = 0L,
+                        var createdAt: Date = Date(),
+                        var updatedAt: Date = Date()) : Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

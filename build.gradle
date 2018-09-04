@@ -27,7 +27,11 @@ idea {
         testOutputDir = file("$buildDir/classes/kotlin/test/")
     }
 }
-
+allOpen{
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
 repositories {
     for (String u : repos) {
         maven { url = u }
