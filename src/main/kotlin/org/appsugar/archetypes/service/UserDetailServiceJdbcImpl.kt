@@ -2,7 +2,7 @@ package org.appsugar.archetypes.service
 
 import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.repository.UserRepository
-import org.appsugar.archetypes.web.security.Permission
+import org.appsugar.archetypes.web.Permission
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

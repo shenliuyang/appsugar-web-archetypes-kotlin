@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.web.security
+package org.appsugar.archetypes.web
 
 enum class Permission(
         val value: String, val code: String

@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.repository
 
-import kotlinx.coroutines.experimental.async
 import org.appsugar.archetypes.BaseTestCase
 import org.appsugar.archetypes.condition.UserCondition
 import org.junit.jupiter.api.Assertions
@@ -25,6 +24,5 @@ class UserRepositoryTest : BaseTestCase() {
         val condition = UserCondition(name = "NewYoung", loginName = "123")
         val users = repository.findAll(repository.toPredicate(condition))
         logger.debug("testFindByCondition {} result is {} ", condition, users)
-        async { }
     }
 }

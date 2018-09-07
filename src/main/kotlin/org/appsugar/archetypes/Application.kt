@@ -9,15 +9,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.session.hazelcast.config.annotation.web.http.EnableHazelcastHttpSession
 
-@EnableJpaRepositories(repositoryBaseClass = CustomSimpleJpaRepository::class)
 @SpringBootApplication
+@EnableJpaRepositories(repositoryBaseClass = CustomSimpleJpaRepository::class)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableCaching(proxyTargetClass = true)
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableHazelcastHttpSession
 class Application
 
 fun main(args: Array<String>) {
     runApplication<Application>(*args)
 }
-
