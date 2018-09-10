@@ -21,7 +21,7 @@ import java.io.Serializable
 @Service
 @Primary
 @ConfigurationProperties("spring.security.user")
-class UserDetailServiceJdbcImpl(val userRepository: UserRepository, val passwordEncoder: PasswordEncoder) : UserDetailsService {
+class UserDetailServiceImpl(val userRepository: UserRepository, val passwordEncoder: PasswordEncoder) : UserDetailsService {
 
     var name = "user"
     var password = System.currentTimeMillis().toString()
@@ -30,7 +30,7 @@ class UserDetailServiceJdbcImpl(val userRepository: UserRepository, val password
         var endpointPermission = "endpoint"
     }
 
-    val logger = getLogger<UserDetailServiceJdbcImpl>()
+    val logger = getLogger<UserDetailServiceImpl>()
 
     override fun loadUserByUsername(username: String): UserDetails {
         if (username == name) return UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf(SimpleGrantedAuthority(endpointPermission)))

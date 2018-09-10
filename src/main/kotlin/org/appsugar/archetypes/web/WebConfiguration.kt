@@ -6,12 +6,14 @@ import com.hazelcast.config.Config
 import com.hazelcast.config.MapAttributeConfig
 import com.hazelcast.config.MapIndexConfig
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.service.UserDetailServiceJdbcImpl
+import org.appsugar.archetypes.service.UserDetailServiceImpl
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
@@ -60,19 +62,11 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
         val om = ObjectMapper()
         val unAuthentication = om.writeValueAsBytes(Response.UN_AUTHENTICATED)
         val accessDenine = om.writeValueAsBytes(Response.UN_AUTHROIZED)
-        val loginFailure = om.writeValueAsBytes(Response(-1, "用户名或账号密码错误"))
         val success = om.writeValueAsBytes(Response.SUCCESS)
         val contentType = "application/json; charset=utf-8"
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .anyRequest().fullyAuthenticated()
-                .and().formLogin().failureHandler { _, response, _ ->
-                    response.contentType = contentType
-                    response.outputStream.write(loginFailure)
-                }.successHandler { _, response, _ ->
-                    response.contentType = contentType
-                    response.outputStream.write(success)
-                }
                 .and().exceptionHandling().authenticationEntryPoint { _, response, _ ->
                     response.contentType = contentType
                     response.outputStream.write(unAuthentication)
@@ -86,6 +80,16 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
                 }
                 .and().csrf().disable()
     }
+
+    @Bean
+    override fun authenticationManagerBean(): AuthenticationManager {
+        return super.authenticationManagerBean()
+    }
+
+    override fun configure(auth: AuthenticationManagerBuilder?) {
+        super.configure(auth)
+        //TODO custom  authentication provider  auth.authenticationProvider(authProvider);
+    }
 }
 
 @Configuration
@@ -94,7 +98,7 @@ class ActuatorSecurity : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests()
-                .anyRequest().hasAuthority(UserDetailServiceJdbcImpl.endpointPermission)
+                .anyRequest().hasAuthority(UserDetailServiceImpl.endpointPermission)
                 .and().httpBasic()
     }
 
