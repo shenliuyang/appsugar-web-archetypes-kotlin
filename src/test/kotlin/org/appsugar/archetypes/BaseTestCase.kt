@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.context.annotation.DependsOn
-import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
 import org.springframework.core.env.get
 import org.springframework.http.client.ClientHttpRequestInterceptor
@@ -24,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.LinkedMultiValueMap
 import java.io.File
 import java.sql.DriverManager
+import javax.annotation.PostConstruct
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,19 +30,23 @@ import java.sql.DriverManager
 @ActiveProfiles("dev")
 abstract class BaseTestCase {
     protected val logger: Logger by lazy { LoggerFactory.getLogger(this::class.java) }
-
-
+    @Autowired
     protected lateinit var restTemplate: TestRestTemplate
+    @Autowired
+    protected lateinit var env: Environment
 
     companion object {
         private var flag = false
         private var loginFlag = false
     }
 
-    @DependsOn("prepareImportSampleData")
-    @Autowired
-    fun prepareLogin(restTemplate: TestRestTemplate) {
-        this.restTemplate = restTemplate
+    @PostConstruct
+    fun postConstruct() {
+        prepareImportSampleData()
+        prepareLogin()
+    }
+
+    fun prepareLogin() {
         if (BaseTestCase.loginFlag) return
         BaseTestCase.loginFlag = true
         val username = "admin"
@@ -62,8 +65,8 @@ abstract class BaseTestCase {
         })
     }
 
-    @Autowired
-    fun prepareImportSampleData(env: Environment) {
+
+    fun prepareImportSampleData() {
         env.getProperty("refreshDb") ?: return
         if (flag) return else flag = true
         logger.info("prepare to import test db data")
