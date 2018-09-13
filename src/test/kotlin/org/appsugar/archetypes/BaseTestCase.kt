@@ -16,7 +16,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.env.Environment
 import org.springframework.core.env.get
 import org.springframework.http.client.ClientHttpRequestInterceptor
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.LinkedMultiValueMap
@@ -27,7 +26,6 @@ import javax.annotation.PostConstruct
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-@ActiveProfiles("dev")
 abstract class BaseTestCase {
     protected val logger: Logger by lazy { LoggerFactory.getLogger(this::class.java) }
     @Autowired

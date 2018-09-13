@@ -15,7 +15,7 @@ plugins {
     kotlin("kapt") version kotlinVersion
     idea
     id("net.researchgate.release") version "2.7.0"
-    id("org.springframework.boot") version "2.0.4.RELEASE"
+    id("org.springframework.boot") version "2.0.5.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 }
 val repos:List<String> by extra
