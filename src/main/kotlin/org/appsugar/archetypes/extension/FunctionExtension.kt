@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory
 /****/
 inline fun <reified T : Any> getLogger() = LoggerFactory.getLogger(T::class.java) as Logger
 
-inline fun <R> Boolean.then(block: () -> R?) = if (this) block() else null
 
 inline fun String.isNotBlankThen(block: String.() -> Unit): String {
     if (isNotBlank()) block()

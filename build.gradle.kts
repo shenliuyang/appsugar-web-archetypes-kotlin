@@ -1,14 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
+
 buildscript {
     val repos by extra { listOf("http://maven.aliyun.com/nexus/content/groups/public","https://jcenter.bintray.com/") }
-    extra["kotlin.version"] = "1.2.61"
+    extra["kotlin.version"] = "1.2.70"
     repositories { for (u in repos) { maven(u) } }
 }
 
 plugins {
-    val kotlinVersion = "1.2.61"
+    val kotlinVersion = "1.2.70"
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     kotlin("jvm") version kotlinVersion

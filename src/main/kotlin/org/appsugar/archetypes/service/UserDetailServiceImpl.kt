@@ -41,7 +41,7 @@ class UserDetailServiceImpl(val userRepository: UserRepository, val passwordEnco
             permissions.addAll(role.permissions)
         }
         if (permissions.contains("*")) permissions.addAll(Permission.values().map { it.value })
-        return UserPrincipal(user.id, user.loginName, passwordEncoder.encode(user.password), permissions.map { SimpleGrantedAuthority(it) }.toMutableList())
+        return UserPrincipal(user.id, user.loginName, passwordEncoder.encode(user.password), permissions.asSequence().map { SimpleGrantedAuthority(it) }.toMutableList())
     }
 
 
