@@ -50,6 +50,7 @@ abstract class BaseTestCase {
         val username = "admin"
         val password = "admin"
         logger.debug("prepare to login with user {} password is {}", username, password)
+
         val responseEntity = restTemplate.postForEntity("/login", LinkedMultiValueMap<String, String>(mapOf("username" to listOf(username), "password" to listOf(password))), Response::class.java)
         val response = responseEntity.body!!
         logger.debug("login  result is {}", response)
@@ -89,5 +90,3 @@ abstract class BaseTestCase {
         }
     }
 }
-
-

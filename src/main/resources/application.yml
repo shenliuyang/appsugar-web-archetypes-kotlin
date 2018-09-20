@@ -33,6 +33,18 @@ spring:
       enabled: false
       url: http://localhost:8080/mancenter
     network:
+      port: 5701
+      portAutoIncrement: true
+      join:
+        multicast:
+          enabled: false
+          group: 224.2.2.3
+          port: 54327
+        tcpIp:
+          enabled: false
+          members:
+            - 192.168.1.1-255
+            - 192.168.2.1-255
       interfaces:
         enabled: false
         interfaces:

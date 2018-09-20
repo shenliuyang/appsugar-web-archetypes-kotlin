@@ -41,6 +41,19 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
             url = c.management.url
         }
         networkConfig.apply {
+            port = c.network.port
+            isPortAutoIncrement = c.network.portAutoIncrement
+            join.apply {
+                multicastConfig.apply {
+                    isEnabled = c.network.join.multicast.enabled
+                    multicastPort = c.network.join.multicast.port
+                    multicastGroup = c.network.join.multicast.group
+                }
+                tcpIpConfig.apply {
+                    isEnabled = c.network.join.tcpIp.enabled
+                    members = c.network.join.tcpIp.members
+                }
+            }
             interfaces.apply {
                 isEnabled = c.network.interfaces.enabled
                 interfaces = c.network.interfaces.interfaces
@@ -133,9 +146,40 @@ class HazelcastManagementConfig {
 
 class HazelcastNetworkConfig {
     var interfaces = HazelcastInterfacesConfig()
+    var port = 5701
+    var portAutoIncrement = true
+    var join = HazelcastNetworkJoinConfig()
     override fun toString(): String {
-        return "HazelcastNetworkConfig(interfaces=$interfaces)"
+        return "HazelcastNetworkConfig(interfaces=$interfaces, port=$port, portAutoIncrement=$portAutoIncrement, join=$join)"
     }
+}
+
+class HazelcastNetworkJoinConfig {
+    var tcpIp = HazelcastNetworkJoinTcpIpConfig()
+    var multicast = HzelcastNetworkJoinMulticastConfig()
+    override fun toString(): String {
+        return "HazelcastNetworkJoinConfig(tcpIp=$tcpIp multicast=$multicast)"
+    }
+
+}
+
+class HzelcastNetworkJoinMulticastConfig {
+    var enabled = false
+    var group = "224.2.2.3"
+    var port = 54327
+    override fun toString(): String {
+        return "HzelcastNetworkJoinMulticastConfig(enabled=$enabled, group='$group', port=$port)"
+    }
+
+}
+
+class HazelcastNetworkJoinTcpIpConfig {
+    var enabled = false
+    var members = mutableListOf<String>()
+    override fun toString(): String {
+        return "HazelcastNetworkJoinTcpIpConfig(enabled=$enabled, members=$members)"
+    }
+
 }
 
 class HazelcastInterfacesConfig {

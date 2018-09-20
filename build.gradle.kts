@@ -33,7 +33,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-cache")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.cloud:spring-cloud-starter-config:$configVersion")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("com.querydsl:querydsl-jpa")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -43,6 +42,7 @@ dependencies {
     compile(dynamic("com.h2database:h2")!!)
     compile(dynamic("mysql:mysql-connector-java")!!)
     kapt("com.querydsl:querydsl-apt:4.1.4:jpa")
+
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")
     testCompile("org.springframework.boot:spring-boot-starter-test"){exclude("junit")}
