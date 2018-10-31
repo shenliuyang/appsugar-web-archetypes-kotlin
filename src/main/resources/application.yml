@@ -4,15 +4,6 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: none
-    properties:
-      hibernate:
-        cache:
-          use_second_level_cache: true
-          use_query_cache: true
-          region:
-            factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
-          hazelcast:
-            instance_name: ${spring.hazelcast.name}
   datasource:
     max-wait: 10000
     max-active: 5
@@ -25,31 +16,6 @@ spring:
     operationType: CLEAN_INSERT
     sample-file: src/test/resources/sample-data.xml
     data-factory: org.dbunit.ext.h2.H2DataTypeFactory
-  hazelcast:
-    group:
-      name: ${random.uuid}
-      password: dev-pass
-    management:
-      enabled: false
-      url: http://localhost:8080/mancenter
-    network:
-      port: 5701
-      portAutoIncrement: true
-      join:
-        multicast:
-          enabled: false
-          group: 224.2.2.3
-          port: 54327
-        tcpIp:
-          enabled: false
-          members:
-            - 192.168.1.1-255
-            - 192.168.2.1-255
-      interfaces:
-        enabled: false
-        interfaces:
-          - 192.168.199.*
-    name: spring-hibernate-cache
   jackson:
     serialization:
       write_dates_as_timestamps: true
@@ -69,3 +35,16 @@ shiro:
     key: u39fskcJooyWj2jA6Vs2lA==
   session:
     name: appsession
+
+---
+spring:
+  profiles: mysql
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:h2:~/tmp/${db.name}
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  dbunit:
+    data-factory: org.hibernate.dialect.MySQL5InnoDBDialect

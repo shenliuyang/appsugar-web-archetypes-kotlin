@@ -10,6 +10,7 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 class MainController(val userRepository: UserRepository) {
@@ -24,13 +25,12 @@ class MainController(val userRepository: UserRepository) {
     /**
      * 用户登录
      */
-    @PostMapping("login")
-    fun login(username: String, password: String): Response {
+    @PostMapping("/login")
+    fun login(username: String, password: String, request: HttpServletRequest): Response {
         val context = SecurityContextHolder.getContext()
         return try {
-            val result = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(
-                    username, password))
-            context.authentication = result
+            val token = UsernamePasswordAuthenticationToken(username, password)
+            context.authentication = authenticationManager.authenticate(token)!!
             Response.SUCCESS
         } catch (ex: AuthenticationException) {
             Response(-1, "用户名或账号密码错误")

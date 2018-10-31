@@ -16,7 +16,7 @@ plugins {
     kotlin("kapt") version kotlinVersion
     idea
     id("net.researchgate.release") version "2.7.0"
-    id("org.springframework.boot") version "2.0.6.RELEASE"
+    id("org.springframework.boot") version "2.1.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 }
 val repos:List<String> by extra
@@ -35,12 +35,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-devtools")
     compile("com.querydsl:querydsl-jpa")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("com.hazelcast:hazelcast-hibernate52:1.2.3")
-    compile("com.hazelcast:hazelcast-spring")
-    compile("org.springframework.session:spring-session-hazelcast")
     compile(dynamic("com.h2database:h2")!!)
     compile(dynamic("mysql:mysql-connector-java")!!)
-    kapt("com.querydsl:querydsl-apt:4.1.4:jpa")
+    kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")
     testCompile("org.springframework.boot:spring-boot-starter-test"){exclude("junit")}
