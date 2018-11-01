@@ -85,6 +85,7 @@ tasks {
                                 if(isMatchAny(it.name))"lib-dynamic/${it.name}" else "lib/${it.name}"
                             }))
         }
+        dependsOn(copyToLib,copyToLibDynamic)
     }
     "test"(Test::class){
         failFast = true
