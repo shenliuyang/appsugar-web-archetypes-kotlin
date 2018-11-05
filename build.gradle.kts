@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
@@ -23,10 +24,12 @@ val repos:List<String> by extra
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic by configurations.creating
+val coroutineVersion = "0.30.2"
 repositories { for (u in repos) { maven(u) } }
 
 dependencies {
     compile(kotlin("stdlib-jdk8"))
+    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-actuator")
@@ -38,6 +41,8 @@ dependencies {
     compile(dynamic("com.h2database:h2")!!)
     compile(dynamic("mysql:mysql-connector-java")!!)
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
+    testCompile("com.squareup.retrofit2:converter-jackson:2.4.0")
+    testCompile("com.squareup.retrofit2:retrofit:2.4.0")
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")
     testCompile("org.springframework.boot:spring-boot-starter-test"){exclude("junit")}
@@ -94,5 +99,6 @@ tasks {
         systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
     }
 }
+kotlin { experimental.coroutines = Coroutines.ENABLE }
 kapt { useBuildCache = true }
 springBoot { buildInfo() }
