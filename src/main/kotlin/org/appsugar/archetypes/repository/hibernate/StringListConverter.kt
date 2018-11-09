@@ -8,5 +8,5 @@ import javax.persistence.AttributeConverter
 class StringListConverter : AttributeConverter<List<String>, String> {
     override fun convertToDatabaseColumn(attribute: List<String>) = attribute.joinToString(",")
 
-    override fun convertToEntityAttribute(dbData: String) = dbData.split(",").toMutableList()
+    override fun convertToEntityAttribute(dbData: String) = if (dbData.isBlank()) mutableListOf() else dbData.split(",").toMutableList()
 }
