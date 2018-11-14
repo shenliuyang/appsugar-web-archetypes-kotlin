@@ -78,15 +78,20 @@ val copyToLibDynamic by tasks.creating(Copy::class){
 }
 tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
 
+lateinit var mainApplicationClassName:String
 tasks {
-    "bootJar"(BootJar::class) { classifier = "boot" }
+    "bootJar"(BootJar::class) {
+        mainApplicationClassName = mainClassName
+        classifier = "boot"
+    }
     "bootRun"(BootRun::class) {sourceResources(sourceSets["main"]) }
     "jar"(Jar::class){
         enabled = true
-        archiveName = "${project.name}.jar"
+        archiveName = "${project.name}-$version.jar"
+
         manifest{
                     attributes(
-                            mapOf("Main-Class" to "org.appsugar.archetypes.ApplicationKt", "Class-Path" to configurations.runtime.joinToString(" ") {
+                            mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.joinToString(" ") {
                                 if(isMatchAny(it.name))"lib-dynamic/${it.name}" else "lib/${it.name}"
                             }))
         }
