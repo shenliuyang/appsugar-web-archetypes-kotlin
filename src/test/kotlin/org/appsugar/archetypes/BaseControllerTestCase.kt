@@ -1,7 +1,8 @@
 package org.appsugar.archetypes
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
+
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.Assertions
@@ -14,6 +15,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 
 class BaseControllerTestCase : BaseTestCase() {
@@ -35,8 +38,12 @@ class BaseControllerTestCase : BaseTestCase() {
         if (BaseControllerTestCase.loginFlag) return
         BaseControllerTestCase.loginFlag = true
         val loginCookie = LoginCookie()
-        val client = OkHttpClient.Builder().addInterceptor(HeaderInterceptor(loginCookie)).build()
-        retrofit = Retrofit.Builder().client(client).baseUrl("http://localhost:${env["local.server.port"]}").addConverterFactory(JacksonConverterFactory.create()).build()
+        val client = OkHttpClient.Builder()
+                .addInterceptor(HeaderInterceptor(loginCookie)).build()
+        retrofit = Retrofit.Builder()
+                .client(client)
+                .baseUrl("http://localhost:${env["local.server.port"]}")
+                .addConverterFactory(JacksonConverterFactory.create()).build()
         val username = "admin"
         val password = "admin"
         val result = buildFacade(MainFacade::class.java).login(username, password).execute()!!
@@ -82,11 +89,11 @@ interface MainFacade {
 }
 
 
-suspend fun <T> Call<T>.await(): T {
+suspend fun <T> Call<T>.await(): T? {
     return suspendCancellableCoroutine {
         this.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
-                it.resume(response.body()!!)
+                it.resume(response.body())
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {

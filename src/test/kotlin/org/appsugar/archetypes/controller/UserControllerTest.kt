@@ -1,6 +1,6 @@
 package org.appsugar.archetypes.controller
 
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.appsugar.archetypes.BaseControllerTestCase
 import org.appsugar.archetypes.TypedPage
 import org.appsugar.archetypes.TypedResponse
@@ -16,7 +16,7 @@ class UserControllerTest : BaseControllerTestCase() {
     lateinit var userFacade: UserFacade
     @Test
     fun testList() = runBlocking {
-        val response = userFacade.list().await()
+        val response = userFacade.list().await()!!
         logger.debug("testList result is {}", response)
         Assertions.assertEquals(Response.SUCCESS.code, response.code)
     }

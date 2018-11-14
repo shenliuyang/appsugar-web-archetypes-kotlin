@@ -5,12 +5,12 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
     val repos by extra { listOf("http://maven.aliyun.com/nexus/content/groups/public","https://jcenter.bintray.com/") }
-    extra["kotlin.version"] = "1.2.71"
+    extra["kotlin.version"] = "1.3.10"
     repositories { for (u in repos) { maven(u) } }
 }
 
 plugins {
-    val kotlinVersion = "1.2.71"
+    val kotlinVersion = "1.3.10"
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     kotlin("jvm") version kotlinVersion
@@ -24,7 +24,7 @@ val repos:List<String> by extra
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic by configurations.creating
-val coroutineVersion = "0.30.2"
+val coroutineVersion = "1.0.1"
 repositories { for (u in repos) { maven(u) } }
 
 dependencies {
@@ -99,6 +99,5 @@ tasks {
         systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
     }
 }
-kotlin { experimental.coroutines = Coroutines.ENABLE }
 kapt { useBuildCache = true }
 springBoot { buildInfo() }
