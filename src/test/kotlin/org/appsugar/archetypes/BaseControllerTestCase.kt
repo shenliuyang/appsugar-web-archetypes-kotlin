@@ -2,7 +2,6 @@ package org.appsugar.archetypes
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import kotlinx.coroutines.suspendCancellableCoroutine
-
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.Assertions

@@ -88,12 +88,11 @@ tasks {
     "jar"(Jar::class){
         enabled = true
         archiveName = "${project.name}-$version.jar"
-
         manifest{
-                    attributes(
-                            mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.joinToString(" ") {
-                                if(isMatchAny(it.name))"lib-dynamic/${it.name}" else "lib/${it.name}"
-                            }))
+            attributes(
+                    mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.all.joinToString(" ") {
+                        if(isMatchAny(it.name))"lib-dynamic/${it.name}" else "lib/${it.name}"
+                    }))
         }
         dependsOn(copyToLib,copyToLibDynamic)
     }

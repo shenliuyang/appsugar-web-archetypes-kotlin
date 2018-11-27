@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.env.Environment
 import org.springframework.core.env.get
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.transaction.annotation.Transactional
 import java.io.File
@@ -21,6 +22,7 @@ import javax.annotation.PostConstruct
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
+@ContextConfiguration
 abstract class BaseTestCase {
     protected val logger: Logger by lazy { LoggerFactory.getLogger(this::class.java) }
 
