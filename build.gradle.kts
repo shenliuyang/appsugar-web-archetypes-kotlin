@@ -87,7 +87,7 @@ tasks {
         archiveName = "${project.name}-$version.jar"
         manifest{
             attributes(
-                    mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.all.joinToString(" ") {
+                    mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.get().all.joinToString(" ") {
                         if(isMatchAny(it.name))"lib-dynamic/${it.name}" else "lib/${it.name}"
                     }))
         }
