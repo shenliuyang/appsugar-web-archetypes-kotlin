@@ -4,21 +4,21 @@ import org.appsugar.archetypes.repository.hibernate.StringListConverter
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.DynamicUpdate
-import javax.persistence.Column
-import javax.persistence.Convert
-import javax.persistence.Entity
+import java.util.*
+import javax.persistence.*
 
 
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @DynamicUpdate
-class Role(
+data class Role(
+        @get:Id
+        @get:GeneratedValue(strategy = GenerationType.IDENTITY)
+        override var id: Long = 0L,
+        override var createdAt: Date = Date(),
+        override var updatedAt: Date = Date(),
         var name: String = "",
         @get:Convert(converter = StringListConverter::class)
         @get:Column(columnDefinition = "TEXT")
         var permissions: MutableList<String> = mutableListOf()
-) : IdEntity() {
-    override fun toString(): String {
-        return "Role( id='$id',name='$name', permissions='$permissions')"
-    }
-}
+) : IdEntityable<Long>
