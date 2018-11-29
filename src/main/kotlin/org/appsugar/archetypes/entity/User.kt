@@ -1,7 +1,6 @@
 package org.appsugar.archetypes.entity
 
 
-import org.appsugar.archetypes.repository.hibernate.StringListConverter
 import org.hibernate.annotations.*
 import org.hibernate.annotations.Cache
 import java.util.*
@@ -21,7 +20,6 @@ data class User(
         @get:Column(unique = true)
         var loginName: String = "",
         var password: String = "",
-        @get:Convert(converter = StringListConverter::class)
         @get:Column(columnDefinition = "TEXT")
         var permissions: MutableList<String> = mutableListOf()
 ) : IdEntityable<Long> {

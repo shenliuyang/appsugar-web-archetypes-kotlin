@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.entity
 
-import org.appsugar.archetypes.repository.hibernate.StringListConverter
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.DynamicUpdate
@@ -18,7 +17,6 @@ data class Role(
         override var createdAt: Date = Date(),
         override var updatedAt: Date = Date(),
         var name: String = "",
-        @get:Convert(converter = StringListConverter::class)
         @get:Column(columnDefinition = "TEXT")
         var permissions: MutableList<String> = mutableListOf()
 ) : IdEntityable<Long>
