@@ -7,6 +7,7 @@ import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -25,21 +26,21 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(condition: UserCondition, @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): Response {
+    fun list(condition: UserCondition, @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): Response<Page<User>> {
         val page = repository.findAll(repository.toPredicate(condition), pageable)
         return Response(page)
     }
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping("detail")
-    fun form(id: Long): Response {
+    fun form(id: Long): Response<User> {
         return Response(repository.findById(id).get())
     }
 
 
     @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
-    fun save(user: User, roleIds: Array<Long>?, permissions: Array<String>?): Response {
+    fun save(user: User, roleIds: Array<Long>?, permissions: Array<String>?): Response<Void> {
         logger.info("prepare to save User {}  new permissions {} new roles {}  ", user, permissions, roleIds)
         user.roles = roleIds?.let { roleRepository.findByIdIn(it.toList()).toMutableSet() } ?: mutableSetOf()
         user.permissions = permissions?.toMutableList() ?: mutableListOf()

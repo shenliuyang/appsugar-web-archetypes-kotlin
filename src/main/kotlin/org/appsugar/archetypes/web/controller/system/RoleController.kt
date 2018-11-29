@@ -4,6 +4,7 @@ import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.extension.getLogger
 import org.appsugar.archetypes.repository.RoleRepository
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -21,7 +22,7 @@ class RoleController(val repository: RoleRepository) {
 
     @PreAuthorize("hasAuthority('role:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(@PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): Response {
+    fun list(@PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): Response<Page<Role>> {
         val page = repository.findAll(pageable)
         return Response(page)
     }
@@ -29,14 +30,14 @@ class RoleController(val repository: RoleRepository) {
 
     @PreAuthorize("hasAuthority('role:view')")
     @RequestMapping("detail")
-    fun form(id: Long): Response {
+    fun form(id: Long): Response<Role> {
         return Response(repository.findById(id).get())
     }
 
 
     @PreAuthorize("hasAuthority('role:edit')")
     @RequestMapping("save")
-    fun save(role: Role, permissions: Array<String>?): Response {
+    fun save(role: Role, permissions: Array<String>?): Response<Void> {
         logger.info("prepare to save role {}, new permissions is {} ", role, permissions)
         role.permissions = permissions?.toMutableList() ?: mutableListOf()
         repository.save(role)

@@ -26,7 +26,7 @@ class MainController(val userRepository: UserRepository) {
      * 用户登录
      */
     @PostMapping("/login")
-    fun login(username: String, password: String, request: HttpServletRequest): Response {
+    fun login(username: String, password: String, request: HttpServletRequest): Response<Void> {
         val context = SecurityContextHolder.getContext()
         return try {
             val token = UsernamePasswordAuthenticationToken(username, password)

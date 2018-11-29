@@ -34,7 +34,7 @@ class ControllerAdvice {
      * 处理系统异常
      */
     @ExceptionHandler(Exception::class)
-    fun handleException(ex: Exception): Response {
+    fun handleException(ex: Exception): Response<Void> {
         logger.error("some error occurred", ex)
         val sb = StringBuilder()
         var root: Throwable? = ex
