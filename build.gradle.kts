@@ -23,7 +23,7 @@ plugins {
 val repos:List<String> by extra
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
-val dynamic by configurations.creating
+val dynamic by configurations.creating!!
 val coroutineVersion = "1.0.1"
 repositories { for (u in repos) { maven(u) } }
 
@@ -92,6 +92,13 @@ tasks {
                     }))
         }
         dependsOn(copyToLib,copyToLibDynamic)
+        doLast{
+            copy{
+                from("$buildDir/libs/$archiveName")
+                into("$buildDir/libs/")
+                rename(archiveName,"app.jar")
+            }
+        }
     }
     "test"(Test::class){
         failFast = true
