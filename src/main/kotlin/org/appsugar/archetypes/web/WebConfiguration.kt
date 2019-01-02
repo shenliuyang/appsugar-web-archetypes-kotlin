@@ -31,7 +31,7 @@ import java.io.Serializable
 @Configuration
 class WebConfiguration : WebSecurityConfigurerAdapter() {
 
-
+    
     override fun configure(http: HttpSecurity) {
         val om = ObjectMapper()
         val unAuthentication = om.writeValueAsBytes(Response.UN_AUTHENTICATED)!!

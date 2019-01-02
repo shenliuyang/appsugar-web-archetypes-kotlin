@@ -5,12 +5,12 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
     val repos by extra { listOf("http://maven.aliyun.com/nexus/content/groups/public","https://jcenter.bintray.com/") }
-    extra["kotlin.version"] = "1.3.10"
+    extra["kotlin.version"] = "1.3.11"
     repositories { for (u in repos) { maven(u) } }
 }
 
 plugins {
-    val kotlinVersion = "1.3.10"
+    val kotlinVersion = "1.3.11"
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     kotlin("jvm") version kotlinVersion
@@ -24,7 +24,7 @@ val repos:List<String> by extra
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic by configurations.creating!!
-val coroutineVersion = "1.0.1"
+val coroutineVersion = "1.1.0"
 repositories { for (u in repos) { maven(u) } }
 
 dependencies {
@@ -87,7 +87,7 @@ tasks {
         archiveName = "${project.name}-$version.jar"
         manifest{
             attributes(
-                    mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.get().all.joinToString(" ") {
+                    mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.get().joinToString(" ") {
                         if(isMatchAny(it.name))"lib-dynamic/${it.name}" else "lib/${it.name}"
                     }))
         }
