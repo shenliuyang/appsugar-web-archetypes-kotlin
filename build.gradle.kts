@@ -5,26 +5,26 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
     val repos by extra { listOf("http://maven.aliyun.com/nexus/content/groups/public","https://jcenter.bintray.com/") }
-    extra["kotlin.version"] = "1.3.20"
+    extra["kotlin.version"] = "1.3.21"
     repositories { for (u in repos) { maven(u) } }
 }
 
 plugins {
-    val kotlinVersion = "1.3.20"
+    val kotlinVersion = "1.3.21"
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     idea
     id("net.researchgate.release") version "2.7.0"
-    id("org.springframework.boot") version "2.1.2.RELEASE"
+    id("org.springframework.boot") version "2.1.3.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 }
 val repos:List<String> by extra
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic by configurations.creating!!
-val coroutineVersion = "1.1.0"
+val coroutineVersion = "1.1.1"
 repositories { for (u in repos) { maven(u) } }
 
 dependencies {
@@ -80,11 +80,11 @@ tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
 
 var mainApplicationClassName = "org.appsugar.archetypes.ApplicationKt"
 tasks {
-    "bootJar"(BootJar::class) { classifier = "boot" }
+    "bootJar"(BootJar::class) { archiveClassifier.set("boot") }
     "bootRun"(BootRun::class) {sourceResources(sourceSets["main"]) }
     "jar"(Jar::class){
         enabled = true
-        archiveName = "${project.name}-$version.jar"
+        archiveFileName.set("${project.name}-${archiveVersion.get()}.jar")
         manifest{
             attributes(
                     mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.get().joinToString(" ") {
@@ -94,9 +94,9 @@ tasks {
         dependsOn(copyToLib,copyToLibDynamic)
         doLast{
             copy{
-                from("$buildDir/libs/$archiveName")
+                from("$buildDir/libs/${archiveFileName.get()}")
                 into("$buildDir/libs/")
-                rename(archiveName,"app.jar")
+                rename(archiveFileName.get(),"app.jar")
             }
         }
     }
