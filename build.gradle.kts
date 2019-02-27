@@ -1,24 +1,23 @@
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
     val repos by extra { listOf("http://maven.aliyun.com/nexus/content/groups/public","https://jcenter.bintray.com/") }
-    extra["kotlin.version"] = "1.3.21"
+    extra["kotlin.version"] = "1.3.11"
     repositories { for (u in repos) { maven(u) } }
 }
 
 plugins {
-    val kotlinVersion = "1.3.21"
+    val kotlinVersion = "1.3.11"
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     idea
-    id("net.researchgate.release") version "2.7.0"
+    id("net.researchgate.release") version "2.8.0"
     id("org.springframework.boot") version "2.1.3.RELEASE"
-    id("io.spring.dependency-management") version "1.0.6.RELEASE"
+    id("io.spring.dependency-management") version "1.0.7.RELEASE"
+
 }
 val repos:List<String> by extra
 val dynamicJarNames = ArrayList<String>()
@@ -76,7 +75,7 @@ val copyToLibDynamic by tasks.creating(Copy::class){
     include { isMatchAny(it.file.name) }
     outputs.upToDateWhen { true }
 }
-tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) { kotlinOptions.jvmTarget = "1.8" }
 
 var mainApplicationClassName = "org.appsugar.archetypes.ApplicationKt"
 tasks {
