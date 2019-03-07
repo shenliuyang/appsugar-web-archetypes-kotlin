@@ -1,10 +1,10 @@
 package org.appsugar.archetypes.web.controller.system
 
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.condition.UserCondition
 import org.appsugar.archetypes.entity.User
-import org.appsugar.archetypes.extension.getLogger
+import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.repository.RoleRepository
+import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
 import org.springframework.data.domain.Page

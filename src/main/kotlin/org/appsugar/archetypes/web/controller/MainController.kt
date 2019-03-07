@@ -1,7 +1,7 @@
 package org.appsugar.archetypes.web.controller
 
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.extension.getLogger
+import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager

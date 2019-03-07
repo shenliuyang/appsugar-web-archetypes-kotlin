@@ -3,7 +3,7 @@ package org.appsugar.archetypes.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.extension.getLogger
+import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.repository.UserRepository
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.context.properties.ConfigurationProperties

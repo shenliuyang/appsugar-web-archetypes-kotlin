@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.extension
+package org.appsugar.archetypes.util
 
 data class Number36(val value: String = "0") {
     init {

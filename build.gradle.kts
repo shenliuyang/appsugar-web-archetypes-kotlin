@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.utils.addToStdlib.cast
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
@@ -22,7 +23,7 @@ plugins {
 val repos:List<String> by extra
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
-val dynamic by configurations.creating!!
+val dynamic: Configuration by configurations.creating
 val coroutineVersion = "1.1.1"
 repositories { for (u in repos) { maven(u) } }
 
@@ -37,8 +38,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-devtools")
     compile("com.querydsl:querydsl-jpa")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("com.h2database:h2")
-    compile("mysql:mysql-connector-java")
+    compile(dynamic("com.h2database:h2")!!)
+    compile(dynamic("mysql:mysql-connector-java")!!)
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
     testCompile("com.squareup.retrofit2:converter-jackson:2.4.0")
     testCompile("com.squareup.retrofit2:retrofit:2.4.0")
@@ -49,6 +50,8 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine")
     dynamic.forEach {dynamicJarNames.add(it.name)}
 }
+
+
 
 /*****config plugin and task*****/
 idea {
@@ -90,7 +93,6 @@ tasks {
                         if(isMatchAny(it.name))"lib-dynamic/${it.name}" else "lib/${it.name}"
                     }))
         }
-        dependsOn(copyToLib,copyToLibDynamic)
         doLast{
             copy{
                 from("$buildDir/libs/${archiveFileName.get()}")
@@ -103,7 +105,7 @@ tasks {
         failFast = true
         useJUnitPlatform()
         systemProperties["refreshDb"] = true
-        systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
+        systemProperties["spring.jpa.converters.ddl-auto"] = "create-drop"
     }
 }
 kapt { useBuildCache = true }

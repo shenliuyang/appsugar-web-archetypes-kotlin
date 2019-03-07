@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.repository.hibernate
+package org.appsugar.archetypes.repository.converters
 
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter

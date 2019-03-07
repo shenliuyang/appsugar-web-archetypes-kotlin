@@ -1,7 +1,7 @@
 package org.appsugar.archetypes.web.controller
 
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.extension.getLogger
+import org.appsugar.archetypes.util.getLogger
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.ui.Model
 import org.springframework.web.bind.WebDataBinder

@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.extension
+package org.appsugar.archetypes.util
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

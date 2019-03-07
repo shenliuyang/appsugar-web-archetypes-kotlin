@@ -1,7 +1,6 @@
 package org.appsugar.archetypes.repository
 
 import org.appsugar.archetypes.BaseTestCase
-import org.appsugar.archetypes.condition.UserCondition
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

@@ -47,4 +47,4 @@ spring:
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
   dbunit:
-    data-factory: org.hibernate.dialect.MySQL5InnoDBDialect
+    data-factory: org.converters.dialect.MySQL5InnoDBDialect

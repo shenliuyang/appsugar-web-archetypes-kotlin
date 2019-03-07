@@ -2,7 +2,7 @@ package org.appsugar.archetypes.web.controller.system
 
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.entity.Role
-import org.appsugar.archetypes.extension.getLogger
+import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.repository.RoleRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
