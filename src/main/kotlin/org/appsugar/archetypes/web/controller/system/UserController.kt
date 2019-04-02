@@ -2,15 +2,14 @@ package org.appsugar.archetypes.web.controller.system
 
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.entity.User
-import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
+import org.appsugar.archetypes.util.getLogger
+import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
-import org.springframework.data.web.PageableDefault
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/system/user")
-class UserController(val repository: UserRepository, val roleRepository: RoleRepository) {
+class UserController(val repository: UserRepository, val roleRepository: RoleRepository) : BaseController() {
     companion object {
         val logger = getLogger<UserController>()
     }
@@ -26,7 +25,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(condition: UserCondition, @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): Response<Page<User>> {
+    fun list(condition: UserCondition, pageable: Pageable): Response<Page<User>> {
         val page = repository.findAll(repository.toPredicate(condition), pageable)
         return Response(page)
     }

@@ -2,9 +2,13 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
-    val repos by extra { listOf("http://maven.aliyun.com/nexus/content/groups/public","https://jcenter.bintray.com/") }
+    val repos by extra { listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/") }
     extra["kotlin.version"] = "1.3.11"
-    repositories { for (u in repos) { maven(u) } }
+    repositories {
+        for (u in repos) {
+            maven(u)
+        }
+    }
 }
 
 plugins {
@@ -19,12 +23,16 @@ plugins {
     id("io.spring.dependency-management") version "1.0.7.RELEASE"
 
 }
-val repos:List<String> by extra
+val repos: List<String> by extra
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic: Configuration by configurations.creating
 val coroutineVersion = "1.1.1"
-repositories { for (u in repos) { maven(u) } }
+repositories {
+    for (u in repos) {
+        maven(u)
+    }
+}
 
 dependencies {
     compile(kotlin("stdlib-jdk8"))
@@ -44,12 +52,11 @@ dependencies {
     testCompile("com.squareup.retrofit2:retrofit:2.4.0")
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")
-    testCompile("org.springframework.boot:spring-boot-starter-test"){exclude("junit")}
+    testCompile("org.springframework.boot:spring-boot-starter-test") { exclude("junit") }
     testCompile("org.junit.jupiter:junit-jupiter-api")
     testRuntime("org.junit.jupiter:junit-jupiter-engine")
-    dynamic.forEach {dynamicJarNames.add(it.name)}
+    dynamic.forEach { dynamicJarNames.add(it.name) }
 }
-
 
 
 /*****config plugin and task*****/
@@ -60,18 +67,18 @@ idea {
         testOutputDir = file("$buildDir/classes/kotlin/test/")
     }
 }
-allOpen{
-    val classNameList = listOf("javax.persistence.Entity","javax.persistence.MappedSuperclass","javax.persistence.Embeddable")
-    classNameList.forEach{annotation(it)}
+allOpen {
+    val classNameList = listOf("javax.persistence.Entity", "javax.persistence.MappedSuperclass", "javax.persistence.Embeddable")
+    classNameList.forEach { annotation(it) }
 }
-val copyToLib by tasks.creating(Copy::class){
+val copyToLib by tasks.creating(Copy::class) {
     into("$buildDir/libs/lib")
     from(configurations.runtime)
     exclude("*spring-boot-devtools*.jar")
     exclude { isMatchAny(it.file.name) }
     outputs.upToDateWhen { true }
 }
-val copyToLibDynamic by tasks.creating(Copy::class){
+val copyToLibDynamic by tasks.creating(Copy::class) {
     into("$buildDir/libs/lib-dynamic")
     from(configurations.runtime)
     include { isMatchAny(it.file.name) }
@@ -82,29 +89,29 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) { ko
 var mainApplicationClassName = "org.appsugar.archetypes.ApplicationKt"
 tasks {
     "bootJar"(BootJar::class) { archiveClassifier.set("boot") }
-    "bootRun"(BootRun::class) {sourceResources(sourceSets["main"]) }
-    "jar"(Jar::class){
+    "bootRun"(BootRun::class) { sourceResources(sourceSets["main"]) }
+    "jar"(Jar::class) {
         enabled = true
         archiveFileName.set("${project.name}-${archiveVersion.get()}.jar")
-        manifest{
+        manifest {
             attributes(
                     mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.get().joinToString(" ") {
-                        if(isMatchAny(it.name))"lib-dynamic/${it.name}" else "lib/${it.name}"
+                        if (isMatchAny(it.name)) "lib-dynamic/${it.name}" else "lib/${it.name}"
                     }))
         }
-        doLast{
-            copy{
+        doLast {
+            copy {
                 from("$buildDir/libs/${archiveFileName.get()}")
                 into("$buildDir/libs/")
-                rename(archiveFileName.get(),"app.jar")
+                rename(archiveFileName.get(), "app.jar")
             }
         }
     }
-    "test"(Test::class){
+    "test"(Test::class) {
         failFast = true
         useJUnitPlatform()
         systemProperties["refreshDb"] = true
-        systemProperties["spring.jpa.converters.ddl-auto"] = "create-drop"
+        systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
     }
 }
 kapt { useBuildCache = true }

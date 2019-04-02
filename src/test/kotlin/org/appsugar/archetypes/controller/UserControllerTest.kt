@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.QueryMap
 
 class UserControllerTest : BaseControllerTestCase() {
     lateinit var userFacade: UserFacade
