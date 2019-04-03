@@ -18,14 +18,15 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 
-class BaseControllerTestCase : BaseTestCase() {
+abstract class BaseControllerTestCase : BaseTestCase() {
     companion object {
         private var loginFlag = false
+        protected lateinit var retrofit: Retrofit
     }
 
-    protected lateinit var retrofit: Retrofit
 
     override fun postConstruct() {
+        println("prepare login")
         super.postConstruct()
         prepareLogin()
     }

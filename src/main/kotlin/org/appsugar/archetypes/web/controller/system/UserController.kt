@@ -6,40 +6,38 @@ import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
-import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/system/user")
-class UserController(val repository: UserRepository, val roleRepository: RoleRepository) : BaseController() {
-    companion object {
-        val logger = getLogger<UserController>()
-    }
+class UserController(val repository: UserRepository, val roleRepository: RoleRepository) : BaseController<User>() {
 
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(condition: UserCondition, pageable: Pageable): Response<Page<User>> {
+    fun list(condition: UserCondition, pageable: PageRequest): Response<Page<User>> {
+        println("form jpa repository is $pageable")
         val page = repository.findAll(repository.toPredicate(condition), pageable)
         return Response(page)
     }
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping("detail")
-    fun form(id: Long): Response<User> {
-        return Response(repository.findById(id).get())
+    fun form(user: User): Response<User> {
+        return Response(user)
     }
 
 
     @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
-    fun save(user: User, roleIds: Array<Long>?, permissions: Array<String>?): Response<Void> {
+    fun save(@ModelAttribute user: User, roleIds: Array<Long>?, permissions: Array<String>?): Response<Void> {
         logger.info("prepare to save User {}  new permissions {} new roles {}  ", user, permissions, roleIds)
         user.roles = roleIds?.let { roleRepository.findByIdIn(it.toList()).toMutableSet() } ?: mutableSetOf()
         user.permissions = permissions?.toMutableList() ?: mutableListOf()

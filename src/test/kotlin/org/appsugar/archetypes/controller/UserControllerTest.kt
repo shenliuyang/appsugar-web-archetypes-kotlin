@@ -11,15 +11,22 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.QueryMap
+import retrofit2.http.Query
 
 class UserControllerTest : BaseControllerTestCase() {
     lateinit var userFacade: UserFacade
+
     @Test
     fun testList() = runBlocking {
         val response = userFacade.list().await()!!
         logger.debug("testList result is {}", response)
         Assertions.assertEquals(Response.SUCCESS.code, response.code)
+    }
+
+    @Test
+    fun testForm() = runBlocking {
+        val response = userFacade.form(-1).await()!!
+        logger.debug("test form result is {}", response.data)
     }
 
     override fun postConstruct() {
@@ -31,4 +38,7 @@ class UserControllerTest : BaseControllerTestCase() {
 interface UserFacade {
     @GET("/system/user/list")
     fun list(): Call<TypedResponse<TypedPage<User>>>
+
+    @GET("/system/user/detail")
+    fun form(@Query("id") id: Long): Call<TypedResponse<User>>
 }
