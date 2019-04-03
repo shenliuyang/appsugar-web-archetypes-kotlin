@@ -16,7 +16,7 @@ abstract class BaseController<T> {
     open lateinit var jpaRepository: JpaRepository<T, Long>
 
     @ModelAttribute
-    fun entity(id: Long?) = id?.let { jpaRepository.findByIdOrNull(id) }
+    open fun entity(id: Long?) = id?.let { jpaRepository.findByIdOrNull(id) }
 
     @ModelAttribute
     open fun pageable(@PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable) = pageable as PageRequest
