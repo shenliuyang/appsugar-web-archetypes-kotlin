@@ -30,11 +30,7 @@ server:
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
-shiro:
-  cipher:
-    key: u39fskcJooyWj2jA6Vs2lA==
-  session:
-    name: appsession
+
 
 ---
 spring:

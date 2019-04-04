@@ -117,6 +117,7 @@ class UserPrincipal<T : GrantedAuthority>(val id: Long, username: String, passwo
     : User(username, password, authorities), Serializable {
     companion object {
         val currentUser: UserPrincipal<GrantedAuthority>?
+            @Suppress("UNCHECKED_CAST")
             get() = SecurityContextHolder.getContext()?.let { ctx -> ctx.authentication?.let { auth -> auth.principal as? UserPrincipal<GrantedAuthority> } }
     }
 

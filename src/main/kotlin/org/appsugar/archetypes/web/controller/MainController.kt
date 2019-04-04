@@ -1,8 +1,9 @@
 package org.appsugar.archetypes.web.controller
 
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.repository.UserRepository
+import org.appsugar.archetypes.util.getLogger
+import org.appsugar.archetypes.web.UserPrincipal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -26,14 +27,14 @@ class MainController(val userRepository: UserRepository) {
      * 用户登录
      */
     @PostMapping("/login")
-    fun login(username: String, password: String, request: HttpServletRequest): Response<Void> {
+    fun login(username: String, password: String, request: HttpServletRequest): Response<List<String>> {
         val context = SecurityContextHolder.getContext()
         return try {
             val token = UsernamePasswordAuthenticationToken(username, password)
             context.authentication = authenticationManager.authenticate(token)!!
-            Response.SUCCESS
+            Response(UserPrincipal.currentUser!!.authorities.map { it.authority })
         } catch (ex: AuthenticationException) {
-            Response(-1, "用户名或账号密码错误")
+            Response(-1, "Username or password error!!")
         }
     }
 }
