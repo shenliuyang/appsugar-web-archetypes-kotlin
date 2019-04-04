@@ -48,8 +48,8 @@ dependencies {
     compile(dynamic("com.h2database:h2")!!)
     compile(dynamic("mysql:mysql-connector-java")!!)
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
-    testCompile("com.squareup.retrofit2:converter-jackson:2.4.0")
-    testCompile("com.squareup.retrofit2:retrofit:2.4.0")
+    testCompile("com.squareup.retrofit2:converter-jackson:2.5.0")
+    testCompile("com.squareup.retrofit2:retrofit:2.5.0")
     testCompile("org.apache.ant:ant:1.10.1")
     testCompile("org.dbunit:dbunit:2.5.4")
     testCompile("org.springframework.boot:spring-boot-starter-test") { exclude("junit") }

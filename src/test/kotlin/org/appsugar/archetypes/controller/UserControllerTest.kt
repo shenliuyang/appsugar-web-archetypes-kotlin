@@ -29,9 +29,19 @@ class UserControllerTest : BaseControllerTestCase() {
         logger.debug("test form result is {}", response.data)
     }
 
+    @Test
+    fun testPermissions() = runBlocking {
+        val response = userFacade.permissions().await()!!
+        logger.debug("testPermissions  permissions is $response")
+
+    }
+
+
     override fun postConstruct() {
         super.postConstruct()
-        userFacade = buildFacade(UserFacade::class.java)
+        if (!(::userFacade.isInitialized)) {
+            userFacade = buildFacade(UserFacade::class.java)
+        }
     }
 }
 
@@ -41,4 +51,7 @@ interface UserFacade {
 
     @GET("/system/user/detail")
     fun form(@Query("id") id: Long): Call<TypedResponse<User>>
+
+    @GET("/system/user/permissions")
+    fun permissions(): Call<TypedResponse<List<String>>>
 }

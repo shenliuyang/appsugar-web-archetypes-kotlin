@@ -26,7 +26,6 @@ abstract class BaseControllerTestCase : BaseTestCase() {
 
 
     override fun postConstruct() {
-        println("prepare login")
         super.postConstruct()
         prepareLogin()
     }

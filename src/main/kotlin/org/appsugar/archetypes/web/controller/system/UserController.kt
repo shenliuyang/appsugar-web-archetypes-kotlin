@@ -6,14 +6,12 @@ import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
+import org.appsugar.archetypes.web.UserPrincipal
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/system/user")
@@ -43,5 +41,11 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
         user.permissions = permissions?.toMutableList() ?: mutableListOf()
         repository.save(user)
         return Response.SUCCESS
+    }
+
+
+    @GetMapping("permissions")
+    fun permissions(): Response<List<String>> {
+        return Response(UserPrincipal.currentUser!!.authorities.map { it.authority!! })
     }
 }

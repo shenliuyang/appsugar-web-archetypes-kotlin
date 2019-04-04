@@ -3,8 +3,8 @@ package org.appsugar.archetypes.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.repository.UserRepository
+import org.appsugar.archetypes.util.getLogger
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -31,7 +32,7 @@ import java.io.Serializable
 @Configuration
 class WebConfiguration : WebSecurityConfigurerAdapter() {
 
-    
+
     override fun configure(http: HttpSecurity) {
         val om = ObjectMapper()
         val unAuthentication = om.writeValueAsBytes(Response.UN_AUTHENTICATED)!!
@@ -114,5 +115,10 @@ class PasswordEncoderConfiguration {
 
 class UserPrincipal<T : GrantedAuthority>(val id: Long, username: String, password: String, authorities: MutableCollection<T>)
     : User(username, password, authorities), Serializable {
+    companion object {
+        val currentUser: UserPrincipal<GrantedAuthority>?
+            get() = SecurityContextHolder.getContext()?.let { ctx -> ctx.authentication?.let { auth -> auth.principal as? UserPrincipal<GrantedAuthority> } }
+    }
+
     val attributes = mutableMapOf<String, Any>()
 }
