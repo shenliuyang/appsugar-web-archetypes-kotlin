@@ -19,7 +19,7 @@ plugins {
     kotlin("kapt") version kotlinVersion
     idea
     id("net.researchgate.release") version "2.8.0"
-    id("org.springframework.boot") version "2.1.3.RELEASE"
+    id("org.springframework.boot") version "2.1.4.RELEASE"
     id("io.spring.dependency-management") version "1.0.7.RELEASE"
 
 }
