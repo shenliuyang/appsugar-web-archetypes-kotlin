@@ -8,7 +8,7 @@ data class Response<T>(val code: Int = 0, val msg: String = "success", val data:
 
     companion object {
         val UN_AUTHENTICATED = Response<Void>(401, "Unauthenticated")
-        val UN_AUTHROIZED = Response<Void>(403, "Unauthorized")
+        val UN_AUTHORIZED = Response<Void>(403, "Unauthorized")
         val SUCCESS = Response<Void>()
         val ERROR = Response<Void>(-1, "error")
 

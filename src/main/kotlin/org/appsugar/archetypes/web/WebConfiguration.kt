@@ -36,7 +36,7 @@ class WebConfiguration : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         val om = ObjectMapper()
         val unAuthentication = om.writeValueAsBytes(Response.UN_AUTHENTICATED)!!
-        val accessDenine = om.writeValueAsBytes(Response.UN_AUTHROIZED)!!
+        val accessDenine = om.writeValueAsBytes(Response.UN_AUTHORIZED)!!
         val success = om.writeValueAsBytes(Response.SUCCESS)!!
         val contentType = "application/json; charset=utf-8"
         http.authorizeRequests()

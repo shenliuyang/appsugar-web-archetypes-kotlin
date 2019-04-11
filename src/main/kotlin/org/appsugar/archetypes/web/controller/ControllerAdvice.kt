@@ -27,7 +27,7 @@ class ControllerAdvice {
      * 处理权限不够异常
      */
     @ExceptionHandler(AccessDeniedException::class)
-    fun handleUnAuthrizationException(model: Model) = Response.UN_AUTHROIZED
+    fun handleUnAuthrizationException(model: Model) = Response.UN_AUTHORIZED
 
 
     /**

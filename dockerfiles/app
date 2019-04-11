@@ -1,5 +1,0 @@
-FROM appsugar/changeme-base:latest
-WORKDIR /root
-ADD  build/libs/lib-dynamic /root/lib-dynamic
-ADD  build/libs/app.jar /root/app.jar
-ENTRYPOINT java  -jar app.jar

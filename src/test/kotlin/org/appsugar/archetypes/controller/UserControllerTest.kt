@@ -33,7 +33,6 @@ class UserControllerTest : BaseControllerTestCase() {
     fun testPermissions() = runBlocking {
         val response = userFacade.permissions().await()!!
         logger.debug("testPermissions  permissions is $response")
-
     }
 
 
