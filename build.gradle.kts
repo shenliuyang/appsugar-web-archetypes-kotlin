@@ -21,7 +21,6 @@ plugins {
     id("net.researchgate.release") version "2.8.0"
     id("org.springframework.boot") version "2.1.4.RELEASE"
     id("io.spring.dependency-management") version "1.0.7.RELEASE"
-
 }
 val repos: List<String> by extra
 val dynamicJarNames = ArrayList<String>()
@@ -48,6 +47,7 @@ dependencies {
     compile(dynamic("com.h2database:h2")!!)
     compile(dynamic("mysql:mysql-connector-java")!!)
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
+    kapt("javax.persistence:javax.persistence-api")
     testCompile("com.squareup.retrofit2:converter-jackson:2.5.0")
     testCompile("com.squareup.retrofit2:retrofit:2.5.0")
     testCompile("org.apache.ant:ant:1.10.1")
@@ -114,5 +114,8 @@ tasks {
         systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
     }
 }
-kapt { useBuildCache = true }
+kapt {
+    useBuildCache = true
+    includeCompileClasspath = false
+}
 springBoot { buildInfo() }
