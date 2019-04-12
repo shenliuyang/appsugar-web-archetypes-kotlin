@@ -45,7 +45,7 @@ abstract class BaseControllerTestCase : BaseTestCase() {
                 .addConverterFactory(JacksonConverterFactory.create()).build()
         val username = "admin"
         val password = "admin"
-        val result = buildFacade(MainFacade::class.java).login(username, password).execute()!!
+        val result = buildFacade(MainFacade::class.java).login(username, password).execute()
         Assertions.assertTrue(result.body()!!.code == 0, "username or password incorrect")
         loginCookie.value = result.headers()["Set-Cookie"]!!
     }
