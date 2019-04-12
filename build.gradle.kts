@@ -116,6 +116,5 @@ tasks {
 }
 kapt {
     useBuildCache = true
-    includeCompileClasspath = false
 }
 springBoot { buildInfo() }
