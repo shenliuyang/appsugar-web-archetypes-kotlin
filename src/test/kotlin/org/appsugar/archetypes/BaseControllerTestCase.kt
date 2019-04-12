@@ -30,7 +30,7 @@ abstract class BaseControllerTestCase : BaseTestCase() {
         prepareLogin()
     }
 
-    fun <T> buildFacade(clazz: Class<T>) = retrofit.create(clazz)!!
+    fun <T> buildFacade(clazz: Class<T>) = retrofit.create(clazz)
 
 
     fun prepareLogin() {

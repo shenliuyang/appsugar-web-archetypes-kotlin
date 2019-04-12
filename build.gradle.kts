@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
     val repos by extra { listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/") }
-    extra["kotlin.version"] = "1.3.11"
+    extra["kotlin.version"] = "1.3.30"
     repositories {
         for (u in repos) {
             maven(u)
@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.3.11"
+    val kotlinVersion = "1.3.30"
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     kotlin("jvm") version kotlinVersion
@@ -84,7 +84,7 @@ val copyToLibDynamic by tasks.creating(Copy::class) {
     include { isMatchAny(it.file.name) }
     outputs.upToDateWhen { true }
 }
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) { kotlinOptions.jvmTarget = "1.8" }
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
 
 var mainApplicationClassName = "org.appsugar.archetypes.ApplicationKt"
 tasks {
