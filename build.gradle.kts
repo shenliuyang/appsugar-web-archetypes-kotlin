@@ -2,11 +2,11 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
-    extra["kotlin.version"] = "1.3.30"
+    extra["kotlin.version"] = "1.3.31"
 }
 
 plugins {
-    val kotlinVersion = "1.3.30"
+    val kotlinVersion = "1.3.31"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -28,6 +28,7 @@ repositories {repos.forEach(::maven)}
 dependencies {
     api(kotlin("stdlib-jdk8"))
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutineVersion}")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${Versions.coroutineVersion}")
     api("org.springframework.boot:spring-boot-starter-web")
     api("org.springframework.boot:spring-boot-starter-security")
     api("org.springframework.boot:spring-boot-starter-actuator")
