@@ -20,7 +20,6 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -96,11 +95,5 @@ class UserDetailServiceImpl(val userRepository: UserRepository, val passwordEnco
 
 class UserPrincipal<T : GrantedAuthority>(val id: Long, username: String, password: String, authorities: MutableCollection<T>)
     : User(username, password, authorities), Serializable {
-    companion object {
-        val currentUser: UserPrincipal<GrantedAuthority>?
-            @Suppress("UNCHECKED_CAST")
-            get() = SecurityContextHolder.getContext()?.let { ctx -> ctx.authentication?.let { auth -> auth.principal as? UserPrincipal<GrantedAuthority> } }
-    }
-
     val attributes = mutableMapOf<String, Any>()
 }
