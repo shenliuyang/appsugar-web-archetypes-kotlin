@@ -1,17 +1,22 @@
 package org.appsugar.archetypes.web.controller.system
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.reactive.awaitFirst
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
-import org.appsugar.archetypes.web.UserPrincipal
+import org.appsugar.archetypes.util.monoWithContext
 import org.appsugar.archetypes.web.controller.BaseController
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/system/user")
@@ -20,32 +25,32 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(condition: UserCondition, pageable: PageRequest): Response<Page<User>> {
-        println("form jpa repository is $pageable")
-        val page = repository.findAll(repository.toPredicate(condition), pageable)
-        return Response(page)
+    fun list(condition: UserCondition, pageable: PageRequest) = GlobalScope.monoWithContext {
+        val page = repository.findAllAsync(repository.toPredicate(condition), pageable).await()
+        Response(page.transfer { it.copy() })
     }
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping("detail")
-    fun form(user: User): Response<User> {
-        return Response(user)
-    }
+    fun form(@ModelAttribute("entity") user: Mono<User>) = user.map { Response(it.copy()) }
 
 
     @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
-    fun save(@ModelAttribute user: User, roleIds: Array<Long>?, permissions: Array<String>?): Response<Void> {
+    fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = GlobalScope.monoWithContext {
+        val roleIds = userData.roleIds
+        val permissions = userData.permissions
+        val user = userMono.awaitFirst()!!
         logger.info("prepare to save User {}  new permissions {} new roles {}  ", user, permissions, roleIds)
-        user.roles = roleIds?.let { roleRepository.findByIdIn(it.toList()).toMutableSet() } ?: mutableSetOf()
-        user.permissions = permissions?.toMutableList() ?: mutableListOf()
-        repository.save(user)
-        return Response.SUCCESS
+        user.roles = if (roleIds.isEmpty()) mutableSetOf() else roleRepository.findByIdIn(roleIds).await().toMutableSet()
+        user.permissions = permissions
+        repository.saveAsync(user).await()
+        Response.SUCCESS
     }
 
 
     @GetMapping("permissions")
-    fun permissions(): Response<List<String>> {
-        return Response(UserPrincipal.currentUser!!.authorities.map { it.authority!! })
-    }
+    fun permissions(@AuthenticationPrincipal userDetails: UserDetails) = Mono.just(Response(userDetails.authorities.map { it.authority }))
 }
+
+data class UserData(var roleIds: MutableList<Long> = mutableListOf(), var permissions: MutableList<String> = mutableListOf())

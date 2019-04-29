@@ -6,7 +6,7 @@ spring:
       ddl-auto: none
   datasource:
     max-wait: 10000
-    max-active: 5
+    max-active: 1
     test-on-borrow: true
     url: jdbc:h2:~/tmp/${db.name}
     username: sa

@@ -29,7 +29,8 @@ dependencies {
     api(kotlin("stdlib-jdk8"))
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutineVersion}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${Versions.coroutineVersion}")
-    api("org.springframework.boot:spring-boot-starter-web")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${Versions.coroutineVersion}")
+    api("org.springframework.boot:spring-boot-starter-webflux")
     api("org.springframework.boot:spring-boot-starter-security")
     api("org.springframework.boot:spring-boot-starter-actuator")
     api("org.springframework.boot:spring-boot-starter-cache")
@@ -77,7 +78,10 @@ val copyToLibDynamic by tasks.creating(Copy::class) {
     include { isMatchAny(it.file.name) }
     outputs.upToDateWhen { true }
 }
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions{
+    jvmTarget = "1.8"
+    freeCompilerArgs = listOf("-Xjvm-default=enable")
+} }
 
 var mainApplicationClassName = "org.appsugar.archetypes.ApplicationKt"
 tasks {

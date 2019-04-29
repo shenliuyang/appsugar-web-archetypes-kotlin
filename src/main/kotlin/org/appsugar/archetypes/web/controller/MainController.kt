@@ -1,40 +1,39 @@
 package org.appsugar.archetypes.web.controller
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.repository.UserRepository
-import org.appsugar.archetypes.util.getLogger
-import org.appsugar.archetypes.web.UserPrincipal
+import org.appsugar.archetypes.util.monoWithContext
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.AuthenticationException
-import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.context.SecurityContextImpl
+import org.springframework.security.web.server.context.ServerSecurityContextRepository
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.servlet.http.HttpServletRequest
+import org.springframework.web.server.ServerWebExchange
 
 @RestController
-class MainController(val userRepository: UserRepository) {
-    companion object {
-        val logger = getLogger<MainController>()
-    }
+class MainController {
 
     @Autowired
-    lateinit var authenticationManager: AuthenticationManager
+    lateinit var webSessionServerSecurityContextRepository: ServerSecurityContextRepository
+    @Autowired
+    lateinit var reactiveAuthenticationManager: ReactiveAuthenticationManager
 
-
-    /**
-     * 用户登录
-     */
     @PostMapping("/login")
-    fun login(username: String, password: String, request: HttpServletRequest): Response<List<String>> {
-        val context = SecurityContextHolder.getContext()
-        return try {
-            val token = UsernamePasswordAuthenticationToken(username, password)
-            context.authentication = authenticationManager.authenticate(token)!!
-            Response(UserPrincipal.currentUser!!.authorities.map { it.authority })
+    fun login(loginData: LoginData, serverWebExchange: ServerWebExchange) = GlobalScope.monoWithContext {
+        try {
+            val authentication = reactiveAuthenticationManager.authenticate(UsernamePasswordAuthenticationToken(loginData.username, loginData.password)).awaitFirst()!!
+            webSessionServerSecurityContextRepository.save(serverWebExchange, SecurityContextImpl(authentication)).awaitFirstOrNull()
+            Response(authentication.authorities.map { it.authority })
         } catch (ex: AuthenticationException) {
-            Response(-1, "Username or password error!!")
+            Response.error("username or password error!!")
         }
+
     }
 }
+
+data class LoginData(var username: String, var password: String)

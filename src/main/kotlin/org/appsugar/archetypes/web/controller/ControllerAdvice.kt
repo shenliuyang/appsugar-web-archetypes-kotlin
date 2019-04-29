@@ -8,6 +8,7 @@ import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import reactor.core.publisher.Mono
 import java.beans.PropertyEditorSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -27,14 +28,14 @@ class ControllerAdvice {
      * 处理权限不够异常
      */
     @ExceptionHandler(AccessDeniedException::class)
-    fun handleUnAuthrizationException(model: Model) = Response.UN_AUTHORIZED
+    fun handleUnAuthrizationException(model: Model) = Mono.just(Response.UN_AUTHORIZED)
 
 
     /**
      * 处理系统异常
      */
     @ExceptionHandler(Exception::class)
-    fun handleException(ex: Exception): Response<Void> {
+    fun handleException(ex: Exception): Mono<Response<Void>> {
         logger.error("some error occurred", ex)
         val sb = StringBuilder()
         var root: Throwable? = ex
@@ -44,7 +45,7 @@ class ControllerAdvice {
                 root = it.cause
             }
         } while (root != null)
-        return Response.error(sb.toString())
+        return Mono.just(Response.error(sb.toString()))
     }
 
 

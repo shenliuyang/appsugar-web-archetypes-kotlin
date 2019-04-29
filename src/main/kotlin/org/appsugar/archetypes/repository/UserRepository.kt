@@ -5,15 +5,14 @@ import org.appsugar.archetypes.entity.QUser
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.util.isNotBlankThen
 import org.springframework.data.jpa.repository.EntityGraph
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.querydsl.QuerydslPredicateExecutor
 import java.io.Serializable
+import java.util.concurrent.CompletableFuture
 
-interface UserRepository : JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {
+interface UserRepository : BaseRepository<User, Long> {
 
     /*find User by LoginName fetch with Roles*/
     @EntityGraph(attributePaths = ["roles"])
-    fun findByLoginName(loginName: String): User?
+    fun findByLoginName(loginName: String): CompletableFuture<User?>
 }
 
 private val u = QUser.user
