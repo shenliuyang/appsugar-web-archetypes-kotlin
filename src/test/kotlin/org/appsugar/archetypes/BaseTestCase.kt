@@ -40,7 +40,6 @@ abstract class BaseTestCase {
 
 
     fun prepareImportSampleData() {
-        env.getProperty("refreshDb") ?: return
         if (flag) return else flag = true
         logger.info("prepare to import test db data")
         val con = DriverManager.getConnection(env["spring.datasource.url"], env["spring.datasource.username"], env["spring.datasource.password"])

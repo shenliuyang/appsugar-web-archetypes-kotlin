@@ -15,15 +15,16 @@ plugins {
     id("org.springframework.boot") version "2.1.4.RELEASE"
     idea
 }
-apply{ plugin("io.spring.dependency-management") }
+apply { plugin("io.spring.dependency-management") }
 val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/")
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic: Configuration by configurations.creating
-object Versions{
-    const val coroutineVersion = "1.2.0"
+
+object Versions {
+    const val coroutineVersion = "1.2.1"
 }
-repositories {repos.forEach(::maven)}
+repositories { repos.forEach(::maven) }
 
 dependencies {
     api(kotlin("stdlib-jdk8"))
@@ -78,17 +79,19 @@ val copyToLibDynamic by tasks.creating(Copy::class) {
     include { isMatchAny(it.file.name) }
     outputs.upToDateWhen { true }
 }
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions{
-    jvmTarget = "1.8"
-    freeCompilerArgs = listOf("-Xjvm-default=enable")
-} }
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf("-Xjvm-default=enable")
+    }
+}
 
 var mainApplicationClassName = "org.appsugar.archetypes.ApplicationKt"
 tasks {
     "bootJar"(BootJar::class) { archiveClassifier.set("boot") }
     "bootRun"(BootRun::class) { sourceResources(sourceSets["main"]) }
     "jar"(Jar::class) {
-        dependsOn(copyToLib,copyToLibDynamic)
+        dependsOn(copyToLib, copyToLibDynamic)
         enabled = true
         archiveFileName.set("${project.name}-${archiveVersion.get()}.jar")
         manifest {
@@ -108,7 +111,6 @@ tasks {
     "test"(Test::class) {
         failFast = true
         useJUnitPlatform()
-        systemProperties["refreshDb"] = true
         systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
     }
 }

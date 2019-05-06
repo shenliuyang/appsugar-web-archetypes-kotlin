@@ -83,7 +83,7 @@ class UserDetailServiceImpl(val userRepository: UserRepository, val passwordEnco
         if (username == name) return@mono UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf(SimpleGrantedAuthority(endpointPermission)))
         val user = userRepository.findByLoginName(username).await()
                 ?: throw UsernameNotFoundException("username: [$username] did not found")
-        var permissions = mutableSetOf<String>().apply { user.permissions }
+        var permissions = HashSet(user.permissions)
         for (role in user.roles) {
             permissions.addAll(role.permissions)
         }
