@@ -105,7 +105,6 @@ tasks {
     "test"(Test::class) {
         failFast = true
         useJUnitPlatform()
-        systemProperties["refreshDb"] = true
         systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
     }
 }
