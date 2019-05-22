@@ -82,7 +82,7 @@ val copyToLibDynamic by tasks.creating(Copy::class) {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xjvm-default=enable")
+        freeCompilerArgs = listOf("-Xjvm-default=enable", "-XXLanguage:+InlineClasses")
     }
 }
 
