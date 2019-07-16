@@ -12,7 +12,7 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     id("net.researchgate.release") version "2.8.0"
-    id("org.springframework.boot") version "2.1.5.RELEASE"
+    id("org.springframework.boot") version "2.1.6.RELEASE"
     idea
 }
 apply { plugin("io.spring.dependency-management") }
