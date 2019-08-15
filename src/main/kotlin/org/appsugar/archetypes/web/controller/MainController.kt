@@ -32,7 +32,6 @@ class MainController {
         } catch (ex: AuthenticationException) {
             Response.error("username or password error!!")
         }
-
     }
 }
 
