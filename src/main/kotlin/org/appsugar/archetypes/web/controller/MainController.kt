@@ -1,10 +1,9 @@
 package org.appsugar.archetypes.web.controller
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.util.monoWithContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -24,7 +23,7 @@ class MainController {
     lateinit var reactiveAuthenticationManager: ReactiveAuthenticationManager
 
     @PostMapping("/login")
-    fun login(loginData: LoginData, serverWebExchange: ServerWebExchange) = GlobalScope.monoWithContext {
+    fun login(loginData: LoginData, serverWebExchange: ServerWebExchange) = mono {
         try {
             val authentication = reactiveAuthenticationManager.authenticate(UsernamePasswordAuthenticationToken(loginData.username, loginData.password)).awaitFirst()!!
             webSessionServerSecurityContextRepository.save(serverWebExchange, SecurityContextImpl(authentication)).awaitFirstOrNull()

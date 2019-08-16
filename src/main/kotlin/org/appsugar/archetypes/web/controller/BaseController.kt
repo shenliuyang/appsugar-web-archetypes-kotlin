@@ -1,9 +1,8 @@
 package org.appsugar.archetypes.web.controller
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
+import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.repository.BaseRepository
-import org.appsugar.archetypes.util.monoWithContext
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
@@ -19,7 +18,7 @@ abstract class BaseController<T> {
     open lateinit var jpaRepository: BaseRepository<T, Long>
 
     @ModelAttribute("entity")
-    open fun entity(id: IdData): Mono<T> = GlobalScope.monoWithContext { id.id?.let { jpaRepository.findByIdOrNullAsync(it).await() } }
+    open fun entity(id: IdData): Mono<T> = mono { id.id?.let { jpaRepository.findByIdOrNullAsync(it).await() } }
 
     @ModelAttribute
     open fun pageable(pageData: PageData) = PageRequest.of(pageData.page, pageData.size, Sort.Direction.DESC, "id")
