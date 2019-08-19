@@ -1,20 +1,18 @@
 package org.appsugar.archetypes.web.controller.system
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
-import org.appsugar.archetypes.util.monoWithContext
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
@@ -26,7 +24,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
     fun list(condition: UserCondition, pageable: PageRequest) = mono {
-        val page = repository.findAllAsync(repository.toPredicate(condition), pageable).await()
+        val page = repository.findAllAsync(condition.toPredicate(), pageable).await()
         Response(page.transfer { it.copy() })
     }
 
