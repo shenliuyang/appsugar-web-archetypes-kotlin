@@ -1,12 +1,11 @@
 package org.appsugar.archetypes.web.controller.system
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.repository.RoleRepository
-import org.appsugar.archetypes.util.monoWithContext
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
@@ -22,7 +21,7 @@ class RoleController(val repository: RoleRepository) : BaseController<Role>() {
 
     @PreAuthorize("hasAuthority('role:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(pageable: PageRequest) = GlobalScope.monoWithContext {
+    fun list(pageable: PageRequest) = mono {
         val page = repository.findAll(pageable)
         Response(page)
     }
@@ -35,7 +34,7 @@ class RoleController(val repository: RoleRepository) : BaseController<Role>() {
 
     @PreAuthorize("hasAuthority('role:edit')")
     @RequestMapping("save")
-    fun save(@ModelAttribute("entity") role: Mono<Role>, roleData: RoleData) = GlobalScope.monoWithContext {
+    fun save(@ModelAttribute("entity") role: Mono<Role>, roleData: RoleData) = mono {
         val r = role.awaitFirst()!!
         val permissions = roleData.permissions
         logger.info("prepare to save role {}, new permissions is {} ", r, permissions)

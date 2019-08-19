@@ -2,7 +2,6 @@ package org.appsugar.archetypes.web
 
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.common.domain.Response
@@ -79,7 +78,7 @@ class UserDetailServiceImpl(val userRepository: UserRepository, val passwordEnco
     }
 
 
-    override fun findByUsername(username: String): Mono<UserDetails> = GlobalScope.mono {
+    override fun findByUsername(username: String): Mono<UserDetails> = mono {
         if (username == name) return@mono UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf(SimpleGrantedAuthority(endpointPermission)))
         val user = userRepository.findByLoginName(username).await()
                 ?: throw UsernameNotFoundException("username: [$username] did not found")

@@ -2,17 +2,17 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
-    extra["kotlin.version"] = "1.3.31"
+    extra["kotlin.version"] = "1.3.41"
 }
 
 plugins {
-    val kotlinVersion = "1.3.31"
+    val kotlinVersion = "1.3.41"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     id("net.researchgate.release") version "2.8.0"
-    id("org.springframework.boot") version "2.1.5.RELEASE"
+    id("org.springframework.boot") version "2.1.7.RELEASE"
     idea
 }
 apply { plugin("io.spring.dependency-management") }
@@ -22,7 +22,7 @@ val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic: Configuration by configurations.creating
 
 object Versions {
-    const val coroutineVersion = "1.2.1"
+    const val coroutineVersion = "1.3.0-RC2"
 }
 repositories { repos.forEach(::maven) }
 

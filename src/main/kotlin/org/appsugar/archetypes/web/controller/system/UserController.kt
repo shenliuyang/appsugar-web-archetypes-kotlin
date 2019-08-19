@@ -25,8 +25,8 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(condition: UserCondition, pageable: PageRequest) = GlobalScope.monoWithContext {
-        val page = repository.findAllAsync(condition.toPredicate(), pageable).await()
+    fun list(condition: UserCondition, pageable: PageRequest) = mono {
+        val page = repository.findAllAsync(repository.toPredicate(condition), pageable).await()
         Response(page.transfer { it.copy() })
     }
 
@@ -37,7 +37,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
-    fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = GlobalScope.monoWithContext {
+    fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = mono {
         val roleIds = userData.roleIds
         val permissions = userData.permissions
         val user = userMono.awaitFirst()!!
@@ -50,7 +50,11 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
 
     @GetMapping("permissions")
-    fun permissions(@AuthenticationPrincipal userDetails: UserDetails) = Mono.just(Response(userDetails.authorities.map { it.authority }))
+    fun permissions() = mono {
+        val ctx = ReactiveSecurityContextHolder.getContext().awaitFirst()
+        val authentication = ctx.authentication
+        Response(authentication.authorities.map { it.authority })
+    }
 }
 
 data class UserData(var roleIds: MutableList<Long> = mutableListOf(), var permissions: MutableList<String> = mutableListOf())
