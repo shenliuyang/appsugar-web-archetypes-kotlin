@@ -16,7 +16,9 @@ interface UserRepository : BaseRepository<User, Long> {
 }
 
 private val u = QUser.user
-fun UserRepository.toPredicate(c: UserCondition) = BooleanBuilder().apply {
+
+fun UserCondition.toPredicate() = BooleanBuilder().apply {
+    val c = this@toPredicate
     c.name.isNotBlankThen { and(u.name.startsWith(this)) }
     c.loginName.isNotBlankThen { and(u.loginName.eq(this)) }
 }

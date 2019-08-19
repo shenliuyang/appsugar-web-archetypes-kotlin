@@ -26,7 +26,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
     fun list(condition: UserCondition, pageable: PageRequest) = GlobalScope.monoWithContext {
-        val page = repository.findAllAsync(repository.toPredicate(condition), pageable).await()
+        val page = repository.findAllAsync(condition.toPredicate(), pageable).await()
         Response(page.transfer { it.copy() })
     }
 

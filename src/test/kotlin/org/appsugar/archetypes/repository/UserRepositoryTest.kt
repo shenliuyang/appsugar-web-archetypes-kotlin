@@ -23,7 +23,7 @@ class UserRepositoryTest : BaseTestCase() {
     @Test
     fun testFindByCondition() {
         val condition = UserCondition(name = "NewYoung", loginName = "123")
-        val users = repository.findAll(repository.toPredicate(condition))
+        val users = repository.findAll(condition.toPredicate())
         logger.debug("testFindByCondition {} result is {} ", condition, users)
     }
 }
