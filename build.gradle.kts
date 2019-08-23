@@ -2,11 +2,11 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
-    extra["kotlin.version"] = "1.3.41"
+    extra["kotlin.version"] = "1.3.50"
 }
 
 plugins {
-    val kotlinVersion = "1.3.41"
+    val kotlinVersion = "1.3.50"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
