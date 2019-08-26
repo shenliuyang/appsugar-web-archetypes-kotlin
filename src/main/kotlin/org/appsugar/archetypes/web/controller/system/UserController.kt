@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono
 @RequestMapping("/system/user")
 class UserController(val repository: UserRepository, val roleRepository: RoleRepository) : BaseController<User>() {
 
-
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
     fun list(condition: UserCondition, pageable: PageRequest) = mono {

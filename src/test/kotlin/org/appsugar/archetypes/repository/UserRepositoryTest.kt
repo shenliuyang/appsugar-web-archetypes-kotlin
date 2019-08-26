@@ -11,7 +11,6 @@ class UserRepositoryTest : BaseTestCase() {
     @Autowired
     lateinit var repository: UserRepository
 
-
     @Test
     fun testFindByLoginName() = runBlocking {
         val loginName = "admin"

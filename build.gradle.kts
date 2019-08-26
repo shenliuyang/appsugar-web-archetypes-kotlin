@@ -1,29 +1,28 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-import org.springframework.boot.gradle.tasks.run.BootRun
-
-buildscript {
-    extra["kotlin.version"] = "1.3.50"
-}
-
+buildscript {}
 plugins {
     val kotlinVersion = "1.3.50"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
-    id("net.researchgate.release") version "2.8.0"
+    id("net.researchgate.release") version "2.8.1"
     id("org.springframework.boot") version "2.1.7.RELEASE"
     idea
 }
 apply { plugin("io.spring.dependency-management") }
+object Versions {
+    const val kotlinVersion = "1.3.50"
+    const val coroutineVersion = "1.3.0"
+    const val nettyVersion = "4.1.39.Final"
+    const val fstVersion = "2.56"
+}
+extra["kotlin.version"] = Versions.kotlinVersion
+extra["netty.version"] = Versions.nettyVersion
+
 val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/")
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic: Configuration by configurations.creating
-
-object Versions {
-    const val coroutineVersion = "1.3.0-RC2"
-}
 repositories { repos.forEach(::maven) }
 
 dependencies {
@@ -36,8 +35,11 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-actuator")
     api("org.springframework.boot:spring-boot-starter-cache")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
+    api("org.springframework.boot:spring-boot-starter-data-redis-reactive")
     api("org.springframework.boot:spring-boot-devtools")
+    api("io.netty:netty-transport-native-epoll:${Versions.nettyVersion}:linux-x86_64")
     api("com.querydsl:querydsl-jpa")
+    api("de.ruedigermoeller:fst:${Versions.fstVersion}")
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
     api(dynamic("com.h2database:h2")!!)
     api(dynamic("mysql:mysql-connector-java")!!)
@@ -87,16 +89,17 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 var mainApplicationClassName = "org.appsugar.archetypes.ApplicationKt"
+
 tasks {
-    "bootJar"(BootJar::class) { archiveClassifier.set("boot") }
-    "bootRun"(BootRun::class) { sourceResources(sourceSets["main"]) }
-    "jar"(Jar::class) {
+    bootJar { archiveClassifier.set("boot") }
+    bootRun { sourceResources(sourceSets["main"]) }
+    jar {
         dependsOn(copyToLib, copyToLibDynamic)
         enabled = true
         archiveFileName.set("${project.name}-${archiveVersion.get()}.jar")
         manifest {
             attributes(
-                    mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtime.get().joinToString(" ") {
+                    mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtimeClasspath.get().joinToString(" ") {
                         if (isMatchAny(it.name)) "lib-dynamic/${it.name}" else "lib/${it.name}"
                     }))
         }
@@ -108,7 +111,7 @@ tasks {
             }
         }
     }
-    "test"(Test::class) {
+    test {
         failFast = true
         useJUnitPlatform()
         systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
@@ -117,4 +120,6 @@ tasks {
 kapt {
     useBuildCache = true
 }
+
+
 springBoot { buildInfo() }
