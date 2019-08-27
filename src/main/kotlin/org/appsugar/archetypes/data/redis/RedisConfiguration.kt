@@ -23,7 +23,7 @@ class RedisConfiguration {
         val packageName = Application::class.java.`package`.name
         val result = scanner.findCandidateComponents(packageName)
         val classToIdList = result.asSequence().map { it.beanClassName }.map(::classNameToPair).toList()
-        logger.debug("prepare to register class mapping {}", classToIdList)
+        logger.debug("Prepare to register class mapping {}", classToIdList)
         return FstRedisSerializer(preRegistryClasses = classToIdList)
     }
 
