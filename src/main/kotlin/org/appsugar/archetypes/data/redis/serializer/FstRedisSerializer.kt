@@ -6,9 +6,17 @@ import org.springframework.data.redis.serializer.RedisSerializer
 /**
  * 使用fst代替jdk序列化提升性能减少存储占用
  */
-class FstRedisSerializer(val shareReferenfces: Boolean = false, val preRegistryClasses: List<Pair<Int, Class<*>>> = emptyList()) : RedisSerializer<Any> {
+class FstRedisSerializer(private val fstSerializerSource: FstSerializerSource) : RedisSerializer<Any> {
 
-    val threadLocal = object : ThreadLocal<FSTConfiguration>() {
+
+    override fun serialize(t: Any?) = t?.let { fstSerializerSource.fstConfiguration.asByteArray(this) }
+
+    override fun deserialize(bytes: ByteArray?) = bytes?.let { fstSerializerSource.fstConfiguration.asObject(it) }
+
+}
+
+data class FstSerializerSource(val shareReferenfces: Boolean = false, val preRegistryClasses: List<Pair<Int, Class<*>>> = emptyList()) {
+    private val threadLocal = object : ThreadLocal<FSTConfiguration>() {
         override fun initialValue(): FSTConfiguration {
             val fst = FSTConfiguration.createDefaultConfiguration()
             fst.registerClass()
@@ -25,8 +33,5 @@ class FstRedisSerializer(val shareReferenfces: Boolean = false, val preRegistryC
         }
     }
 
-    override fun serialize(t: Any?) = t?.let { threadLocal.get().asByteArray(this) }
-
-    override fun deserialize(bytes: ByteArray?) = bytes?.let { threadLocal.get().asObject(it) }
-
+    val fstConfiguration: FSTConfiguration get() = threadLocal.get()!!
 }

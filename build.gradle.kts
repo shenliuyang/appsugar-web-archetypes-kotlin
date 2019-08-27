@@ -41,6 +41,7 @@ dependencies {
     api("com.querydsl:querydsl-jpa")
     api("de.ruedigermoeller:fst:${Versions.fstVersion}")
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
+    api("net.logstash.logback:logstash-logback-encoder:6.1")
     api(dynamic("com.h2database:h2")!!)
     api(dynamic("mysql:mysql-connector-java")!!)
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
