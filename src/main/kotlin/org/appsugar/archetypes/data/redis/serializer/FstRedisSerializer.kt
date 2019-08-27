@@ -6,7 +6,7 @@ import org.springframework.data.redis.serializer.RedisSerializer
 /**
  * 使用fst代替jdk序列化提升性能减少存储占用
  */
-class FstRedisSerializer(val shareReferenfces: Boolean = false, val preRegistryClasses: List<Pair<Int, Class<Any>>> = emptyList()) : RedisSerializer<Any> {
+class FstRedisSerializer(val shareReferenfces: Boolean = false, val preRegistryClasses: List<Pair<Int, Class<*>>> = emptyList()) : RedisSerializer<Any> {
 
     val threadLocal = object : ThreadLocal<FSTConfiguration>() {
         override fun initialValue(): FSTConfiguration {

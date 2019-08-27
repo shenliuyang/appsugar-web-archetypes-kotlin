@@ -1,6 +1,7 @@
 package org.appsugar.archetypes.entity
 
 
+import org.appsugar.archetypes.data.redis.ClassMapping
 import org.hibernate.annotations.*
 import org.hibernate.annotations.Cache
 import java.util.*
@@ -10,6 +11,7 @@ import javax.persistence.Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @DynamicUpdate
+@ClassMapping(100)
 data class User(
         @get:Id
         @get:GeneratedValue(strategy = GenerationType.IDENTITY)
