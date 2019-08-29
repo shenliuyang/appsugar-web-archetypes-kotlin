@@ -82,8 +82,5 @@ const val MDC_IN_CONTEXT_KEY = "MDC_IN_CONTEXT_KEY"
  */
 private fun Context.copyToMdc() {
     val optional = this.getOrEmpty<Map<String, String>>(MDC_IN_CONTEXT_KEY)
-    optional.ifPresent {
-        MDC.setContextMap(it)
-    }
-
+    if (optional.isPresent) MDC.setContextMap(optional.get()) else MDC.clear()
 }

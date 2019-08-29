@@ -2,12 +2,14 @@ package org.appsugar.archetypes.web.controller
 
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.util.getLogger
+import org.slf4j.MDC
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.ui.Model
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 import java.beans.PropertyEditorSupport
 import java.time.LocalDate
@@ -31,12 +33,19 @@ class ControllerAdvice {
     fun handleUnAuthrizationException(model: Model) = Mono.just(Response.UN_AUTHORIZED)
 
 
+    val urlKey = "url"
+    val methodKey = "method"
     /**
      * 处理系统异常
      */
     @ExceptionHandler(Exception::class)
-    fun handleException(ex: Exception): Mono<Response<Void>> {
-        logger.error("some error occurred", ex)
+    fun handleException(serverWebExchange: ServerWebExchange, ex: Exception): Mono<Response<Void>> {
+        val req = serverWebExchange.request
+        MDC.put(urlKey, req.uri.toString())
+        MDC.put(methodKey, req.methodValue)
+        logger.error("controller  error", ex)
+        MDC.remove(urlKey)
+        MDC.remove(methodKey)
         val sb = StringBuilder()
         var root: Throwable? = ex
         do {

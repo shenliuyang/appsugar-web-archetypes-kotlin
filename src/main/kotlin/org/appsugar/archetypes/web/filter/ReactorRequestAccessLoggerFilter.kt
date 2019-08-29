@@ -6,7 +6,9 @@ import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.logger.MDC_IN_CONTEXT_KEY
+import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.web.UserPrincipal
+import org.slf4j.MDC
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.stereotype.Component
@@ -20,6 +22,9 @@ import reactor.util.context.Context
  */
 @Component
 class ReactorRequestAccessLoggerFilter : WebFilter {
+    companion object {
+        val logger = getLogger<ReactorRequestAccessLoggerFilter>()
+    }
 
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain) = mono<Void>(Dispatchers.Unconfined) {
         val req = exchange.request
@@ -36,7 +41,27 @@ class ReactorRequestAccessLoggerFilter : WebFilter {
             mdc["userId"] = id.toString()
             mdc["username"] = username
         }
-        chain.filter(exchange).subscriberContext(Context.of(MDC_IN_CONTEXT_KEY, mdc)).awaitFirstOrNull().apply { mdc.clear() }
+        val time = System.currentTimeMillis()
+        try {
+            chain.filter(exchange).subscriberContext(Context.of(MDC_IN_CONTEXT_KEY, mdc)).awaitFirstOrNull()
+        } finally {
+            if (logger.isInfoEnabled) {
+                //记录下每次请求消耗时间,请求路径远程地址
+                val spendTime = System.currentTimeMillis() - time
+                val requestUrl = req.uri.toString()
+                val requestMethod = req.methodValue
+                val remote = req.remoteAddress?.hostString
+                mdc["url"] = requestUrl
+                mdc["method"] = requestMethod
+                remote?.let { mdc["remote"] = remote }
+                mdc["elapsed"] = spendTime.toString()
+                mdc["type"] = "access"
+                MDC.setContextMap(mdc)
+                logger.info("request access log")
+                MDC.clear()
+            }
+            mdc.clear()
+        }
     }
 
 }
