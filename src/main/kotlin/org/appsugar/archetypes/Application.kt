@@ -8,6 +8,7 @@ import org.springframework.boot.runApplication
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.scheduling.annotation.EnableAsync
 
 
 @SpringBootApplication
@@ -15,6 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableCaching(proxyTargetClass = true)
 @EnableFstClassMapping
+@EnableAsync
 class Application
 
 fun main(args: Array<String>) {

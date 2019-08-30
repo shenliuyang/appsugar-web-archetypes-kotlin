@@ -1,5 +1,6 @@
 package org.appsugar.archetypes.data.redis.serializer
 
+import kotlinx.coroutines.asContextElement
 import org.nustaq.serialization.FSTConfiguration
 import org.springframework.data.redis.serializer.RedisSerializer
 
@@ -18,8 +19,8 @@ class FstRedisSerializer(private val fstSerializerSource: FstSerializerSource) :
 data class FstSerializerSource(val shareReferenfces: Boolean = false, val preRegistryClasses: List<Pair<Int, Class<*>>> = emptyList()) {
     private val threadLocal = object : ThreadLocal<FSTConfiguration>() {
         override fun initialValue(): FSTConfiguration {
+            this.asContextElement()
             val fst = FSTConfiguration.createDefaultConfiguration()
-            fst.registerClass()
             fst.isShareReferences = shareReferenfces
             val registry = fst.classRegistry
             preRegistryClasses.forEach {

@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async
 import java.io.Serializable
 import java.util.concurrent.CompletableFuture
 
+
 @NoRepositoryBean
 interface BaseRepository<T, ID : Serializable> : JpaRepository<T, ID>, QuerydslPredicateExecutor<T> {
 

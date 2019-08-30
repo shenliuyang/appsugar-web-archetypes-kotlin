@@ -2,13 +2,13 @@ package org.appsugar.archetypes.web.controller.system
 
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
+import org.appsugar.archetypes.util.monoWithMdc
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
@@ -22,8 +22,11 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(condition: UserCondition, pageable: PageRequest) = mono {
+    fun list(condition: UserCondition, pageable: PageRequest) = monoWithMdc {
+        Mono.subscriberContext().awaitFirst()
+        logger.debug("query user by condition {}", condition)
         val page = repository.findAllAsync(condition.toPredicate(), pageable).await()
+        logger.debug("query user by condition {}", condition)
         Response(page.transfer { it.copy() })
     }
 
@@ -34,7 +37,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
-    fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = mono {
+    fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = monoWithMdc {
         val roleIds = userData.roleIds
         val permissions = userData.permissions
         val user = userMono.awaitFirst()!!
@@ -47,7 +50,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
 
     @GetMapping("permissions")
-    fun permissions() = mono {
+    fun permissions() = monoWithMdc {
         val ctx = ReactiveSecurityContextHolder.getContext().awaitFirst()
         val authentication = ctx.authentication
         Response(authentication.authorities.map { it.authority })

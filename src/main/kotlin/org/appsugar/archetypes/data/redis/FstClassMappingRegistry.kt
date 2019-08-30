@@ -30,6 +30,8 @@ class FstClassMappingRegistry : ImportBeanDefinitionRegistrar {
             val fstConfigurationSource = FstClassMappingConfigurationSource(attr, importingClassMetadata.className)
             val basePackages = fstConfigurationSource.basePackageNames
             val idToClassList = scanAndGetIdToClassList(basePackages, scanner)
+            val duplicatedListKey = idToClassList.asSequence().map { it.first }.groupingBy { it }.eachCount().asSequence().filter { it.value > 1 }.map { it.key }.toList()
+            require(duplicatedListKey.isEmpty()) { "ClassMapping value duplicated $duplicatedListKey  in $idToClassList" }
             if (logger.isDebugEnabled) {
                 logger.debug("scan basepackages is {} class mapping data is {}", basePackages, idToClassList)
             }
