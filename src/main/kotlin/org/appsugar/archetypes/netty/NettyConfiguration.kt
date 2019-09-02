@@ -17,9 +17,13 @@ import io.netty.channel.socket.nio.NioSocketChannel
 import io.netty.util.concurrent.DefaultThreadFactory
 import io.netty.util.concurrent.FastThreadLocalThread
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.concurrent.Executor
+import kotlin.coroutines.CoroutineContext
 
 /**
  * 配置全局唯一eventLoopGroup
@@ -28,11 +32,11 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class NettyConfiguration {
     companion object {
-        val threadSize get() = 1.coerceAtLeast(Runtime.getRuntime().availableProcessors() + 1)
+        val threadSize get() = 1.coerceAtLeast(Runtime.getRuntime().availableProcessors())
         val eventLoopGroup: EventLoopGroup by lazy {
             val processNumber = threadSize
             val threadFactory = object : DefaultThreadFactory("netty", true) {
-                protected override fun newThread(r: Runnable, name: String): Thread {
+                override fun newThread(r: Runnable, name: String): Thread {
                     return FastThreadLocalDispatcherThread(threadGroup, r, name)
                 }
             }
@@ -65,7 +69,23 @@ class NettyConfiguration {
         forEach {
             it.execute {
                 val currentThread = Thread.currentThread() as FastThreadLocalDispatcherThread
-                currentThread.dispatcher = it.asCoroutineDispatcher()
+                val dispatcher = it.asCoroutineDispatcher()
+                currentThread.dispatcher = object : ExecutorCoroutineDispatcher() {
+                    override val executor: Executor
+                        get() = dispatcher.executor
+
+                    override fun close() = dispatcher.close()
+
+                    override fun dispatch(context: CoroutineContext, block: Runnable) {
+                        val thread = Thread.currentThread()
+                        //减少队列开销
+                        if (thread === currentThread) {
+                            block.run()
+                        } else {
+                            dispatcher.dispatch(context, block)
+                        }
+                    }
+                }
             }
         }
     }
