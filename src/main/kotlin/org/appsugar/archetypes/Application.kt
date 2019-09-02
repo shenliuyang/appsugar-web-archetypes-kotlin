@@ -1,6 +1,7 @@
 package org.appsugar.archetypes
 
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo
 import org.appsugar.archetypes.data.redis.EnableFstClassMapping
 import org.appsugar.archetypes.repository.CustomSimpleJpaRepository
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableAsync
 @EnableCaching(proxyTargetClass = true)
 @EnableFstClassMapping
 @EnableAsync
+@EnableDubbo
 class Application
 
 fun main(args: Array<String>) {

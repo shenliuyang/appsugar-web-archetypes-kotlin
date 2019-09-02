@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: appsugar-web
   jpa:
     open-in-view: true
     show-sql: false
@@ -31,7 +33,15 @@ server:
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
-
+dubbo:
+  protocol:
+    name: dubbo
+    port: 20880
+    dispatcher: direct
+    threadpool: cached
+    threads: 0
+  registry:
+    address: multicast://224.5.6.7:1234
 ---
 spring:
   profiles: mysql

@@ -14,7 +14,8 @@ object Versions {
     const val kotlinVersion = "1.3.50"
     const val coroutineVersion = "1.3.0"
     const val nettyVersion = "4.1.39.Final"
-    const val fstVersion = "2.56"
+    const val fstVersion = "2.57"
+    const val dubboVersion = "2.7.3"
 }
 extra["kotlin.version"] = Versions.kotlinVersion
 extra["netty.version"] = Versions.nettyVersion
@@ -30,18 +31,18 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutineVersion}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${Versions.coroutineVersion}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${Versions.coroutineVersion}")
-    api("org.springframework.boot:spring-boot-starter-webflux")
+    api("org.springframework.boot:spring-boot-starter-webflux") { exclude("io.netty") }
     api("org.springframework.boot:spring-boot-starter-security")
     api("org.springframework.boot:spring-boot-starter-actuator")
     api("org.springframework.boot:spring-boot-starter-cache")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
-    api("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+    api("org.springframework.boot:spring-boot-starter-data-redis-reactive") { exclude("io.netty") }
     api("org.springframework.boot:spring-boot-devtools")
-    api("io.netty:netty-transport-native-epoll:${Versions.nettyVersion}:linux-x86_64")
     api("com.querydsl:querydsl-jpa")
     api("de.ruedigermoeller:fst:${Versions.fstVersion}")
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
     api("net.logstash.logback:logstash-logback-encoder:6.1")
+    api("org.apache.dubbo:dubbo-spring-boot-starter:${Versions.dubboVersion}")
     api(dynamic("com.h2database:h2")!!)
     api(dynamic("mysql:mysql-connector-java")!!)
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")

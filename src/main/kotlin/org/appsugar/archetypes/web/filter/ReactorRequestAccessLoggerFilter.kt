@@ -58,17 +58,6 @@ class ReactorRequestAccessLoggerFilter : WebFilter {
                 remote?.let { mdc["remote"] = remote }
                 mdc["elapsed"] = spendTime.toString()
                 mdc["type"] = "access"
-                if (ctx == null) {
-                    ctx = ReactiveSecurityContextHolder.getContext().awaitFirstOrNull()
-                    ctx?.let {
-                        @Suppress("UNCHECKED_CAST")
-                        val principal = it.authentication.principal as UserPrincipal<GrantedAuthority>
-                        val id = principal.id
-                        val username = principal.username
-                        mdc["userId"] = id.toString()
-                        mdc["username"] = username
-                    }
-                }
                 MDC.setContextMap(mdc)
                 logger.info("request access")
                 MDC.clear()
