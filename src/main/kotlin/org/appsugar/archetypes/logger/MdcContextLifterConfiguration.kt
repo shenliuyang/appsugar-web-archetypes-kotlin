@@ -17,10 +17,8 @@ class MdcContextLifterConfiguration {
     @Autowired(required = false)
     fun setBuildProperties(buildProperties: BuildProperties?) {
         if (buildProperties == null) return
-        val name = buildProperties.name
         val version = buildProperties.version
         val lc = LoggerFactory.getILoggerFactory() as LoggerContext
-        lc.putProperty("app", name)
         lc.putProperty("version", version)
     }
 }
