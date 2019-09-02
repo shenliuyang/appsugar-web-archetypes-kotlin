@@ -33,15 +33,21 @@ server:
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
+transporter: nettyNF
 dubbo:
   protocol:
     name: dubbo
     port: 20880
     dispatcher: direct
-    threadpool: cached
-    threads: 0
+    transporter: ${transporter}
+  provider:
+    transporter: ${transporter}
+  consumer:
+    client: ${transporter}
   registry:
     address: multicast://224.5.6.7:1234
+    transporter: ${transporter}
+
 ---
 spring:
   profiles: mysql

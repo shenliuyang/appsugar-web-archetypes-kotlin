@@ -1,0 +1,1 @@
+nettyNF=org.appsugar.archetypes.dubbo.remote.NettyNativeFirstTransporter
