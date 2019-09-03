@@ -43,6 +43,7 @@ dependencies {
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
     api("net.logstash.logback:logstash-logback-encoder:6.1")
     api("org.apache.dubbo:dubbo-spring-boot-starter:${Versions.dubboVersion}")
+    api("org.apache.dubbo:dubbo-dependencies-zookeeper:${Versions.dubboVersion}")
     api(dynamic("com.h2database:h2")!!)
     api(dynamic("mysql:mysql-connector-java")!!)
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")

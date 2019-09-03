@@ -3,7 +3,6 @@ package org.appsugar.archetypes.logger
 import kotlinx.coroutines.ThreadContextElement
 import org.slf4j.MDC
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 
 fun Map<String, String>.asMdcContext() = ThreadLocalElement(this) as CoroutineContext
@@ -19,21 +18,11 @@ internal data class ThreadLocalElement(
 
     override fun updateThreadContext(context: CoroutineContext): Map<String, String> {
         MDC.setContextMap(mdc)
-        return mdc;
+        return this.mdc
     }
 
     override fun restoreThreadContext(context: CoroutineContext, oldState: Map<String, String>) {
         MDC.clear()
     }
-
-    // this method is overridden to perform value comparison (==) on key
-    override fun minusKey(key: CoroutineContext.Key<*>): CoroutineContext {
-        return if (this.key == key) EmptyCoroutineContext else this
-    }
-
-    // this method is overridden to perform value comparison (==) on key
-    public override operator fun <E : CoroutineContext.Element> get(key: CoroutineContext.Key<E>): E? =
-            @Suppress("UNCHECKED_CAST")
-            if (this.key == key) this as E else null
 
 }
