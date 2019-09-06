@@ -1,10 +1,7 @@
 spring:
   application:
     name: appsugar-web
-  data:
-    redis:
-      repositories:
-        enabled: false
+  data.redis.repositories.enabled: false
   redis:
     lettuce:
       pool:
@@ -57,7 +54,17 @@ dubbo:
   registry:
     address: multicast://224.5.6.7:1234
     transporter: ${transporter}
-
+spring.boot.admin.client:
+  enabled: false
+  url: http://your-spring-boot-admin-server-domain/
+  user:
+    name: xxx
+    password: xxx
+  instance:
+    metadata:
+      user:
+        name: ${spring.security.user.name}
+        password: ${spring.security.user.password}
 ---
 spring:
   profiles: mysql

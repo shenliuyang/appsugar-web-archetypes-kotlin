@@ -16,6 +16,7 @@ object Versions {
     const val nettyVersion = "4.1.39.Final"
     const val fstVersion = "2.57"
     const val dubboVersion = "2.7.3"
+    const val springBootAdminVersion = "2.1.6"
 }
 extra["kotlin.version"] = Versions.kotlinVersion
 extra["netty.version"] = Versions.nettyVersion
@@ -37,6 +38,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-cache")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     compileOnly("org.springframework.boot:spring-boot-starter-data-redis-reactive") { exclude("io.netty") }
+    api("de.codecentric:spring-boot-admin-starter-client:${Versions.springBootAdminVersion}")
     api("org.springframework.boot:spring-boot-devtools")
     api("com.querydsl:querydsl-jpa")
     api("de.ruedigermoeller:fst:${Versions.fstVersion}")
