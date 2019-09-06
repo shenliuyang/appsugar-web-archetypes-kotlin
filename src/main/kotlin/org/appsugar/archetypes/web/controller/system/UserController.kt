@@ -28,10 +28,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
     fun list(condition: UserCondition, pageable: PageRequest) = monoWithMdc {
-        Mono.subscriberContext().awaitFirst()
-        logger.debug("query user by condition {}", condition)
         val page = repository.findAllAsync(condition.toPredicate(), pageable).await()
-        logger.debug("query user by condition {}", condition)
         Response(page.transfer { it.copy() })
     }
 

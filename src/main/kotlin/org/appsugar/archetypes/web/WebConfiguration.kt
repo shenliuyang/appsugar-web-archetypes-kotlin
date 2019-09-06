@@ -39,16 +39,21 @@ import java.io.Serializable
 @Configuration
 class WebConfiguration {
 
+
     @Bean
-    fun configura(shs: ServerHttpSecurity) = let {
+    fun customLoginFilter(shs: ServerHttpSecurity) = let {
         val om = ObjectMapper()
         val unAuthentication = om.writeValueAsBytes(Response.UN_AUTHENTICATED)
+        val success = om.writeValueAsBytes(Response.SUCCESS)
         shs.authorizeExchange().matchers(EndpointRequest.toAnyEndpoint()).hasAuthority(UserDetailServiceImpl.endpointPermission)
                 .pathMatchers("/login").permitAll().anyExchange().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint { ex, _ -> ex.response.writeJsonByteArray(unAuthentication) }
+                .and().logout().logoutSuccessHandler { ex, _ -> ex.exchange.response.writeJsonByteArray(success) }
+                .and().httpBasic()
                 .and().csrf().disable()
         shs.build()
     }
+
 
     @Bean
     fun encoder() = BCryptPasswordEncoder(11)

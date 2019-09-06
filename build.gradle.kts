@@ -36,7 +36,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-actuator")
     api("org.springframework.boot:spring-boot-starter-cache")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
-    api("org.springframework.boot:spring-boot-starter-data-redis-reactive") { exclude("io.netty") }
+    compileOnly("org.springframework.boot:spring-boot-starter-data-redis-reactive") { exclude("io.netty") }
     api("org.springframework.boot:spring-boot-devtools")
     api("com.querydsl:querydsl-jpa")
     api("de.ruedigermoeller:fst:${Versions.fstVersion}")

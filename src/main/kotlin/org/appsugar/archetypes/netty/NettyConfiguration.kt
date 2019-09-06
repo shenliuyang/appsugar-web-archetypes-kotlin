@@ -33,19 +33,7 @@ import kotlin.coroutines.CoroutineContext
 class NettyConfiguration {
     companion object {
         val threadSize get() = 1.coerceAtLeast(Runtime.getRuntime().availableProcessors())
-        val eventLoopGroup: EventLoopGroup by lazy {
-            val processNumber = threadSize
-            val threadFactory = object : DefaultThreadFactory("netty", true) {
-                override fun newThread(r: Runnable, name: String): Thread {
-                    return FastThreadLocalDispatcherThread(threadGroup, r, name)
-                }
-            }
-            when {
-                Epoll.isAvailable() -> EpollEventLoopGroup(processNumber, threadFactory)
-                KQueue.isAvailable() -> KQueueEventLoopGroup(processNumber, threadFactory)
-                else -> NioEventLoopGroup(processNumber, threadFactory)
-            }
-        }
+        lateinit var eventLoopGroup: EventLoopGroup
         val serverSocketChannel: Class<ServerSocketChannel> by lazy {
             @Suppress("UNCHECKED_CAST")
             when {
@@ -65,8 +53,20 @@ class NettyConfiguration {
     }
 
     @Bean(destroyMethod = "shutdownGracefully")
-    fun eventLoopGroup() = eventLoopGroup.apply {
-        forEach {
+    fun eventLoopGroup(): EventLoopGroup {
+        val processNumber = threadSize
+        val threadFactory = object : DefaultThreadFactory("netty", true) {
+            override fun newThread(r: Runnable, name: String): Thread {
+                return FastThreadLocalDispatcherThread(threadGroup, r, name)
+            }
+        }
+        val result = when {
+            Epoll.isAvailable() -> EpollEventLoopGroup(processNumber, threadFactory)
+            KQueue.isAvailable() -> KQueueEventLoopGroup(processNumber, threadFactory)
+            else -> NioEventLoopGroup(processNumber, threadFactory)
+        }
+        eventLoopGroup = result
+        result.forEach {
             it.execute {
                 val currentThread = Thread.currentThread() as FastThreadLocalDispatcherThread
                 val dispatcher = it.asCoroutineDispatcher()
@@ -88,6 +88,7 @@ class NettyConfiguration {
                 }
             }
         }
+        return result
     }
 
     @Bean

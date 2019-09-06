@@ -2,7 +2,7 @@ package org.appsugar.archetypes.util
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.future
-import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.logger.MDC_IN_CONTEXT_KEY
 import org.appsugar.archetypes.logger.asMdcContext
@@ -25,7 +25,7 @@ public fun <T> monoWithMdc(
         context: CoroutineContext = Dispatchers.Unconfined,
         block: suspend CoroutineScope.() -> T?
 ) = mono(context) {
-    val ctx = Mono.subscriberContext().awaitFirst()!!
+    val ctx = Mono.subscriberContext().awaitFirstOrNull() ?: return@mono block()
     val optional = ctx.getOrEmpty<Map<String, String>>(MDC_IN_CONTEXT_KEY)
     if (optional.isPresent) {
         withContext(optional.get().asMdcContext()) {

@@ -16,8 +16,8 @@ import org.springframework.scheduling.annotation.EnableAsync
 @EnableJpaRepositories(repositoryBaseClass = CustomSimpleJpaRepository::class)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableCaching(proxyTargetClass = true)
+@EnableAsync(proxyTargetClass = true)
 @EnableFstClassMapping
-@EnableAsync
 @EnableDubbo
 class Application
 
