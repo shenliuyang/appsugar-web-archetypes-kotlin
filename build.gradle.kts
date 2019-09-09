@@ -6,7 +6,7 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     id("net.researchgate.release") version "2.8.1"
-    id("org.springframework.boot") version "2.1.7.RELEASE"
+    id("org.springframework.boot") version "2.1.8.RELEASE"
     idea
 }
 apply { plugin("io.spring.dependency-management") }

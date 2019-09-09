@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono
 @RequestMapping("/system/user")
 class UserController(val repository: UserRepository, val roleRepository: RoleRepository) : BaseController<User>() {
 
-    @Reference(version = "1")
+    @Reference(version = "1", check = false)
     lateinit var userFacade: UserFacade
 
     @PreAuthorize("hasAuthority('user:view')")
