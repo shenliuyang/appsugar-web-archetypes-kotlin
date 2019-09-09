@@ -14,13 +14,13 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    max-wait: 10000
-    max-active: 1
-    test-on-borrow: true
     url: jdbc:h2:~/tmp/${db.name}
     username: sa
     password:
     driver-class-name: org.h2.Driver
+    hikari:
+      maxPoolSize: 1
+      minIdle: 1
   dbunit:
     operationType: CLEAN_INSERT
     sample-file: src/test/resources/sample-data.xml

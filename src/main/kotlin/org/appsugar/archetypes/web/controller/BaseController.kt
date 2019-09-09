@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import reactor.core.publisher.Mono
 
 abstract class BaseController<T> {
-    protected val logger = LoggerFactory.getLogger(this::class.java)
+    protected val logger = LoggerFactory.getLogger(this::class.java)!!
+    
     @Autowired
     open lateinit var jpaRepository: BaseRepository<T, Long>
 
