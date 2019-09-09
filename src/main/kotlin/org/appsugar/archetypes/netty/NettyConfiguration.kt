@@ -17,13 +17,10 @@ import io.netty.channel.socket.nio.NioSocketChannel
 import io.netty.util.concurrent.DefaultThreadFactory
 import io.netty.util.concurrent.FastThreadLocalThread
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.util.concurrent.Executor
-import kotlin.coroutines.CoroutineContext
 
 /**
  * 配置全局唯一eventLoopGroup
@@ -69,23 +66,7 @@ class NettyConfiguration {
         result.forEach {
             it.execute {
                 val currentThread = Thread.currentThread() as FastThreadLocalDispatcherThread
-                val dispatcher = it.asCoroutineDispatcher()
-                currentThread.dispatcher = object : ExecutorCoroutineDispatcher() {
-                    override val executor: Executor
-                        get() = dispatcher.executor
-
-                    override fun close() = dispatcher.close()
-
-                    override fun dispatch(context: CoroutineContext, block: Runnable) {
-                        val thread = Thread.currentThread()
-                        //减少队列开销
-                        if (thread === currentThread) {
-                            block.run()
-                        } else {
-                            dispatcher.dispatch(context, block)
-                        }
-                    }
-                }
+                currentThread.dispatcher = it.asCoroutineDispatcher()
             }
         }
         return result

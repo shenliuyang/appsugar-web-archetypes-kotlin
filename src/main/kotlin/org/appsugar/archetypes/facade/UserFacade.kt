@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
  * 用户对外暴露接口
  */
 interface UserFacade {
-    fun getUserByLoginName(loginName: String): CompletableFuture<User?>
+    fun getByLoginName(loginName: String): CompletableFuture<User?>
 }
 
 @Service(version = "1")
@@ -20,7 +20,7 @@ class UserFacadeImpl : UserFacade {
     @Autowired
     lateinit var userRepository: UserRepository
 
-    override fun getUserByLoginName(loginName: String) = future {
+    override fun getByLoginName(loginName: String) = future {
         userRepository.findByLoginName(loginName).await()
     }
 

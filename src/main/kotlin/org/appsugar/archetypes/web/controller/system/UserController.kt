@@ -24,7 +24,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @Reference(version = "1", check = false)
     lateinit var userFacade: UserFacade
-
+    
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
     fun list(condition: UserCondition, pageable: PageRequest) = monoWithMdc {

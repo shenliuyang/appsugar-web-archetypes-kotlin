@@ -33,6 +33,12 @@ spring:
     user:
       name: changeme
       password: changeme
+  task:
+    execution:
+      pool:
+        core-size: 10
+        keep-alive: 60s
+        max-size: 50
 db:
   name: appsugar_kotlin
 server:
