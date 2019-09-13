@@ -15,12 +15,16 @@ import io.netty.channel.socket.SocketChannel
 import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.channel.socket.nio.NioSocketChannel
 import io.netty.util.concurrent.DefaultThreadFactory
+import io.netty.util.concurrent.EventExecutor
 import io.netty.util.concurrent.FastThreadLocalThread
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.coroutines.CoroutineContext
 
 /**
  * 配置全局唯一eventLoopGroup
@@ -30,7 +34,19 @@ import org.springframework.context.annotation.Configuration
 class NettyConfiguration {
     companion object {
         val threadSize get() = 1.coerceAtLeast(Runtime.getRuntime().availableProcessors())
-        lateinit var eventLoopGroup: EventLoopGroup
+        val eventLoopGroup: EventLoopGroup by lazy {
+            val processNumber = threadSize
+            val threadFactory = object : DefaultThreadFactory("netty", true) {
+                override fun newThread(r: Runnable, name: String): Thread {
+                    return FastThreadLocalDispatcherThread(threadGroup, r, name)
+                }
+            }
+            return@lazy when {
+                Epoll.isAvailable() -> EpollEventLoopGroup(processNumber, threadFactory)
+                KQueue.isAvailable() -> KQueueEventLoopGroup(processNumber, threadFactory)
+                else -> NioEventLoopGroup(processNumber, threadFactory)
+            }
+        }
         val serverSocketChannel: Class<ServerSocketChannel> by lazy {
             @Suppress("UNCHECKED_CAST")
             when {
@@ -49,28 +65,8 @@ class NettyConfiguration {
         }
     }
 
-    @Bean(destroyMethod = "shutdownGracefully")
-    fun eventLoopGroup(): EventLoopGroup {
-        val processNumber = threadSize
-        val threadFactory = object : DefaultThreadFactory("netty", true) {
-            override fun newThread(r: Runnable, name: String): Thread {
-                return FastThreadLocalDispatcherThread(threadGroup, r, name)
-            }
-        }
-        val result = when {
-            Epoll.isAvailable() -> EpollEventLoopGroup(processNumber, threadFactory)
-            KQueue.isAvailable() -> KQueueEventLoopGroup(processNumber, threadFactory)
-            else -> NioEventLoopGroup(processNumber, threadFactory)
-        }
-        eventLoopGroup = result
-        result.forEach {
-            it.execute {
-                val currentThread = Thread.currentThread() as FastThreadLocalDispatcherThread
-                currentThread.dispatcher = it.asCoroutineDispatcher()
-            }
-        }
-        return result
-    }
+    @Bean
+    fun eventLoopGroup() = eventLoopGroup
 
     @Bean
     fun serverSocketChannel(): Class<ServerSocketChannel> = serverSocketChannel
@@ -84,4 +80,12 @@ class FastThreadLocalDispatcherThread(group: ThreadGroup, target: Runnable, name
 }
 
 
+class FastDispatcher(private val dispatcher: ExecutorCoroutineDispatcher, private val thread: Thread) : CoroutineDispatcher() {
+    override fun dispatch(context: CoroutineContext, block: Runnable) = if (Thread.currentThread() === thread) block.run() else dispatcher.dispatch(context, block)
+}
+
+private val execute2Dispatcher = ConcurrentHashMap<EventExecutor, CoroutineDispatcher>()
+
+val EventExecutor.dispatcher: CoroutineDispatcher get() = execute2Dispatcher[this]!!
+val currentDispatcher: CoroutineDispatcher get() = (Thread.currentThread() as FastThreadLocalDispatcherThread).dispatcher
 val GlobalLoopGroup = NettyConfiguration.eventLoopGroup.asCoroutineDispatcher()

@@ -2,12 +2,6 @@ spring:
   application:
     name: appsugar-web
   data.redis.repositories.enabled: false
-  redis:
-    lettuce:
-      pool:
-        max-active: 8
-        max-idle: 8
-        min-idle: 8
   jpa:
     open-in-view: true
     show-sql: false
@@ -48,6 +42,8 @@ server:
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
 transporter: nettyNF
 dubbo:
+  application:
+    name: ${spring.application.name}
   protocol:
     name: dubbo
     port: 20880
