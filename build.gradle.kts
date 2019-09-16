@@ -14,8 +14,6 @@ object Versions {
     const val kotlinVersion = "1.3.50"
     const val coroutineVersion = "1.3.1"
     const val nettyVersion = "4.1.41.Final"
-    const val fstVersion = "2.57"
-    const val dubboVersion = "2.7.3"
     const val springBootAdminVersion = "2.1.6"
 }
 extra["kotlin.version"] = Versions.kotlinVersion
