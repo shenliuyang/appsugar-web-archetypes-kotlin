@@ -13,15 +13,15 @@ apply { plugin("io.spring.dependency-management") }
 object Versions {
     const val kotlinVersion = "1.3.50"
     const val coroutineVersion = "1.3.1"
-    const val nettyVersion = "4.1.39.Final"
+    const val nettyVersion = "4.1.41.Final"
     const val fstVersion = "2.57"
     const val dubboVersion = "2.7.3"
     const val springBootAdminVersion = "2.1.6"
 }
 extra["kotlin.version"] = Versions.kotlinVersion
-extra["netty.version"] = Versions.nettyVersion
+//extra["netty.version"] = Versions.nettyVersion
 
-val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/","https://repo.spring.io/milestone")
+val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/", "https://repo.spring.io/milestone")
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 val dynamic: Configuration by configurations.creating
