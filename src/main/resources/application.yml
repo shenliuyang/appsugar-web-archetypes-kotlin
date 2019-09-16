@@ -29,7 +29,7 @@ spring:
   task:
     execution:
       pool:
-        core-size: 10
+        core-size: 1
         keep-alive: 60s
         max-size: 50
 db:

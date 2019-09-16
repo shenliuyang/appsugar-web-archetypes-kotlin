@@ -62,7 +62,7 @@ class WebConfiguration {
     fun serverSecurityContextrepository() = WebSessionServerSecurityContextRepository()
 
     fun ServerHttpResponse.writeJsonByteArray(byteArray: ByteArray): Mono<Void> {
-        this.headers.contentType = MediaType.APPLICATION_JSON_UTF8
+        this.headers.contentType = MediaType.APPLICATION_JSON
         val data = this.bufferFactory().wrap(byteArray)
         return writeWith(Mono.just(data))
     }
@@ -86,7 +86,7 @@ class UserDetailServiceImpl(val userRepository: UserRepository, val passwordEnco
         if (username == name) return@mono UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf(SimpleGrantedAuthority(endpointPermission)))
         val user = userRepository.findByLoginName(username).await()
                 ?: throw UsernameNotFoundException("username: [$username] did not found")
-        var permissions = HashSet(user.permissions)
+        val permissions = HashSet(user.permissions)
         for (role in user.roles) {
             permissions.addAll(role.permissions)
         }

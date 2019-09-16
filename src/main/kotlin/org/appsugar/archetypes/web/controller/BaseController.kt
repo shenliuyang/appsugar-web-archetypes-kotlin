@@ -15,12 +15,12 @@ import reactor.core.publisher.Mono
 
 abstract class BaseController<T> {
     protected val logger = LoggerFactory.getLogger(this::class.java)!!
-    
+
     @Autowired
     open lateinit var jpaRepository: BaseRepository<T, Long>
 
     @ModelAttribute("entity")
-    open fun entity(id: IdData): Mono<T> = mono(Dispatchers.Unconfined) { id.id?.let { jpaRepository.findByIdOrNullAsync(it).await() } }
+    open fun entity(id: IdData): Mono<T> = if (id.id == null) Mono.empty() else mono(Dispatchers.Unconfined) { jpaRepository.findByIdOrNullAsync(id.id!!).await() }
 
     @ModelAttribute
     open fun pageable(pageData: PageData) = PageRequest.of(pageData.page, pageData.size, Sort.Direction.DESC, "id")

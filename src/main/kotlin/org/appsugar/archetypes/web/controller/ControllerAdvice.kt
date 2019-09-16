@@ -5,15 +5,10 @@ import org.appsugar.archetypes.util.getLogger
 import org.slf4j.MDC
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.ui.Model
-import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
-import java.beans.PropertyEditorSupport
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -55,22 +50,5 @@ class ControllerAdvice {
             }
         } while (root != null)
         return Mono.just(Response.error(sb.toString()))
-    }
-
-
-    @InitBinder
-    fun initWebBinder(webDataBinder: WebDataBinder) {
-        webDataBinder.registerCustomEditor(LocalDateTime::class.java, object : PropertyEditorSupport() {
-            override fun setAsText(text: String) {
-                value = LocalDateTime.parse(text, LOCAL_DATE_TIME_PATTERN)
-            }
-        })
-
-        webDataBinder.registerCustomEditor(LocalDate::class.java, object : PropertyEditorSupport() {
-            override fun setAsText(text: String) {
-                value = LocalDate.parse(text, LOCAL_DATE_PATTERN)
-            }
-        })
-
     }
 }

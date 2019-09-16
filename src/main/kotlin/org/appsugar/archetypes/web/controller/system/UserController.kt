@@ -8,7 +8,7 @@ import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
-import org.appsugar.archetypes.util.monoWithMdc
+import org.appsugar.archetypes.util.withMdcContext
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
@@ -23,7 +23,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    fun list(condition: UserCondition, pageable: PageRequest) = monoWithMdc {
+    suspend fun list(condition: UserCondition, pageable: PageRequest) = withMdcContext {
         val page = repository.findAllAsync(condition.toPredicate(), pageable).await()
         Response(page.transfer { it.copy() })
     }
@@ -35,7 +35,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
-    fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = monoWithMdc {
+    suspend fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = withMdcContext {
         val roleIds = userData.roleIds
         val permissions = userData.permissions
         val user = userMono.awaitFirst()!!
@@ -48,7 +48,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
 
     @GetMapping("permissions")
-    fun permissions() = monoWithMdc {
+    suspend fun permissions() = withMdcContext {
         val ctx = ReactiveSecurityContextHolder.getContext().awaitFirst()
         val authentication = ctx.authentication
         Response(authentication.authorities.map { it.authority })
