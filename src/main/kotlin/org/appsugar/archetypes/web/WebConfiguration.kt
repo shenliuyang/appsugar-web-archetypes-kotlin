@@ -2,7 +2,6 @@ package org.appsugar.archetypes.web
 
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.netty.channel.EventLoopGroup
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.common.domain.Response
@@ -14,7 +13,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
-import org.springframework.http.client.reactive.ReactorResourceFactory
 import org.springframework.http.server.reactive.ServerHttpResponse
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
@@ -31,7 +29,6 @@ import org.springframework.security.web.server.context.WebSessionServerSecurityC
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.config.EnableWebFlux
 import reactor.core.publisher.Mono
-import reactor.netty.resources.LoopResources
 import java.io.Serializable
 
 @EnableWebFlux
@@ -68,18 +65,6 @@ class WebConfiguration {
         this.headers.contentType = MediaType.APPLICATION_JSON_UTF8
         val data = this.bufferFactory().wrap(byteArray)
         return writeWith(Mono.just(data))
-    }
-
-    /**
-     * 配置webflux reactive netty
-     *  设置loopResources 使用netty全局线程池
-     */
-    @Bean
-    fun reactorServerResourceFactory(eventLoopGroup: EventLoopGroup): ReactorResourceFactory {
-        return ReactorResourceFactory().apply {
-            isUseGlobalResources = false
-            loopResources = LoopResources { eventLoopGroup }
-        }
     }
 
 }

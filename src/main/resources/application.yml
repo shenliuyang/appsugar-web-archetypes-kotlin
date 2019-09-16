@@ -1,7 +1,6 @@
 spring:
   application:
     name: appsugar-web
-  data.redis.repositories.enabled: false
   jpa:
     open-in-view: true
     show-sql: false
@@ -40,22 +39,6 @@ server:
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
-transporter: nettyNF
-dubbo:
-  application:
-    name: ${spring.application.name}
-  protocol:
-    name: dubbo
-    port: 20880
-    dispatcher: direct
-    transporter: ${transporter}
-  provider:
-    transporter: ${transporter}
-  consumer:
-    client: ${transporter}
-  registry:
-    address: multicast://224.5.6.7:1234
-    transporter: ${transporter}
 spring.boot.admin.client:
   enabled: false
   url: http://your-spring-boot-admin-server-domain/

@@ -2,10 +2,8 @@ package org.appsugar.archetypes.web.controller.system
 
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
-import org.apache.dubbo.config.annotation.Reference
 import org.appsugar.archetypes.common.domain.Response
 import org.appsugar.archetypes.entity.User
-import org.appsugar.archetypes.facade.UserFacade
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
@@ -22,9 +20,7 @@ import reactor.core.publisher.Mono
 @RequestMapping("/system/user")
 class UserController(val repository: UserRepository, val roleRepository: RoleRepository) : BaseController<User>() {
 
-    @Reference(version = "1", check = false)
-    lateinit var userFacade: UserFacade
-    
+
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
     fun list(condition: UserCondition, pageable: PageRequest) = monoWithMdc {
