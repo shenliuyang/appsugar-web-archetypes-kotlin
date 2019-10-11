@@ -6,7 +6,7 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     id("net.researchgate.release") version "2.8.1"
-    id("org.springframework.boot") version "2.2.0.M6"
+    id("org.springframework.boot") version "2.2.0.RC1"
     idea
 }
 apply { plugin("io.spring.dependency-management") }
@@ -114,11 +114,13 @@ tasks {
         failFast = true
         useJUnitPlatform()
         systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
+        testLogging {
+            showStandardStreams = true
+        }
     }
 }
 kapt {
     useBuildCache = true
 }
-
 
 springBoot { buildInfo() }
