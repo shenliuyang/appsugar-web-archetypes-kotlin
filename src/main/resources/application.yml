@@ -56,7 +56,7 @@ spring:
   jpa:
     show-sql: true
   datasource:
-    url: jdbc:h2:~/tmp/${db.name}
+    url: jdbc:mysql://localhost/${db.name}?createDatabaseIfNotExist=true&useSSL=false&characterEncoding=utf-8s
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
