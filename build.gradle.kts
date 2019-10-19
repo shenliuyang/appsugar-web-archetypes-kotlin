@@ -6,18 +6,18 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     id("net.researchgate.release") version "2.8.1"
-    id("org.springframework.boot") version "2.2.0.RC1"
+    id("org.springframework.boot") version "2.2.0.RELEASE"
     idea
 }
 apply { plugin("io.spring.dependency-management") }
 object Versions {
     const val kotlinVersion = "1.3.50"
-    const val coroutineVersion = "1.3.1"
+    const val coroutineVersion = "1.3.2"
     const val nettyVersion = "4.1.41.Final"
     const val springBootAdminVersion = "2.1.6"
 }
 extra["kotlin.version"] = Versions.kotlinVersion
-//extra["netty.version"] = Versions.nettyVersion
+extra["netty.version"] = Versions.nettyVersion
 
 val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/", "https://repo.spring.io/milestone")
 val dynamicJarNames = ArrayList<String>()
