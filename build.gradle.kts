@@ -1,4 +1,3 @@
-buildscript {}
 plugins {
     val kotlinVersion = "1.3.50"
     kotlin("jvm") version kotlinVersion
@@ -6,18 +5,16 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     id("net.researchgate.release") version "2.8.1"
-    id("org.springframework.boot") version "2.2.0.RELEASE"
+    id("org.springframework.boot") version "2.2.1.RELEASE"
     idea
 }
 apply { plugin("io.spring.dependency-management") }
 object Versions {
     const val kotlinVersion = "1.3.50"
     const val coroutineVersion = "1.3.2"
-    const val nettyVersion = "4.1.42.Final"
     const val springBootAdminVersion = "2.1.6"
 }
 extra["kotlin.version"] = Versions.kotlinVersion
-extra["netty.version"] = Versions.nettyVersion
 
 val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/", "https://repo.spring.io/milestone")
 val dynamicJarNames = ArrayList<String>()
@@ -41,7 +38,7 @@ dependencies {
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
     api("net.logstash.logback:logstash-logback-encoder:6.1")
     api(dynamic("com.h2database:h2")!!)
-    api(dynamic("mysql:mysql-connector-java")!!)
+    api("mysql:mysql-connector-java")
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
     kapt("javax.persistence:javax.persistence-api")
     testApi("com.squareup.retrofit2:converter-jackson:2.5.0")
@@ -50,7 +47,7 @@ dependencies {
     testApi("org.dbunit:dbunit:2.5.4")
     testApi("org.springframework.boot:spring-boot-starter-test") { exclude("junit") }
     testApi("org.junit.jupiter:junit-jupiter-api")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     dynamic.forEach { dynamicJarNames.add(it.name) }
 }
 
@@ -95,7 +92,6 @@ tasks {
     jar {
         dependsOn(copyToLib, copyToLibDynamic)
         enabled = true
-        archiveFileName.set("${project.name}-${archiveVersion.get()}.jar")
         manifest {
             attributes(
                     mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtimeClasspath.get().joinToString(" ") {

@@ -24,8 +24,8 @@ spring:
     default-property-inclusion: NON_NULL
   security:
     user:
-      name: changeme
-      password: changeme
+      name: ${random.uuid}
+      password: ${random.uuid}
   task:
     execution:
       pool:

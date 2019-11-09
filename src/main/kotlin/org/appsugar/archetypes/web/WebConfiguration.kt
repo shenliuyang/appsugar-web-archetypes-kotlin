@@ -73,6 +73,7 @@ class WebConfiguration {
 @Primary
 @ConfigurationProperties("spring.security.user")
 class UserDetailServiceImpl(val userRepository: UserRepository, val passwordEncoder: PasswordEncoder) : ReactiveUserDetailsService {
+   
     var name = "user"
     var password = System.currentTimeMillis().toString()
 
