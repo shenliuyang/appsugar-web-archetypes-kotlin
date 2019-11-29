@@ -1,5 +1,5 @@
 plugins {
-    val kotlinVersion = "1.3.50"
+    val kotlinVersion = "1.3.61"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -10,7 +10,7 @@ plugins {
 }
 apply { plugin("io.spring.dependency-management") }
 object Versions {
-    const val kotlinVersion = "1.3.50"
+    const val kotlinVersion = "1.3.61"
     const val coroutineVersion = "1.3.2"
     const val springBootAdminVersion = "2.1.6"
 }
@@ -109,7 +109,7 @@ tasks {
     test {
         failFast = true
         useJUnitPlatform()
-        systemProperties["spring.jpa.hibernate.ddl-auto"] = "create-drop"
+        systemProperties["spring.jpa.hibernate.ddl-auto"] = "update"
         testLogging {
             showStandardStreams = true
         }
