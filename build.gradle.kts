@@ -5,14 +5,14 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     id("net.researchgate.release") version "2.8.1"
-    id("org.springframework.boot") version "2.2.1.RELEASE"
+    id("org.springframework.boot") version "2.2.2.RELEASE"
     idea
 }
 apply { plugin("io.spring.dependency-management") }
 object Versions {
     const val kotlinVersion = "1.3.61"
     const val coroutineVersion = "1.3.2"
-    const val springBootAdminVersion = "2.1.6"
+    const val springBootAdminVersion = "2.2.0"
 }
 extra["kotlin.version"] = Versions.kotlinVersion
 
