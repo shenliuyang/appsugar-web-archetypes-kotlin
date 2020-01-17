@@ -1,20 +1,22 @@
 plugins {
-    val kotlinVersion = "1.3.61"
+    val kotlinVersion : String by System.getProperties()
+    val springBootVersion: String by System.getProperties()
+    val releasePluginVersion:String by System.getProperties()
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
-    id("net.researchgate.release") version "2.8.1"
-    id("org.springframework.boot") version "2.2.2.RELEASE"
+    id("net.researchgate.release") version releasePluginVersion
+    id("org.springframework.boot") version springBootVersion
     idea
 }
 apply { plugin("io.spring.dependency-management") }
-object Versions {
-    const val kotlinVersion = "1.3.61"
-    const val coroutineVersion = "1.3.2"
-    const val springBootAdminVersion = "2.2.0"
-}
-extra["kotlin.version"] = Versions.kotlinVersion
+
+val kotlinVersion : String by System.getProperties()
+val coroutineVersion : String by project
+val springBootAdminVersion : String by project
+
+extra["kotlin.version"] = kotlinVersion
 
 val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/", "https://repo.spring.io/milestone")
 val dynamicJarNames = ArrayList<String>()
@@ -24,15 +26,15 @@ repositories { repos.forEach(::maven) }
 
 dependencies {
     api(kotlin("stdlib-jdk8"))
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutineVersion}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${Versions.coroutineVersion}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${Versions.coroutineVersion}")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutineVersion}")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${coroutineVersion}")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${coroutineVersion}")
     api("org.springframework.boot:spring-boot-starter-webflux")
     api("org.springframework.boot:spring-boot-starter-security")
     api("org.springframework.boot:spring-boot-starter-actuator")
     api("org.springframework.boot:spring-boot-starter-cache")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
-    api("de.codecentric:spring-boot-admin-starter-client:${Versions.springBootAdminVersion}")
+    api("de.codecentric:spring-boot-admin-starter-client:${springBootAdminVersion}")
     api("org.springframework.boot:spring-boot-devtools")
     api("com.querydsl:querydsl-jpa")
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
