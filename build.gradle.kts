@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.cli.jvm.main
+
 plugins {
     val kotlinVersion : String by System.getProperties()
     val springBootVersion: String by System.getProperties()
@@ -86,25 +88,21 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     }
 }
 
-var mainApplicationClassName = "org.appsugar.archetypes.ApplicationKt"
+var mainApplicationClassName = "detected by spring boot plugin"
 
 tasks {
-    bootJar { archiveClassifier.set("boot") }
+    bootJar { doLast { mainApplicationClassName = mainClassName } }
     bootRun { sourceResources(sourceSets["main"]) }
     jar {
-        dependsOn(copyToLib, copyToLibDynamic)
+        dependsOn(copyToLib, copyToLibDynamic,bootJar)
         enabled = true
-        manifest {
-            attributes(
-                    mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtimeClasspath.get().joinToString(" ") {
-                        if (isMatchAny(it.name)) "lib-dynamic/${it.name}" else "lib/${it.name}"
-                    }))
-        }
-        doLast {
-            copy {
-                from("$buildDir/libs/${archiveFileName.get()}")
-                into("$buildDir/libs/")
-                rename(archiveFileName.get(), "app.jar")
+        archiveFileName.set("app.jar")
+        doFirst {
+            manifest {
+                attributes(
+                        mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtimeClasspath.get().joinToString(" ") {
+                            if (isMatchAny(it.name)) "lib-dynamic/${it.name}" else "lib/${it.name}"
+                        }))
             }
         }
     }
