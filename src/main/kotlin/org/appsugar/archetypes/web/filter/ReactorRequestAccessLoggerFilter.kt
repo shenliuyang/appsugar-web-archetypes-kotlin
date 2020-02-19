@@ -6,6 +6,7 @@ import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.logger.MDC_IN_CONTEXT_KEY
+import org.appsugar.archetypes.logger.asMdcContext
 import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.web.UserPrincipal
 import org.slf4j.MDC
@@ -45,7 +46,7 @@ class ReactorRequestAccessLoggerFilter : WebFilter {
         }
         val time = System.currentTimeMillis()
         try {
-            chain.filter(exchange).subscriberContext(Context.of(MDC_IN_CONTEXT_KEY, mdc)).awaitFirstOrNull()
+            chain.filter(exchange).subscriberContext(Context.of(MDC_IN_CONTEXT_KEY, mdc.asMdcContext())).awaitFirstOrNull()
         } finally {
             if (logger.isInfoEnabled) {
                 //记录下每次请求消耗时间,请求路径远程地址

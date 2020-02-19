@@ -4,7 +4,6 @@ import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.appsugar.archetypes.common.domain.Response
-import org.appsugar.archetypes.logger.MDC_IN_CONTEXT_KEY
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.util.getLogger
 import org.appsugar.archetypes.util.withMdcContext
@@ -20,7 +19,6 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ServerWebExchange
-import reactor.core.publisher.Mono
 
 
 @RestController
@@ -43,14 +41,6 @@ class MainController {
             webSessionServerSecurityContextRepository.save(serverWebExchange, SecurityContextImpl(authentication)).awaitFirstOrNull()
             @Suppress("UNCHECKED_CAST")
             val principal = authentication.principal as UserPrincipal<GrantedAuthority>
-            val id = principal.id
-            val username = principal.username
-            val ctx = Mono.subscriberContext().awaitFirst()!!
-            val optional = ctx.getOrEmpty<MutableMap<String, String>>(MDC_IN_CONTEXT_KEY)
-            optional.ifPresent {
-                it["userId"] = id.toString()
-                it["username"] = username
-            }
             Response(authentication.authorities.map { it.authority })
         } catch (ex: AuthenticationException) {
             Response.error("username or password error!!")

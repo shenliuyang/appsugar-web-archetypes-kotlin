@@ -45,9 +45,6 @@ dependencies {
     api("mysql:mysql-connector-java")
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
     kapt("javax.persistence:javax.persistence-api")
-    testApi("com.squareup.retrofit2:retrofit:2.5.0")
-    testApi("com.squareup.retrofit2:converter-jackson:2.5.0")
-    testApi("com.squareup.retrofit2:retrofit:2.5.0")
     testApi("org.apache.ant:ant:1.10.1")
     testApi("org.dbunit:dbunit:2.5.4")
     testApi("org.springframework.boot:spring-boot-starter-test") { exclude("junit") }
