@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.cli.jvm.main
-
 plugins {
     val kotlinVersion : String by System.getProperties()
     val springBootVersion: String by System.getProperties()
@@ -17,7 +15,6 @@ apply { plugin("io.spring.dependency-management") }
 val kotlinVersion : String by System.getProperties()
 val coroutineVersion : String by project
 val springBootAdminVersion : String by project
-val logstashVersion :String by project
 
 extra["kotlin.version"] = kotlinVersion
 
@@ -40,7 +37,6 @@ dependencies {
     api("org.springframework.boot:spring-boot-devtools")
     api("com.querydsl:querydsl-jpa")
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
-    api("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
     api("com.h2database:h2")
     api("mysql:mysql-connector-java")
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
@@ -75,6 +71,7 @@ val copyToLibDynamic by tasks.creating(Copy::class) {
     include { isMatchAny(it.file.name) }
     outputs.upToDateWhen { true }
 }
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"

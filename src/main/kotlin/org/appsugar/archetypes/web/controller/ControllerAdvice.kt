@@ -1,6 +1,6 @@
 package org.appsugar.archetypes.web.controller
 
-import org.appsugar.archetypes.common.domain.Response
+import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.util.getLogger
 import org.slf4j.MDC
 import org.springframework.security.access.AccessDeniedException
@@ -9,15 +9,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
-import java.time.format.DateTimeFormatter
 
 
 @RestControllerAdvice
 class ControllerAdvice {
     companion object {
         val logger = getLogger<ControllerAdvice>()
-        val LOCAL_DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")!!
-        val LOCAL_DATE_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd")!!
     }
 
 
@@ -30,6 +27,7 @@ class ControllerAdvice {
 
     val urlKey = "url"
     val methodKey = "method"
+
     /**
      * 处理系统异常
      */

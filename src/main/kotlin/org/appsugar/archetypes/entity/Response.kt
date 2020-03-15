@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.common.domain
+package org.appsugar.archetypes.entity
 
 import com.fasterxml.jackson.annotation.JsonInclude
 

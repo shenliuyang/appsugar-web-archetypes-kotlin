@@ -13,8 +13,8 @@
     <logger name="com.zaxxer" level="WARN"/>
     <logger name="org.apache.shiro" level="WARN"/>
     <logger name="org.dbunit" level="WARN"/>
-    <logger name="ro.isdc.wro" level="WARN"/>
-    <root level="debug">
+    <logger name="org.appsugar" level="DEBUG"/>
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

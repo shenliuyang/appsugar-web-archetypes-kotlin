@@ -4,7 +4,7 @@ package org.appsugar.archetypes.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactor.mono
-import org.appsugar.archetypes.common.domain.Response
+import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.util.getLogger
 import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest
@@ -73,7 +73,7 @@ class WebConfiguration {
 @Primary
 @ConfigurationProperties("spring.security.user")
 class UserDetailServiceImpl(val userRepository: UserRepository, val passwordEncoder: PasswordEncoder) : ReactiveUserDetailsService {
-   
+
     var name = "user"
     var password = System.currentTimeMillis().toString()
 

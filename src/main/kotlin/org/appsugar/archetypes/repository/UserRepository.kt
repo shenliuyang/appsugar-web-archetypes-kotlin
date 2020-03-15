@@ -9,15 +9,14 @@ import java.io.Serializable
 import java.util.concurrent.CompletableFuture
 
 interface UserRepository : BaseRepository<User, Long> {
-
     /*find User by LoginName fetch with Roles*/
     @EntityGraph(attributePaths = ["roles"])
     fun findByLoginName(loginName: String): CompletableFuture<User?>
 }
 
-private val u = QUser.user
 
 fun UserCondition.toPredicate() = BooleanBuilder().apply {
+    val u = QUser.user!!
     val c = this@toPredicate
     c.name.isNotBlankThen { and(u.name.startsWith(this)) }
     c.loginName.isNotBlankThen { and(u.loginName.eq(this)) }

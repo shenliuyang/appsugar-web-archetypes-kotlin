@@ -1,14 +1,15 @@
 package org.appsugar.archetypes.web.controller.system
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
-import org.appsugar.archetypes.common.domain.Response
+import kotlinx.coroutines.reactor.mono
+import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.entity.User
 import org.appsugar.archetypes.repository.RoleRepository
 import org.appsugar.archetypes.repository.UserCondition
 import org.appsugar.archetypes.repository.UserRepository
 import org.appsugar.archetypes.repository.toPredicate
-import org.appsugar.archetypes.util.withMdcContext
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
@@ -23,7 +24,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    suspend fun list(condition: UserCondition, pageable: PageRequest) = withMdcContext {
+    suspend fun list(condition: UserCondition, pageable: PageRequest) = mono(Dispatchers.Unconfined) {
         val page = repository.findAllAsync(condition.toPredicate(), pageable).await()
         Response(page.transfer { it.copy() })
     }
@@ -35,7 +36,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
     @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
-    suspend fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = withMdcContext {
+    suspend fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = mono(Dispatchers.Unconfined) {
         val roleIds = userData.roleIds
         val permissions = userData.permissions
         val user = userMono.awaitFirst()!!
@@ -48,7 +49,7 @@ class UserController(val repository: UserRepository, val roleRepository: RoleRep
 
 
     @GetMapping("permissions")
-    suspend fun permissions() = withMdcContext {
+    suspend fun permissions() = mono(Dispatchers.Unconfined) {
         val ctx = ReactiveSecurityContextHolder.getContext().awaitFirst()
         val authentication = ctx.authentication
         Response(authentication.authorities.map { it.authority })
