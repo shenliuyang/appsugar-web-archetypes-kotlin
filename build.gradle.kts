@@ -37,7 +37,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-devtools")
     api("com.querydsl:querydsl-jpa")
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
-    api("com.h2database:h2")
+    apiDynamic("com.h2database:h2")
     api("mysql:mysql-connector-java")
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
     kapt("javax.persistence:javax.persistence-api")
@@ -82,7 +82,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 var mainApplicationClassName = "detected by spring boot plugin"
 
 tasks {
-    bootJar { doLast { mainApplicationClassName = mainClassName } }
+    bootJar {
+        launchScript()
+        doLast { mainApplicationClassName = mainClassName }
+    }
     bootRun { sourceResources(sourceSets["main"]) }
     jar {
         dependsOn(bootJar,copyToLib, copyToLibDynamic)

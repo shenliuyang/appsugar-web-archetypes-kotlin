@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
+import org.springframework.http.client.reactive.ReactorResourceFactory
 import org.springframework.http.server.reactive.ServerHttpResponse
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
@@ -59,7 +60,16 @@ class WebConfiguration {
     fun reactiveAuthenticationManager(reactiveUserDetailsService: ReactiveUserDetailsService) = UserDetailsRepositoryReactiveAuthenticationManager(reactiveUserDetailsService).apply { setPasswordEncoder(encoder()) }
 
     @Bean
-    fun serverSecurityContextrepository() = WebSessionServerSecurityContextRepository()
+    fun serverSecurityContextRepository() = WebSessionServerSecurityContextRepository()
+
+    @Bean
+    fun reactorClientResourceFactory() = ReactorResourceFactory()
+
+    /**
+     * 提供resourceEventLoop供其他基于netty的框架,减少线程开销
+     */
+    @Bean
+    fun resourceEventLoop(reactorResourceFactory: ReactorResourceFactory) = reactorResourceFactory.loopResources
 
     fun ServerHttpResponse.writeJsonByteArray(byteArray: ByteArray): Mono<Void> {
         this.headers.contentType = MediaType.APPLICATION_JSON
