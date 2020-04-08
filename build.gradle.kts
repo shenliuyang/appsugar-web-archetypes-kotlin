@@ -82,10 +82,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 var mainApplicationClassName = "detected by spring boot plugin"
 
 tasks {
-    bootJar {
-        launchScript()
-        doLast { mainApplicationClassName = mainClassName }
-    }
+    bootJar { doLast { mainApplicationClassName = mainClassName } }
     bootRun { sourceResources(sourceSets["main"]) }
     jar {
         dependsOn(bootJar,copyToLib, copyToLibDynamic)
