@@ -23,7 +23,7 @@ class RoleController(val repository: RoleRepository) : BaseController<Role>() {
     @PreAuthorize("hasAuthority('role:view')")
     @RequestMapping(value = ["list", ""])
     suspend fun list(pageable: PageRequest) = mono(Dispatchers.Unconfined) {
-        val page = repository.findAll(pageable)
+        val page = repository.findAllAsync(pageable).await()
         Response(page)
     }
 
