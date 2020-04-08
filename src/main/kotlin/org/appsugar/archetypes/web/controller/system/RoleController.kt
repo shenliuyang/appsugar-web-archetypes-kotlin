@@ -6,7 +6,7 @@ import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.entity.Role
-import org.appsugar.archetypes.repository.RoleRepository
+import org.appsugar.archetypes.repository.jpa.RoleJpaRepository
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/system/role")
-class RoleController(val repository: RoleRepository) : BaseController<Role>() {
+class RoleController(val repository: RoleJpaRepository) : BaseController<Role>() {
 
 
     @PreAuthorize("hasAuthority('role:view')")

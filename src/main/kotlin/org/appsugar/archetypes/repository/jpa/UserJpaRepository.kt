@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.repository
+package org.appsugar.archetypes.repository.jpa
 
 import com.querydsl.core.BooleanBuilder
 import org.appsugar.archetypes.entity.QUser
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.EntityGraph
 import java.io.Serializable
 import java.util.concurrent.CompletableFuture
 
-interface UserRepository : BaseRepository<User, Long> {
+interface UserJpaRepository : BaseJpaRepository<User, Long> {
     /*find User by LoginName fetch with Roles*/
     @EntityGraph(attributePaths = ["roles"])
     fun findByLoginName(loginName: String): CompletableFuture<User?>

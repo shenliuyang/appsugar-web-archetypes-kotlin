@@ -6,7 +6,7 @@ import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.entity.Response
-import org.appsugar.archetypes.repository.UserRepository
+import org.appsugar.archetypes.repository.jpa.UserJpaRepository
 import org.appsugar.archetypes.util.getLogger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -32,7 +32,7 @@ class MainController {
     lateinit var reactiveAuthenticationManager: ReactiveAuthenticationManager
 
     @Autowired
-    lateinit var userRepository: UserRepository
+    lateinit var userRepository: UserJpaRepository
 
     @PostMapping("/login")
     suspend fun login(loginData: LoginData, serverWebExchange: ServerWebExchange) = mono(Dispatchers.Unconfined) {

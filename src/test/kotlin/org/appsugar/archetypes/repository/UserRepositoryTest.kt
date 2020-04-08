@@ -3,13 +3,16 @@ package org.appsugar.archetypes.repository
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.runBlocking
 import org.appsugar.archetypes.BaseTestCase
+import org.appsugar.archetypes.repository.jpa.UserCondition
+import org.appsugar.archetypes.repository.jpa.UserJpaRepository
+import org.appsugar.archetypes.repository.jpa.toPredicate
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 class UserRepositoryTest : BaseTestCase() {
     @Autowired
-    lateinit var repository: UserRepository
+    lateinit var repository: UserJpaRepository
 
     @Test
     fun testFindByLoginName() = runBlocking {

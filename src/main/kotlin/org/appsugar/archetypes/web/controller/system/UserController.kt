@@ -6,10 +6,10 @@ import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.entity.User
-import org.appsugar.archetypes.repository.RoleRepository
-import org.appsugar.archetypes.repository.UserCondition
-import org.appsugar.archetypes.repository.UserRepository
-import org.appsugar.archetypes.repository.toPredicate
+import org.appsugar.archetypes.repository.jpa.RoleJpaRepository
+import org.appsugar.archetypes.repository.jpa.UserCondition
+import org.appsugar.archetypes.repository.jpa.UserJpaRepository
+import org.appsugar.archetypes.repository.jpa.toPredicate
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/system/user")
-class UserController(val repository: UserRepository, val roleRepository: RoleRepository) : BaseController<User>() {
+class UserController(val repository: UserJpaRepository, val roleRepository: RoleJpaRepository) : BaseController<User>() {
 
 
     @PreAuthorize("hasAuthority('user:view')")

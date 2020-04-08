@@ -3,7 +3,7 @@ package org.appsugar.archetypes.web.controller
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactor.mono
-import org.appsugar.archetypes.repository.BaseRepository
+import org.appsugar.archetypes.repository.jpa.BaseJpaRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
@@ -17,7 +17,7 @@ abstract class BaseController<T> {
     protected val logger = LoggerFactory.getLogger(this::class.java)!!
 
     @Autowired
-    open lateinit var jpaRepository: BaseRepository<T, Long>
+    open lateinit var jpaRepository: BaseJpaRepository<T, Long>
 
     @ModelAttribute("entity")
     open fun entity(id: IdData): Mono<T> = if (id.id == null) Mono.empty() else mono(Dispatchers.Unconfined) { jpaRepository.findByIdOrNullAsync(id.id!!).await() }

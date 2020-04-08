@@ -1,10 +1,10 @@
-package org.appsugar.archetypes.repository
+package org.appsugar.archetypes.repository.jpa
 
 import org.appsugar.archetypes.entity.Role
 import org.springframework.scheduling.annotation.Async
 import java.util.concurrent.CompletableFuture
 
-interface RoleRepository : BaseRepository<Role, Long> {
+interface RoleJpaRepository : BaseJpaRepository<Role, Long> {
 
     @Async
     fun findByIdIn(ids: List<Long>): CompletableFuture<List<Role>>

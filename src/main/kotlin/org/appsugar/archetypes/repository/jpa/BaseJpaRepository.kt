@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.repository
+package org.appsugar.archetypes.repository.jpa
 
 import com.querydsl.core.types.Predicate
 import org.springframework.data.domain.Pageable
@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 
 
 @NoRepositoryBean
-interface BaseRepository<T, ID : Serializable> : JpaRepository<T, ID>, QuerydslPredicateExecutor<T> {
+interface BaseJpaRepository<T, ID : Serializable> : JpaRepository<T, ID>, QuerydslPredicateExecutor<T> {
 
     @Async
     @JvmDefault

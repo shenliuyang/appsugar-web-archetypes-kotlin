@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.repository
+package org.appsugar.archetypes.repository.jpa
 
 import org.appsugar.archetypes.entity.IdEntityable
 import org.springframework.data.jpa.repository.support.JpaEntityInformation
