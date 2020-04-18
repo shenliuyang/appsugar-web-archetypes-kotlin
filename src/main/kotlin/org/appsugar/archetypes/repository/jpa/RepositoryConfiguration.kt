@@ -11,7 +11,7 @@ import javax.persistence.EntityManager
 class CustomSimpleJpaRepository<T, ID : Serializable>(entityInformation: JpaEntityInformation<T, ID>, entityManager: EntityManager) : SimpleJpaRepository<T, ID>(entityInformation, entityManager) {
 
     override fun <S : T> save(entity: S): S {
-        if (entity is IdEntityable<*>) {
+        if (entity is IdEntityable) {
             entity.updatedAt = Date()
         }
         return super.save(entity)

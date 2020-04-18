@@ -15,6 +15,7 @@ apply { plugin("io.spring.dependency-management") }
 val kotlinVersion : String by System.getProperties()
 val coroutineVersion : String by project
 val springBootAdminVersion : String by project
+val modelMapperVersion: String by  project
 
 extra["kotlin.version"] = kotlinVersion
 

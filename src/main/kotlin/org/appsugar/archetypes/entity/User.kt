@@ -11,9 +11,7 @@ import javax.persistence.Entity
 @Entity
 @DynamicUpdate
 data class User(
-        @get:Id
-        @get:GeneratedValue(strategy = GenerationType.IDENTITY)
-        override var id: Long = 0L,
+        override var id: Long = 0,
         override var createdAt: Date = Date(),
         override var updatedAt: Date = Date(),
         var name: String = "",
@@ -22,7 +20,7 @@ data class User(
         var password: String = "",
         @get:Column(columnDefinition = "TEXT")
         var permissions: MutableList<String> = mutableListOf()
-) : IdEntityable<Long> {
+) : IdEntityable() {
     @get:Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @get:ManyToMany(fetch = FetchType.LAZY)
     @get:Fetch(FetchMode.SUBSELECT)

@@ -3,6 +3,7 @@ package org.appsugar.archetypes.repository
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.runBlocking
 import org.appsugar.archetypes.BaseTestCase
+import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.repository.jpa.RoleJpaRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -19,4 +20,10 @@ class RoleRepositoryTest : BaseTestCase() {
         Assertions.assertTrue(roles.isNotEmpty())
     }
 
+    @Test
+    fun testSave() {
+        val list = MutableList(20) { Role(name = "$it name") }
+        roleRepository.saveAll(list)
+        roleRepository.flush()
+    }
 }
