@@ -3,7 +3,7 @@ spring:
     name: appsugar-web
   jpa:
     open-in-view: true
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
   datasource:

@@ -1,9 +1,7 @@
 package org.appsugar.archetypes.web.controller.system
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.repository.jpa.RoleJpaRepository
@@ -22,20 +20,20 @@ class RoleController(val repository: RoleJpaRepository) : BaseController<Role>()
 
     @PreAuthorize("hasAuthority('role:view')")
     @RequestMapping(value = ["list", ""])
-    suspend fun list(pageable: PageRequest) = mono(Dispatchers.Unconfined) {
+    suspend fun list(pageable: PageRequest) = let {
         val page = repository.findAllAsync(pageable).await()
         Response(page)
     }
 
 
     @PreAuthorize("hasAuthority('role:view')")
-    @RequestMapping("detail")
+    @RequestMapping("form")
     fun form(@ModelAttribute("entity") role: Mono<Role>) = role.map { Response(it) }
 
 
     @PreAuthorize("hasAuthority('role:edit')")
     @RequestMapping("save")
-    suspend fun save(@ModelAttribute("entity") role: Mono<Role>, roleData: RoleData) = mono(Dispatchers.Unconfined) {
+    suspend fun save(@ModelAttribute("entity") role: Mono<Role>, roleData: RoleData) = let {
         val r = role.awaitFirst()!!
         val permissions = roleData.permissions
         logger.info("prepare to save role {}, new permissions is {} ", r, permissions)

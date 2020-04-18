@@ -1,15 +1,11 @@
 package org.appsugar.archetypes.web.controller
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.repository.jpa.UserJpaRepository
 import org.appsugar.archetypes.util.getLogger
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.PageRequest
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.AuthenticationException
@@ -35,8 +31,7 @@ class MainController {
     lateinit var userRepository: UserJpaRepository
 
     @PostMapping("/login")
-    suspend fun login(loginData: LoginData, serverWebExchange: ServerWebExchange) = mono(Dispatchers.Unconfined) {
-        logger.debug("all user is {}", userRepository.findAllAsync(PageRequest.of(0, 20)).await())
+    suspend fun login(loginData: LoginData, serverWebExchange: ServerWebExchange) = let {
         try {
             val authentication = reactiveAuthenticationManager.authenticate(UsernamePasswordAuthenticationToken(loginData.username, loginData.password)).awaitFirst()!!
             webSessionServerSecurityContextRepository.save(serverWebExchange, SecurityContextImpl(authentication)).awaitFirstOrNull()
