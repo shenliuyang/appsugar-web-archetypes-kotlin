@@ -34,11 +34,13 @@ spring:
         max-size: 50
 db:
   name: appsugar_kotlin
+#web server config
 server:
   port: 8080
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
+#config spring boot admin client
 spring.boot.admin.client:
   enabled: false
   url: http://your-spring-boot-admin-server-domain/
@@ -50,6 +52,11 @@ spring.boot.admin.client:
       user:
         name: ${spring.security.user.name}
         password: ${spring.security.user.password}
+  #config logger
+  logging:
+    level:
+      org:
+        appsugar: DEBUG
 ---
 spring:
   profiles: mysql

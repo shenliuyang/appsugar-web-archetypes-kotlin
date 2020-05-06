@@ -29,3 +29,5 @@ class UserRepositoryTest : BaseTestCase() {
         logger.debug("testFindByCondition {} result is {} ", condition, users)
     }
 }
+
+

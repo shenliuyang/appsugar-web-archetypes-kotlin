@@ -29,7 +29,7 @@ class UserController(val repository: UserJpaRepository, val roleRepository: Role
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping("form")
-    fun form(@ModelAttribute("entity") user: Mono<User>) = user.map { Response(it.copy()) }
+    fun form(@ModelAttribute("entity") user: Mono<User>) = user
 
 
     @PreAuthorize("hasAuthority('user:edit')")

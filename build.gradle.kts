@@ -15,7 +15,6 @@ apply { plugin("io.spring.dependency-management") }
 val kotlinVersion : String by System.getProperties()
 val coroutineVersion : String by project
 val springBootAdminVersion : String by project
-val modelMapperVersion: String by  project
 
 extra["kotlin.version"] = kotlinVersion
 
@@ -47,6 +46,11 @@ dependencies {
     testApi("org.springframework.boot:spring-boot-starter-test") { exclude("junit") }
     testApi("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testApi("org.bouncycastle:bcprov-jdk15on:1.65")
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    testApi("org.apache.commons:commons-lang3:3.10")
+
+
 }
 fun DependencyHandlerScope.apiDynamic(notation:String)=add(configurations.api.name,notation)!!.apply { dynamicJarNames.add("$name-$version.jar") }
 /*****config plugin and task*****/

@@ -2,6 +2,7 @@ package org.appsugar.archetypes.web.controller.system
 
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.repository.jpa.RoleJpaRepository
@@ -34,6 +35,7 @@ class RoleController(val repository: RoleJpaRepository) : BaseController<Role>()
     @PreAuthorize("hasAuthority('role:edit')")
     @RequestMapping("save")
     suspend fun save(@ModelAttribute("entity") role: Mono<Role>, roleData: RoleData) = let {
+        mono { }
         val r = role.awaitFirst()!!
         val permissions = roleData.permissions
         logger.info("prepare to save role {}, new permissions is {} ", r, permissions)
