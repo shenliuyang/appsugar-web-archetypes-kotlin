@@ -13,7 +13,7 @@ enum class Permission(
 
         fun getPermissionDtoGroupByPrefix(): MutableList<PermissionGroupDto> {
             var permissionDtoGroupByPrefix = mutableListOf<PermissionGroupDto>()
-            GROUP_BY_PREFIX.forEach { k, v ->
+            GROUP_BY_PREFIX.forEach { (k, v) ->
                 permissionDtoGroupByPrefix.add(PermissionGroupDto(k, v.map {
                     PermissionDto(it.value, it.code)
                 }.toList()))
