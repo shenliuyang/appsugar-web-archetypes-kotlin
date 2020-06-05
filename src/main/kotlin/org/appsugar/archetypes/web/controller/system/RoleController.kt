@@ -1,11 +1,10 @@
 package org.appsugar.archetypes.web.controller.system
 
-import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.entity.Role
 import org.appsugar.archetypes.repository.jpa.RoleJpaRepository
+import org.appsugar.archetypes.util.blockedMono
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
@@ -21,9 +20,8 @@ class RoleController(val repository: RoleJpaRepository) : BaseController<Role>()
 
     @PreAuthorize("hasAuthority('role:view')")
     @RequestMapping(value = ["list", ""])
-    suspend fun list(pageable: PageRequest) = let {
-        val page = repository.findAllAsync(pageable).await()
-        Response(page)
+    fun list(pageable: PageRequest) = blockedMono {
+        Response(repository.findAll(pageable))
     }
 
 
@@ -34,13 +32,12 @@ class RoleController(val repository: RoleJpaRepository) : BaseController<Role>()
 
     @PreAuthorize("hasAuthority('role:edit')")
     @RequestMapping("save")
-    suspend fun save(@ModelAttribute("entity") role: Mono<Role>, roleData: RoleData) = let {
-        mono { }
+    fun save(@ModelAttribute("entity") role: Mono<Role>, roleData: RoleData) = blockedMono {
         val r = role.awaitFirst()!!
         val permissions = roleData.permissions
         logger.info("prepare to save role {}, new permissions is {} ", r, permissions)
         r.permissions = permissions
-        repository.saveAsync(r).await()
+        repository.save(r)
         Response.SUCCESS
     }
 

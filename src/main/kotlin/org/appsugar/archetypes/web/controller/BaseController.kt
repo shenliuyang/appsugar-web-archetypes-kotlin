@@ -1,9 +1,7 @@
 package org.appsugar.archetypes.web.controller
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.future.await
-import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.repository.jpa.BaseJpaRepository
+import org.appsugar.archetypes.util.blockedMono
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
@@ -20,7 +18,7 @@ abstract class BaseController<T> {
     open lateinit var jpaRepository: BaseJpaRepository<T, Long>
 
     @ModelAttribute("entity")
-    open fun entity(id: IdData): Mono<T> = if (id.id == null) Mono.empty() else mono(Dispatchers.Unconfined) { jpaRepository.findByIdOrNullAsync(id.id!!).await() }
+    open fun entity(id: IdData): Mono<T?> = blockedMono { if (id.id == null) null else jpaRepository.findById(id.id!!).orElse(null) }
 
     @ModelAttribute
     open fun pageable(pageData: PageData) = PageRequest.of(pageData.page, pageData.size, Sort.Direction.DESC, "id")

@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.repository
 
-import kotlinx.coroutines.future.await
 import kotlinx.coroutines.runBlocking
 import org.appsugar.archetypes.BaseTestCase
 import org.appsugar.archetypes.repository.jpa.UserCondition
@@ -17,7 +16,7 @@ class UserRepositoryTest : BaseTestCase() {
     @Test
     fun testFindByLoginName() = runBlocking {
         val loginName = "admin"
-        val user = repository.findByLoginName(loginName).await()
+        val user = repository.findByLoginName(loginName)
         logger.debug("find user by loginName $loginName  result is $user roles is ${user?.roles}  ${repository.findById(-1)}")
         Assertions.assertNotNull(user)
     }

@@ -2,10 +2,9 @@ package org.appsugar.archetypes.web
 
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import kotlinx.coroutines.future.await
-import kotlinx.coroutines.reactor.mono
 import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.repository.jpa.UserJpaRepository
+import org.appsugar.archetypes.util.blockedMono
 import org.appsugar.archetypes.util.getLogger
 import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -44,7 +43,7 @@ class WebConfiguration {
         val unAuthentication = om.writeValueAsBytes(Response.UN_AUTHENTICATED)
         val success = om.writeValueAsBytes(Response.SUCCESS)
         shs.authorizeExchange().matchers(EndpointRequest.toAnyEndpoint()).hasAuthority(UserDetailServiceImpl.endpointPermission)
-                .pathMatchers("/login").permitAll().anyExchange().authenticated()
+                .pathMatchers("/login", "/test").permitAll().anyExchange().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint { ex, _ -> ex.response.writeJsonByteArray(unAuthentication) }
                 .and().logout().logoutSuccessHandler { ex, _ -> ex.exchange.response.writeJsonByteArray(success) }
                 .and().httpBasic()
@@ -93,9 +92,9 @@ class UserDetailServiceImpl(val userRepository: UserJpaRepository, val passwordE
     }
 
 
-    override fun findByUsername(username: String): Mono<UserDetails> = mono {
-        if (username == name) return@mono UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf(SimpleGrantedAuthority(endpointPermission)))
-        val user = userRepository.findByLoginName(username).await()
+    override fun findByUsername(username: String): Mono<UserDetails> = blockedMono {
+        if (username == name) return@blockedMono UserPrincipal(0, name, passwordEncoder.encode(password), mutableListOf(SimpleGrantedAuthority(endpointPermission)))
+        val user = userRepository.findByLoginName(username)
                 ?: throw UsernameNotFoundException("username: [$username] did not found")
         val permissions = HashSet(user.permissions)
         for (role in user.roles) {

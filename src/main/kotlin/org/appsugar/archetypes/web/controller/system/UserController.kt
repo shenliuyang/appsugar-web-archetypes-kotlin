@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.web.controller.system
 
-import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.awaitFirst
 import org.appsugar.archetypes.entity.Response
 import org.appsugar.archetypes.entity.User
@@ -8,6 +7,7 @@ import org.appsugar.archetypes.repository.jpa.RoleJpaRepository
 import org.appsugar.archetypes.repository.jpa.UserCondition
 import org.appsugar.archetypes.repository.jpa.UserJpaRepository
 import org.appsugar.archetypes.repository.jpa.toPredicate
+import org.appsugar.archetypes.util.blockedMono
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.access.prepost.PreAuthorize
@@ -22,8 +22,8 @@ class UserController(val repository: UserJpaRepository, val roleRepository: Role
 
     @PreAuthorize("hasAuthority('user:view')")
     @RequestMapping(value = ["list", ""])
-    suspend fun list(condition: UserCondition, pageable: PageRequest) = let {
-        val page = repository.findAllAsync(condition.toPredicate(), pageable).await()
+    fun list(condition: UserCondition, pageable: PageRequest) = blockedMono {
+        val page = repository.findAll(condition.toPredicate(), pageable)
         Response(page.transfer { it.copy() })
     }
 
@@ -34,14 +34,14 @@ class UserController(val repository: UserJpaRepository, val roleRepository: Role
 
     @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("save")
-    suspend fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = let {
+    fun save(@ModelAttribute("entity") userMono: Mono<User>, userData: UserData) = blockedMono {
         val roleIds = userData.roleIds
         val permissions = userData.permissions
         val user = userMono.awaitFirst()!!
         logger.info("prepare to save User {}  new permissions {} new roles {}  ", user, permissions, roleIds)
-        user.roles = if (roleIds.isEmpty()) mutableSetOf() else roleRepository.findByIdIn(roleIds).await().toMutableSet()
+        user.roles = if (roleIds.isEmpty()) mutableSetOf() else roleRepository.findByIdIn(roleIds).toMutableSet()
         user.permissions = permissions
-        repository.saveAsync(user).await()
+        repository.save(user)
         Response.SUCCESS
     }
 

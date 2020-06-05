@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.repository
 
-import kotlinx.coroutines.future.await
 import kotlinx.coroutines.runBlocking
 import org.appsugar.archetypes.BaseTestCase
 import org.appsugar.archetypes.entity.Role
@@ -15,7 +14,7 @@ class RoleRepositoryTest : BaseTestCase() {
 
     @Test
     fun testFindByIdIn() = runBlocking {
-        val roles = roleRepository.findByIdIn(listOf(-1L)).await()
+        val roles = roleRepository.findByIdIn(listOf(-1L))
         logger.debug("find by id in -1  result is $roles")
         Assertions.assertTrue(roles.isNotEmpty())
     }

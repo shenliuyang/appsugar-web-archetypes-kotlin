@@ -15,6 +15,7 @@ apply { plugin("io.spring.dependency-management") }
 val kotlinVersion : String by System.getProperties()
 val coroutineVersion : String by project
 val springBootAdminVersion : String by project
+val exposedVersion : String by project
 
 extra["kotlin.version"] = kotlinVersion
 
@@ -37,6 +38,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-devtools")
     api("com.querydsl:querydsl-jpa")
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
+    //api("org.jetbrains.exposed:exposed-spring-boot-starter:$exposedVersion")
     apiDynamic("com.h2database:h2")
     api("mysql:mysql-connector-java")
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
