@@ -19,19 +19,39 @@ spring:
   jackson:
     serialization:
       write_dates_as_timestamps: true
-  security:
-    user:
-      name: changeme
-      password: changeme
+  #开放spring自身jmx
+  jmx:
+    enabled: true
+#config logging
+logging:
+  file:
+    name: ./build/logs/app.log
+  level:
+    ROOT: INFO
+    org.appsugar: DEBUG
 db:
-  name: appsugar_kotlin
+  name: appsugar_java
 server:
   port: 80
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
 
+#开放所有exposure,在生产不允许暴露server.port以外的端口
+management:
+  endpoints.web:
+    exposure.include: "*"
+    base-path: /att
+  security.enabled: false
+  server.port: 0
 
+
+spring.boot.admin.client:
+  enabled: false
+  url: http://your-spring-boot-admin-server-domain/
+  user:
+    name: admin
+    password: admin123
 ---
 spring:
   profiles: mysql

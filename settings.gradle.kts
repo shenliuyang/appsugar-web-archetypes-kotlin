@@ -1,5 +1,1 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
-}
+rootProject.name="appsugar-web-archetypes"
