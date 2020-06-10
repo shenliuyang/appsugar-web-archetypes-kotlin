@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.repository
 
-import kotlinx.coroutines.runBlocking
 import org.appsugar.archetypes.BaseTestCase
 import org.appsugar.archetypes.repository.jpa.UserCondition
 import org.appsugar.archetypes.repository.jpa.UserJpaRepository
@@ -14,7 +13,7 @@ class UserRepositoryTest : BaseTestCase() {
     lateinit var repository: UserJpaRepository
 
     @Test
-    fun testFindByLoginName() = runBlocking {
+    fun testFindByLoginName() {
         val loginName = "admin"
         val user = repository.findByLoginName(loginName)
         logger.debug("find user by loginName $loginName  result is $user roles is ${user?.roles}  ${repository.findById(-1)}")

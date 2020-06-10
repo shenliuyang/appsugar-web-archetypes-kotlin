@@ -22,7 +22,10 @@ extra["kotlin.version"] = kotlinVersion
 val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/", "https://repo.spring.io/milestone")
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
-repositories { repos.forEach(::maven) }
+repositories {
+    mavenLocal()
+    repos.forEach(::maven)
+}
 
 dependencies {
     api(kotlin("stdlib-jdk8"))
