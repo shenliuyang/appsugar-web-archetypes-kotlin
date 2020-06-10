@@ -1,0 +1,6 @@
+#fix spring cloud init logback first than application.yml cause generated undefined logfile
+logging:
+  file:
+    name: ./build/logs/app.log
+  level:
+    ROOT: WARN

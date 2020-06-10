@@ -1,5 +1,5 @@
 *.class
-
+*lombok.config
 *.class
 .classpath
 .project
