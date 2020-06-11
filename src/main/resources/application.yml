@@ -26,7 +26,8 @@ spring:
 #config logging
 logging:
   file:
-    #keep it as same as bootstrap.yml:logging.file.name only use for spring boot admin server logging
+    #正式环境需要映射 -Dlogging.file.name=xxx 解决spring cloud环境初始化日志跟当前环境不一致问题
+    #这里配置主要是为了解决 spring boot admin 管理系统查看日志问题
     name: ./build/logs/app.log
   level:
     org.appsugar: DEBUG

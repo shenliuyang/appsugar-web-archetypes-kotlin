@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <springProperty name="fileName" scope="context" source="logging.file.name" defaultValue="./build/logs/app.log"/>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_FILE}</file>
+        <file>${fileName}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${fileName}.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>15</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -16,7 +17,7 @@
         <neverBlock>true</neverBlock>
     </appender>
 
-    <root>
+    <root level="WARN">
         <appender-ref ref="ASYNC"/>
     </root>
 </configuration>
