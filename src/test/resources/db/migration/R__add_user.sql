@@ -1,0 +1,1 @@
+insert into appsugar_user(id,name,login_name,address,email,age) values(1,'newyoung','admin','china','middleOfSouthSea@china.com',32);

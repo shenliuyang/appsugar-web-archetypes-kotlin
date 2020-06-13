@@ -1,8 +1,12 @@
 plugins {
-    id("io.freefair.lombok") version "5.1.0"
-    id("net.researchgate.release") version "2.8.0"
-    id("org.springframework.boot") version "2.3.0.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
+    val lombokVersion : String by System.getProperties()
+    val releaseVersion : String by System.getProperties()
+    val springBootVersion : String by System.getProperties()
+    val dependencyVersion : String by System.getProperties()
+    id("io.freefair.lombok") version lombokVersion
+    id("net.researchgate.release") version releaseVersion
+    id("org.springframework.boot") version springBootVersion
+    id("io.spring.dependency-management") version dependencyVersion
     java
     idea
 }
@@ -18,11 +22,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.cloud:spring-cloud-starter-config") { exclude(module="spring-cloud-config-client") }
-    implementation("org.jolokia:jolokia-core")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("com.h2database:h2")
+    implementation("mysql:mysql-connector-java")
     implementation("de.codecentric:spring-boot-admin-starter-client:$springBootAdminVersion")
-    implementation("org.springframework.boot:spring-boot-devtools")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok:1.18.12")
+    testImplementation("org.flywaydb:flyway-core")
     testImplementation("org.apache.ant:ant:1.10.1")
     testImplementation("org.dbunit:dbunit:2.5.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("junit") }

@@ -1,0 +1,8 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #disable flyway we do it manually after jpa initialized
+  flyway:
+    table: flyway_${spring.application.name}
+    baselineOnMigrate: true

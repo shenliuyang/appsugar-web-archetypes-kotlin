@@ -21,6 +21,7 @@ public class Application {
 
     @GetMapping("/")
     public String reload() {
+        //new RuntimeException().printStackTrace();
         return reloadProperty.name;
     }
 
@@ -30,4 +31,6 @@ public class Application {
     public static class ReloadProperty {
         private String name;
     }
+
+
 }
