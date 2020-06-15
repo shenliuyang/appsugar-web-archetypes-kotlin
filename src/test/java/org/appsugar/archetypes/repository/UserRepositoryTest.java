@@ -1,7 +1,9 @@
 package org.appsugar.archetypes.repository;
 
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.appsugar.archetypes.domain.User;
+import org.appsugar.archetypes.domain.UserCondition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +33,12 @@ public class UserRepositoryTest extends BaseRepositoryTest {
         Assertions.assertTrue(!result.isEmpty());
     }
 
+    @Test
+    public void testFindByCondition() {
+        String name = "new";
+        UserCondition condition = new UserCondition();
+        condition.setName(name);
+        Iterable<User> users = userRepository.findAll(userRepository.toPredicate(condition));
+        log.debug("testFindByCondition  name is {}  result is {}", name, Lists.newLinkedList(users));
+    }
 }

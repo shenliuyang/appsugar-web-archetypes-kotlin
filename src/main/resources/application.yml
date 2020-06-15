@@ -26,7 +26,6 @@ logging:
     name: ./build/logs/app.log
   level:
     org.appsugar: DEBUG
-    org.flywaydb: INFO
     ROOT: WARN
 server:
   port: 80

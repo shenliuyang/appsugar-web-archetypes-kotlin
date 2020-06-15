@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@DataJpaTest(showSql = false)
+@DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(FlywayMigrationConfiguration.class)
 public abstract class BaseRepositoryTest extends BaseTest {
