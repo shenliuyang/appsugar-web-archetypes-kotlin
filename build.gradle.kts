@@ -29,7 +29,7 @@ dependencies {
     implementation("de.codecentric:spring-boot-admin-starter-client:$springBootAdminVersion")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
+   // annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("com.querydsl:querydsl-apt:4.3.1:jpa")
     annotationProcessor("javax.persistence:javax.persistence-api" )
     testImplementation("org.flywaydb:flyway-core")
