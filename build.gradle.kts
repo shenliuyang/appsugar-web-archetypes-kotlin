@@ -51,6 +51,31 @@ idea {
 }
 tasks {
     bootRun { sourceResources(sourceSets["main"]) }
+    bootJar {
+        layered {
+            application {
+                intoLayer("spring-boot-loader") {
+                    include("org/springframework/boot/loader/**")
+                }
+                intoLayer("application")
+            }
+            dependencies {
+                intoLayer("snapshot-dependencies") {
+                    include("*:*:*SNAPSHOT")
+                }
+                intoLayer("frequency-change-dependencies") {
+                    include("com.h2database:h2:*")
+                    include("mysql:mysql-connector-java:*")
+                }
+                intoLayer("dependencies")
+            }
+            layerOrder = listOf("dependencies", "frequency-change-dependencies", "spring-boot-loader", "snapshot-dependencies", "application")
+        }
+    }
+    bootBuildImage {
+        imageName = "docker.io/library/shenliuyang/${project.name}:${project.version}"
+
+    }
     test {
         failFast = true
         useJUnitPlatform()
