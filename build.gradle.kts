@@ -102,8 +102,4 @@ val buildImage = tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.ima
     images.addAll(imageNames)
 
 }
-tasks.create("pushImage", com.bmuschko.gradle.docker.tasks.image.DockerPushImage::class) {
-    this.images.addAll(imageNames)
-}
-
 springBoot { buildInfo() }
