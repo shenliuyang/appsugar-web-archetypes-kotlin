@@ -92,15 +92,19 @@ val createDockerfile by tasks.creating(com.bmuschko.gradle.docker.tasks.image.Do
     layerList.forEach { copyFile("--from=builder application/$it/", "./") }
     entryPoint("java", "org.springframework.boot.loader.JarLauncher")
 }
-
-tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.image.DockerBuildImage::class) {
+val imageName: String by System.getProperties()
+val imageNames = imageName.split(",")
+val buildImage = tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.image.DockerBuildImage::class) {
     dependsOn(createDockerfile)
-    dependsOn(tasks.build)
     val contextDir = file("$buildDir/libs/")
     doFirst { createDockerfile.destFile.get().asFile.copyTo(File(contextDir, "Dockerfile"), true) }
     inputDir.set(contextDir)
-    images.add("shenliuyang/appsugar:${project.version}")
-}
+    images.addAll(imageNames)
 
+}
+tasks.create("pushImage", com.bmuschko.gradle.docker.tasks.image.DockerPushImage::class) {
+    dependsOn(buildImage)
+    this.images.addAll(imageNames)
+}
 
 springBoot { buildInfo() }
