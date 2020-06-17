@@ -83,7 +83,7 @@ tasks {
 }
 val baseImage: String by System.getProperties()
 val createDockerfile by tasks.creating(com.bmuschko.gradle.docker.tasks.image.Dockerfile::class) {
-    from(baseImage)
+    from("$baseImage as builder")
     workingDir("application")
     copyFile("*.jar", "app.jar")
     runCommand("java -Djarmode=layertools -jar app.jar extract")
