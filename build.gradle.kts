@@ -69,12 +69,8 @@ tasks {
                 }
                 intoLayer("dependencies")
             }
-            layerOrder = listOf("dependencies", "frequency-change-dependencies", "spring-boot-loader", "snapshot-dependencies", "application")
+            layerOrder = listOf("dependencies", "spring-boot-loader", "snapshot-dependencies", "frequency-change-dependencies", "application")
         }
-    }
-    bootBuildImage {
-        imageName = "docker.io/library/shenliuyang/${project.name}:${project.version}"
-
     }
     test {
         failFast = true
