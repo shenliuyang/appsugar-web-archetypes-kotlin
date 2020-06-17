@@ -3,10 +3,12 @@ plugins {
     val releaseVersion: String by System.getProperties()
     val springBootVersion: String by System.getProperties()
     val dependencyVersion: String by System.getProperties()
+    val dockerVersion: String by System.getProperties()
     id("io.freefair.lombok") version lombokVersion
     id("net.researchgate.release") version releaseVersion
     id("org.springframework.boot") version springBootVersion
     id("io.spring.dependency-management") version dependencyVersion
+    id("com.bmuschko.docker-remote-api") version dockerVersion
     java
     idea
 }
@@ -77,6 +79,26 @@ tasks {
         useJUnitPlatform()
         testLogging { showStandardStreams = true }
     }
+}
+val createDockerfile by tasks.creating(com.bmuschko.gradle.docker.tasks.image.Dockerfile::class) {
+    from("adoptopenjdk:11-jre-hotspot as builder")
+    workingDir("application")
+    arg("JAR_FILE=./*.jar")
+    copyFile("\${JAR_FILE}", "application.jar")
+    runCommand("java -Djarmode=layertools -jar application.jar extract")
+    from("adoptopenjdk:11-jre-hotspot")
+    workingDir("application")
+    copyFile("--from=builder application/dependencies/", "./")
+    copyFile("--from=builder application/spring-boot-loader/", "./")
+    copyFile("--from=builder application/snapshot-dependencies/", "./")
+    copyFile("--from=builder application/frequency-change-dependencies/", "./")
+    copyFile("--from=builder application/application/", "./")
+    entryPoint("java", "org.springframework.boot.loader.JarLauncher")
+}
+
+tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.image.DockerBuildImage::class) {
+    dependsOn(createDockerfile)
+    images.add("shenliuyang/appsugar:${project.version}")
 }
 
 
