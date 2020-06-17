@@ -51,6 +51,7 @@ idea {
         testOutputDir = file("$buildDir/classes/java/test/")
     }
 }
+val layerList = listOf("dependencies", "spring-boot-loader", "snapshot-dependencies", "frequency-change-dependencies", "application")
 tasks {
     bootRun { sourceResources(sourceSets["main"]) }
     bootJar {
@@ -71,7 +72,7 @@ tasks {
                 }
                 intoLayer("dependencies")
             }
-            layerOrder = listOf("dependencies", "spring-boot-loader", "snapshot-dependencies", "frequency-change-dependencies", "application")
+            layerOrder = layerList
         }
     }
     test {
@@ -80,24 +81,24 @@ tasks {
         testLogging { showStandardStreams = true }
     }
 }
+val baseImage: String by System.getProperties()
 val createDockerfile by tasks.creating(com.bmuschko.gradle.docker.tasks.image.Dockerfile::class) {
-    from("adoptopenjdk:11-jre-hotspot as builder")
+    from(baseImage)
     workingDir("application")
-    arg("JAR_FILE=./*.jar")
-    copyFile("\${JAR_FILE}", "application.jar")
-    runCommand("java -Djarmode=layertools -jar application.jar extract")
-    from("adoptopenjdk:11-jre-hotspot")
+    copyFile("*.jar", "app.jar")
+    runCommand("java -Djarmode=layertools -jar app.jar extract")
+    from(baseImage)
     workingDir("application")
-    copyFile("--from=builder application/dependencies/", "./")
-    copyFile("--from=builder application/spring-boot-loader/", "./")
-    copyFile("--from=builder application/snapshot-dependencies/", "./")
-    copyFile("--from=builder application/frequency-change-dependencies/", "./")
-    copyFile("--from=builder application/application/", "./")
+    layerList.forEach { copyFile("--from=builder application/$it/", "./") }
     entryPoint("java", "org.springframework.boot.loader.JarLauncher")
 }
 
 tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.image.DockerBuildImage::class) {
     dependsOn(createDockerfile)
+    dependsOn(tasks.build)
+    val contextDir = file("$buildDir/libs/")
+    doFirst { createDockerfile.destFile.get().asFile.copyTo(File(contextDir, "Dockerfile")) }
+    inputDir.set(contextDir)
     images.add("shenliuyang/appsugar:${project.version}")
 }
 
