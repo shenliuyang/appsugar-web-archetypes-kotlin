@@ -97,7 +97,7 @@ tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.image.DockerBuildIma
     dependsOn(createDockerfile)
     dependsOn(tasks.build)
     val contextDir = file("$buildDir/libs/")
-    doFirst { createDockerfile.destFile.get().asFile.copyTo(File(contextDir, "Dockerfile")) }
+    doFirst { createDockerfile.destFile.get().asFile.copyTo(File(contextDir, "Dockerfile"), true) }
     inputDir.set(contextDir)
     images.add("shenliuyang/appsugar:${project.version}")
 }
