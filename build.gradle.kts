@@ -103,7 +103,6 @@ val buildImage = tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.ima
 
 }
 tasks.create("pushImage", com.bmuschko.gradle.docker.tasks.image.DockerPushImage::class) {
-    dependsOn(buildImage)
     this.images.addAll(imageNames)
 }
 
