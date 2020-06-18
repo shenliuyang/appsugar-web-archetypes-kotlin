@@ -92,21 +92,17 @@ val createDockerfile by tasks.creating(com.bmuschko.gradle.docker.tasks.image.Do
     workingDir(workDir)
     layerList.forEach { copyFile("--from=builder application/$it/", "./") }
     val logEnvironment = mapOf("logging.config" to "classpath:logback-spring.xml", "logging.level.ROOT" to "WARN", "logging.file" to "/logs/${project.name}/app.log")
-    val springBootAdminEnvironment = mapOf("spring.boot.admin.client.url" to "http://springbootAdmin",
-            "spring.boot.admin.client.username" to "admin", "spring.boot.admin.client.password" to "admin")
+    val springBootAdminEnvironment = mapOf("spring.boot.admin.client.url" to "http://springbootAdmin", "spring.boot.admin.client.username" to "admin", "spring.boot.admin.client.password" to "admin")
     val springServerEnvironment = mapOf("spring.application.name" to project.name, "server.port" to "80")
-    environmentVariable(logEnvironment)
-    environmentVariable(springBootAdminEnvironment)
-    environmentVariable(springServerEnvironment)
+    (logEnvironment + springBootAdminEnvironment + springServerEnvironment).forEach { (k, v) -> environmentVariable(k, v) }
     entryPoint("java", "org.springframework.boot.loader.JarLauncher")
 }
 val imageName: String by System.getProperties()
 val imageNames = imageName.split(",")
 val buildImage = tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.image.DockerBuildImage::class) {
     dependsOn(createDockerfile)
-    dockerFile.set(createDockerfile.destFile)
     inputDir.set(file("$buildDir/libs/"))
+    doFirst { createDockerfile.destFile.get().asFile.copyTo(File(inputDir.get().asFile, "Dockerfile"), true) }
     images.addAll(imageNames)
-
 }
 springBoot { buildInfo() }
