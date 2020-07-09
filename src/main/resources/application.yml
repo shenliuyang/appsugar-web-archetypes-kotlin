@@ -4,6 +4,7 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: update
+    open-in-view: false
   datasource:
     max-wait: 10000
     max-active: 5

@@ -1,17 +1,20 @@
 package org.appsugar.archetypes.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.appsugar.archetypes.BaseTest;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.MockMvc;
 
 
 @ExtendWith(SpringExtension.class)
-@WebFluxTest
+@WebMvcTest
 public abstract class BaseControllerTest extends BaseTest {
-
+    protected static final String CONTENT_TYPE_JSON = "application/json";
     @Autowired
-    protected WebTestClient webClient;
+    protected MockMvc mockMvc;
+    @Autowired
+    protected ObjectMapper objectMapper;
 }
