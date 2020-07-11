@@ -1,5 +1,6 @@
 package org.appsugar.archetypes.controller;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.appsugar.archetypes.domain.User;
 import org.appsugar.archetypes.repository.UserRepository;
@@ -25,7 +26,8 @@ public class UserControllerTest extends BaseControllerTest {
     private UserRepository userRepository;
 
     @Test
-    public void testList() throws Throwable {
+    @SneakyThrows
+    public void testList() {
         List<User> expectedUsers = Arrays.asList(new User(0l, "admin", "admin", "beijing", "admin@pronhub.com", 1));
         Mockito.when(userRepository.findAll())
                 .thenReturn(expectedUsers);
@@ -35,5 +37,4 @@ public class UserControllerTest extends BaseControllerTest {
         log.debug("testList expectedUsers is {}  real users is {}", expectedResult, result);
         Assertions.assertEquals(expectedResult, result);
     }
-
 }

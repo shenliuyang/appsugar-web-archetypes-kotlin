@@ -41,8 +41,11 @@ dependencies {
     testImplementation("org.flywaydb:flyway-core")
     testImplementation("org.apache.ant:ant:1.10.1")
     testImplementation("org.dbunit:dbunit:2.5.4")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude("org.junit.vintage", "junit-vintage-engine")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
+    testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
+    testImplementation("it.ozimov:embedded-redis:0.7.3") {
+        exclude("commons-logging")
+        exclude("org.slf4j")
     }
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")

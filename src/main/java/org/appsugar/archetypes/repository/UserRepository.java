@@ -3,6 +3,8 @@ package org.appsugar.archetypes.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import lombok.NonNull;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.appsugar.archetypes.domain.QUser;
 import org.appsugar.archetypes.domain.User;
@@ -15,14 +17,14 @@ public interface UserRepository extends JpaRepository<User, Long>, QuerydslExten
 
     List<User> findByName(String name);
 
-    default Predicate toPredicate(UserCondition c) {
-        BooleanBuilder builder = new BooleanBuilder();
-        QUser u = QUser.user;
-        String name = c.getName();
+    default Predicate toPredicate(@NonNull UserCondition c) {
+        val builder = new BooleanBuilder();
+        val u = QUser.user;
+        val name = c.getName();
         if (StringUtils.isNotBlank(name)) {
             builder.and(ops(c.getNameOps(), u.name, name));
         }
-        String loginName = c.getLoginName();
+        val loginName = c.getLoginName();
         if (StringUtils.isNoneBlank(loginName)) {
             builder.and(ops(c.getLoginNameOps(), u.loginName, loginName));
         }
