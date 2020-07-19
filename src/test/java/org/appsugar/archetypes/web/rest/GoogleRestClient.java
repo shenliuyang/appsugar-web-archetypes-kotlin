@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.web.client;
+package org.appsugar.archetypes.web.rest;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;

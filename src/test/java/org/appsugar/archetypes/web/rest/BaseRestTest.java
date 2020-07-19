@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.web.client;
+package org.appsugar.archetypes.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.appsugar.archetypes.BaseTest;
@@ -12,4 +12,5 @@ public abstract class BaseRestTest extends BaseTest {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
 }

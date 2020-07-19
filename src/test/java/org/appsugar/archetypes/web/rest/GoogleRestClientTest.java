@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.web.client;
+package org.appsugar.archetypes.web.rest;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
