@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.repository.jdbc;
+package org.appsugar.archetypes.repository.kjdbc;
 
 import org.appsugar.archetypes.BaseTest;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;

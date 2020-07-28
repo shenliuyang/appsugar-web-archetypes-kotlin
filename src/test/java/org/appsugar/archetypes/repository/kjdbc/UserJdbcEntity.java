@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.repository.jdbc;
+package org.appsugar.archetypes.repository.kjdbc;
 
 import lombok.ToString;
 import org.appsugar.archetypes.domain.User;
