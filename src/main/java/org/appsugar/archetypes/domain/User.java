@@ -12,10 +12,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "appsugar_user")
+@Table(name = User.TABLE_NAME)
 @DynamicUpdate
 public class User implements Serializable {
+    public static final String TABLE_NAME = "APPSUGAR_USER";
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     private Long id;
     private String name;

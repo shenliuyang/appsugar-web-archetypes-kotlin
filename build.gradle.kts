@@ -45,6 +45,7 @@ dependencies {
     testImplementation("org.dbunit:dbunit:2.5.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     testImplementation("it.ozimov:embedded-redis:0.7.3") {
         exclude("commons-logging")
         exclude("org.slf4j")

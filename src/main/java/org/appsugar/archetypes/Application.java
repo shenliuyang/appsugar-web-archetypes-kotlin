@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.InputStream;
+
 @SpringBootApplication
 @RestController
 public class Application {
@@ -21,6 +23,8 @@ public class Application {
 
     @GetMapping("/")
     public String reload() {
+        InputStream in = null;
+        in.mark(12);
         return reloadProperty.name;
     }
 

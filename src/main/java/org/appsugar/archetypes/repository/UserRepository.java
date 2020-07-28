@@ -9,11 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.appsugar.archetypes.domain.QUser;
 import org.appsugar.archetypes.domain.User;
 import org.appsugar.archetypes.domain.UserCondition;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<User, Long>, QuerydslExtension<User> {
+public interface UserRepository extends BaseJpaRepository<User, Long> {
 
     List<User> findByName(String name);
 

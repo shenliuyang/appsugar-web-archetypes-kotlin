@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.repository;
+package org.appsugar.archetypes.repository.jpa;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
