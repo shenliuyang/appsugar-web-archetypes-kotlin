@@ -25,7 +25,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.cloud:spring-cloud-starter-config") { exclude(module = "spring-cloud-config-client") }
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.querydsl:querydsl-jpa")
     implementation("com.h2database:h2")
@@ -33,19 +32,18 @@ dependencies {
     implementation("de.codecentric:spring-boot-admin-starter-client:$springBootAdminVersion")
     implementation("org.jolokia:jolokia-core")
     implementation("org.apache.commons:commons-lang3")
-    //for huge excel file read
-    implementation("org.apache.poi:poi:4.1.2")
-    implementation("org.apache.poi:poi-ooxml:4.1.2")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("com.querydsl:querydsl-apt:4.3.1:jpa")
     annotationProcessor("javax.persistence:javax.persistence-api")
     testImplementation("org.flywaydb:flyway-core")
-    testImplementation("org.apache.ant:ant:1.10.1")
-    testImplementation("org.dbunit:dbunit:2.5.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    testImplementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    testImplementation("org.springframework.kafka:spring-kafka")
+
+    testImplementation("org.springframework.kafka:spring-kafka-test")
     testImplementation("it.ozimov:embedded-redis:0.7.3") {
         exclude("commons-logging")
         exclude("org.slf4j")
@@ -91,7 +89,7 @@ val buildImage = tasks.create("buildImage", com.bmuschko.gradle.docker.tasks.ima
 //create redis container for integration test
 val createRedisContainer by tasks.creating(com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer::class) {
     targetImageId("redis:6.0.5-alpine3.12")
-    hostConfig.portBindings.set(listOf("8080:8080"))
+    hostConfig.portBindings.set(listOf("6379:6379"))
     hostConfig.autoRemove.set(true)
 }
 val startRedisContainer by tasks.creating(com.bmuschko.gradle.docker.tasks.container.DockerStartContainer::class) {
