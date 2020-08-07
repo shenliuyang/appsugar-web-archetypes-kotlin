@@ -1,6 +1,7 @@
 package org.appsugar.archetypes.kafka;
 
 import lombok.SneakyThrows;
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,8 +27,8 @@ public class PubSubKafkaTest extends BaseKafkaTest {
     }
 
     @KafkaListener(topics = PubSubKafkaTest.topic)
-    public void listen(ConsumerRecord<String, String> cr) throws Exception {
-        logger.info(cr.toString());
+    public void listen(ConsumerRecord<String, String> data, Consumer<?, ?> consumer) throws Exception {
+        logger.info(data.value());
         latch.countDown();
     }
 }
