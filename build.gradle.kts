@@ -68,7 +68,6 @@ val baseImage: String by System.getProperties()
 val workDir: String by System.getProperties()
 val createDockerfile: Task by tasks.creating {
     dependsOn(tasks.bootJar)
-    val layered = tasks.bootJar.get().layered
     doLast {
         val sb = StringBuilder().apply {
             appendln("FROM $baseImage as builder")
@@ -91,31 +90,40 @@ val createDockerfile: Task by tasks.creating {
 val integrationTestRedisPort = 6352
 testSystemProps["integration.test.redis.port"] = integrationTestRedisPort
 val imageNameOfRedis = "redis:6.0.1"
-val integrationTestImageNameList = listOf<String>(imageNameOfRedis)
-val startContainerByImageName = mutableMapOf<String, com.bmuschko.gradle.docker.tasks.container.DockerStartContainer>()
-val stopContainerByImageName = mutableMapOf<String, com.bmuschko.gradle.docker.tasks.container.DockerStopContainer>()
+val integrationTestImageNameList = listOf<String>(imageNameOfRedis, "nginx:latest")
 val portBindings = mapOf<String, List<String>>(imageNameOfRedis to listOf("$integrationTestRedisPort:6379"))
+val localImageTags = mutableSetOf<String>()
 val configContainer = fun(imageName: String, create: com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer) = create.apply {
     portBindings[imageName]?.let { hostConfig.portBindings.set(it) }
     hostConfig.autoRemove.set(true)
 }
-integrationTestImageNameList.forEach { imageName ->
-    val pullImage by tasks.creating(com.bmuschko.gradle.docker.tasks.image.DockerPullImage::class.java) {
+val listImages by tasks.creating(com.bmuschko.gradle.docker.tasks.image.DockerListImages::class.java) { onNext { localImageTags.addAll((this as com.github.dockerjava.api.model.Image).repoTags) } }
+integrationTestImageNameList.forEachIndexed { index, imageName ->
+
+    tasks.register<com.bmuschko.gradle.docker.tasks.image.DockerPullImage>("pullImage$index") {
+        dependsOn(listImages)
+        onlyIf { !localImageTags.contains(imageName) }
+        doFirst { println("prepare to pull docker image $imageName") }
         image.set(imageName)
     }
-    val createContainer by tasks.creating(com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer::class.java) {
-        dependsOn(pullImage)
+
+    tasks.register<com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer>("createContainer$index") {
+        dependsOn("pullImage$index")
+        doFirst { println("prepare to create container by image name $imageName") }
         targetImageId(imageName)
         configContainer(imageName, this)
     }
-    val startContainer by tasks.creating(com.bmuschko.gradle.docker.tasks.container.DockerStartContainer::class.java) {
+    tasks.register<com.bmuschko.gradle.docker.tasks.container.DockerStartContainer>("startContainer$index") {
+        val createContainer = tasks.getByName<com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer>("createContainer$index")
         dependsOn(createContainer)
+        doFirst { println("trying to start container by image name $imageName") }
         targetContainerId(createContainer.containerId)
-        startContainerByImageName[imageName] = this
     }
-    val stopContainer by tasks.creating(com.bmuschko.gradle.docker.tasks.container.DockerStopContainer::class.java) {
+    tasks.register<com.bmuschko.gradle.docker.tasks.container.DockerStopContainer>("stopContainer$index") {
+        dependsOn("startContainer$index")
+        doFirst { println("trying to stop container by image name $imageName") }
+        val createContainer = tasks.getByName<com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer>("createContainer$index")
         targetContainerId(createContainer.containerId)
-        stopContainerByImageName[imageName] = this
     }
 }
 tasks.withType(JavaCompile::class) { options.encoding = "UTF-8" }
@@ -149,8 +157,8 @@ tasks {
     }
     build { dependsOn(createDockerfile) }
     test {
-        dependsOn(startContainerByImageName.values)
-        finalizedBy(stopContainerByImageName.values)
+        dependsOn(integrationTestImageNameList.mapIndexed { index, it -> "startContainer$index" })
+        finalizedBy(integrationTestImageNameList.mapIndexed { index, it -> "stopContainer$index" })
         systemProperties(testSystemProps)
         failFast = true
         useJUnitPlatform()
