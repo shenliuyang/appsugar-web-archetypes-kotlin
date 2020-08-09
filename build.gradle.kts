@@ -72,7 +72,6 @@ val createDockerfile: Task by tasks.creating {
         val sb = StringBuilder().apply {
             appendln("FROM $baseImage as builder")
             appendln("WORKDIR $workDir")
-
             appendln("RUN java -Djarmode=layertools -jar ${tasks.bootJar.get().archiveFileName.get()} extract")
             appendln("FROM $baseImage")
             appendln("WORKDIR $workDir")
@@ -90,8 +89,8 @@ val createDockerfile: Task by tasks.creating {
 val integrationTestRedisPort = 6352
 testSystemProps["integration.test.redis.port"] = integrationTestRedisPort
 val imageNameOfRedis = "redis:6.0.1"
-val integrationTestImageNameList = listOf<String>(imageNameOfRedis, "nginx:latest")
-val portBindings = mapOf<String, List<String>>(imageNameOfRedis to listOf("$integrationTestRedisPort:6379"))
+val integrationTestImageNameList = listOf(imageNameOfRedis, "nginx:latest")
+val portBindings = mapOf(imageNameOfRedis to listOf("$integrationTestRedisPort:6379"))
 val localImageTags = mutableSetOf<String>()
 val configContainer = fun(imageName: String, create: com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer) = create.apply {
     portBindings[imageName]?.let { hostConfig.portBindings.set(it) }
@@ -157,8 +156,8 @@ tasks {
     }
     build { dependsOn(createDockerfile) }
     test {
-        dependsOn(integrationTestImageNameList.mapIndexed { index, it -> "startContainer$index" })
-        finalizedBy(integrationTestImageNameList.mapIndexed { index, it -> "stopContainer$index" })
+        dependsOn(integrationTestImageNameList.mapIndexed { index, _ -> "startContainer$index" })
+        finalizedBy(integrationTestImageNameList.mapIndexed { index, _ -> "stopContainer$index" })
         systemProperties(testSystemProps)
         failFast = true
         useJUnitPlatform()
