@@ -13,7 +13,7 @@ plugins {
     idea
 }
 val testSystemProps = mutableMapOf<String, Any>()
-val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/")
+val repos = listOf("https://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/")
 val springCloudVersion: String by project
 repositories { repos.forEach(::maven) }
 dependencyManagement { imports { mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion") } }
