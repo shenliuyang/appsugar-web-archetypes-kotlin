@@ -9,4 +9,8 @@ public abstract class BaseKafkaTest extends BaseIntegrationTest {
     @Autowired
     protected KafkaTemplate<String, String> template;
 
+    protected void preDestory() {
+        
+    }
+
 }

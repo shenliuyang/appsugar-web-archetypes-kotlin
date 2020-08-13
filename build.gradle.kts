@@ -3,11 +3,12 @@ plugins {
     val releaseVersion: String by System.getProperties()
     val springBootVersion: String by System.getProperties()
     val dependencyVersion: String by System.getProperties()
+    val dockerVersion: String by System.getProperties()
     id("io.freefair.lombok") version lombokVersion
     id("net.researchgate.release") version releaseVersion
     id("org.springframework.boot") version springBootVersion
     id("io.spring.dependency-management") version dependencyVersion
-    id("com.bmuschko.docker-remote-api") version "6.6.1"
+    id("com.bmuschko.docker-remote-api") version dockerVersion
     java
     idea
 }
@@ -156,8 +157,8 @@ tasks {
     }
     build { dependsOn(createDockerfile) }
     test {
-        dependsOn(integrationTestImageNameList.mapIndexed { index, _ -> "startContainer$index" })
-        finalizedBy(integrationTestImageNameList.mapIndexed { index, _ -> "stopContainer$index" })
+        //dependsOn(integrationTestImageNameList.mapIndexed { index, _ -> "startContainer$index" })
+        //finalizedBy(integrationTestImageNameList.mapIndexed { index, _ -> "stopContainer$index" })
         systemProperties(testSystemProps)
         failFast = true
         useJUnitPlatform()
