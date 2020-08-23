@@ -79,7 +79,7 @@ val createDockerfile: Task by tasks.creating {
             layerList.forEach { appendln("COPY --from=builder application/$it/ ./") }
             val logEnvironment = mapOf("logging.config" to "classpath:logback-spring.xml", "logging.level.ROOT" to "WARN", "logging.file" to "/logs/${project.name}/app.log")
             val springBootAdminEnvironment = mapOf("spring.boot.admin.client.url" to "http://springbootAdmin", "spring.boot.admin.client.username" to "admin", "spring.boot.admin.client.password" to "admin")
-            val springServerEnvironment = mapOf("spring.application.name" to project.name, "server.port" to "80")
+            val springServerEnvironment = mapOf("spring.application.name" to project.name, "server.port" to "80", "management.server.port" to "0")
             (logEnvironment + springBootAdminEnvironment + springServerEnvironment).forEach { (k, v) -> appendln("ENV $k=$v") }
             appendln("ENTRYPOINT [\"java\",\"org.springframework.boot.loader.JarLauncher\"]")
         }

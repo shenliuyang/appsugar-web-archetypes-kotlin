@@ -7,6 +7,8 @@ spring:
   flyway:
     table: flyway_${spring.application.name}
     baselineOnMigrate: true
+    #classpath:db/migration/{vendor} for support multiple database type
+    locations: classpath:db/migration/
   redis:
     host: localhost
     port: 6379

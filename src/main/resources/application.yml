@@ -44,6 +44,8 @@ management:
   security.enabled: false
   server.port: 0
   endpoint:
+    shutdown:
+      enabled: true
     env:
       post:
         enabled: true
