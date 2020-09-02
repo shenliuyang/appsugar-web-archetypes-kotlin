@@ -15,9 +15,14 @@ plugins {
 val testSystemProps = mutableMapOf<String, Any>()
 val repos = listOf("https://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/")
 val springCloudVersion: String by project
-repositories { repos.forEach(::maven) }
-dependencyManagement { imports { mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion") } }
 val springBootAdminVersion: String by project
+repositories { repos.forEach(::maven) }
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+        mavenBom("de.codecentric:spring-boot-admin-dependencies:$springBootAdminVersion")
+    }
+}
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -26,7 +31,7 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa")
     implementation("com.h2database:h2")
     implementation("mysql:mysql-connector-java")
-    implementation("de.codecentric:spring-boot-admin-starter-client:$springBootAdminVersion")
+    implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.jolokia:jolokia-core")
     implementation("org.apache.commons:commons-lang3")
     developmentOnly("org.springframework.boot:spring-boot-devtools")

@@ -35,7 +35,7 @@ server:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
 
-#开放所有exposure,在生产不允许暴露management.server.port以外的端口
+#开放所有exposure,在生产不允许暴露server.port以外的端口
 management:
   endpoints.web:
     exposure.include: "*"
