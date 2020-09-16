@@ -16,6 +16,7 @@ val testSystemProps = mutableMapOf<String, Any>()
 val repos = listOf("https://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/")
 val springCloudVersion: String by project
 val springBootAdminVersion: String by project
+val springfoxVersion: String by project
 repositories { repos.forEach(::maven) }
 dependencyManagement {
     imports {
@@ -34,6 +35,7 @@ dependencies {
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.jolokia:jolokia-core")
     implementation("org.apache.commons:commons-lang3")
+    implementation("io.springfox:springfox-boot-starter:$springfoxVersion")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("com.querydsl:querydsl-apt:4.3.1:jpa")
