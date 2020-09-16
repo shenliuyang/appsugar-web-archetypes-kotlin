@@ -35,7 +35,7 @@ dependencies {
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.jolokia:jolokia-core")
     implementation("org.apache.commons:commons-lang3")
-    implementation("io.springfox:springfox-boot-starter:$springfoxVersion")
+    developmentOnly(compileOnly("io.springfox:springfox-boot-starter:$springfoxVersion") as Any)
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("com.querydsl:querydsl-apt:4.3.1:jpa")

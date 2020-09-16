@@ -3,6 +3,7 @@ package org.appsugar.archetypes;
 import com.fasterxml.classmate.TypeResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,6 +31,7 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 /**
  * 配置swagger
  */
+@ConditionalOnClass(Docket.class)
 @EnableSwagger2
 @Configuration
 @Slf4j
