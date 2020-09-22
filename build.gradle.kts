@@ -17,7 +17,8 @@ val repos = listOf("https://maven.aliyun.com/nexus/content/groups/public", "http
 val springCloudVersion: String by project
 val springBootAdminVersion: String by project
 val springfoxVersion: String by project
-repositories { repos.forEach(::maven) }
+
+repositories { repos.forEach { maven(it) } }
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
@@ -40,18 +41,18 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("com.querydsl:querydsl-apt:4.3.1:jpa")
     annotationProcessor("javax.persistence:javax.persistence-api")
-    testImplementation("org.flywaydb:flyway-core")
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     testImplementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     testImplementation("org.springframework.kafka:spring-kafka")
-
     testImplementation("org.springframework.kafka:spring-kafka-test")
     testImplementation("it.ozimov:embedded-redis:0.7.3") {
         exclude("commons-logging")
         exclude("org.slf4j")
     }
+    testImplementation("org.apache.ant:ant:1.10.1")
+    testImplementation("org.dbunit:dbunit:2.5.4")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
