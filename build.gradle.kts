@@ -1,7 +1,7 @@
 plugins {
-    val kotlinVersion : String by System.getProperties()
+    val kotlinVersion: String by System.getProperties()
     val springBootVersion: String by System.getProperties()
-    val releasePluginVersion:String by System.getProperties()
+    val releasePluginVersion: String by System.getProperties()
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -12,14 +12,14 @@ plugins {
 }
 apply { plugin("io.spring.dependency-management") }
 
-val kotlinVersion : String by System.getProperties()
-val coroutineVersion : String by project
-val springBootAdminVersion : String by project
-val exposedVersion : String by project
+val kotlinVersion: String by System.getProperties()
+val coroutineVersion: String by project
+val springBootAdminVersion: String by project
+val exposedVersion: String by project
 
 extra["kotlin.version"] = kotlinVersion
 
-val repos = listOf("http://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/", "https://repo.spring.io/milestone")
+val repos = listOf("https://maven.aliyun.com/nexus/content/groups/public", "https://jcenter.bintray.com/", "https://repo.spring.io/milestone")
 val dynamicJarNames = ArrayList<String>()
 val isMatchAny = { name: String -> dynamicJarNames.contains(name) }
 repositories {
@@ -57,7 +57,7 @@ dependencies {
 
 
 }
-fun DependencyHandlerScope.apiDynamic(notation:String)=add(configurations.api.name,notation)!!.apply { dynamicJarNames.add("$name-$version.jar") }
+fun DependencyHandlerScope.apiDynamic(notation: String) = add(configurations.api.name, notation)!!.apply { dynamicJarNames.add("$name-$version.jar") }
 /*****config plugin and task*****/
 idea {
     module {
@@ -95,7 +95,7 @@ tasks {
     bootJar { doLast { mainApplicationClassName = mainClassName } }
     bootRun { sourceResources(sourceSets["main"]) }
     jar {
-        dependsOn(bootJar,copyToLib, copyToLibDynamic)
+        dependsOn(bootJar, copyToLib, copyToLibDynamic)
         enabled = true
         archiveFileName.set("app.jar")
         doFirst { manifest { attributes(mapOf("Main-Class" to mainApplicationClassName, "Class-Path" to configurations.runtimeClasspath.get().joinToString(" ") { if (isMatchAny(it.name)) "lib-dynamic/${it.name}" else "lib/${it.name}" })) } }
