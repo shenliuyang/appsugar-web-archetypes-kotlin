@@ -173,4 +173,9 @@ tasks {
         testLogging { showStandardStreams = true }
     }
 }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
 springBoot { buildInfo() }
