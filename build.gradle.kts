@@ -39,9 +39,11 @@ dependencies {
     developmentOnly(compileOnly("io.springfox:springfox-boot-starter:$springfoxVersion") as Any)
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
+    /****/
     annotationProcessor("com.querydsl:querydsl-apt:4.3.1:jpa")
     annotationProcessor("javax.annotation:javax.annotation-api")
     annotationProcessor("javax.persistence:javax.persistence-api")
+    /****/
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
@@ -176,7 +178,7 @@ tasks {
 }
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(14))
     }
 }
 springBoot { buildInfo() }
