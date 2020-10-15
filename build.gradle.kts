@@ -40,6 +40,7 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("com.querydsl:querydsl-apt:4.3.1:jpa")
+    annotationProcessor("javax.annotation:javax.annotation-api")
     annotationProcessor("javax.persistence:javax.persistence-api")
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
