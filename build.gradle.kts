@@ -178,7 +178,7 @@ tasks {
 }
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(14))
+        languageVersion.set(JavaLanguageVersion.of(8))
     }
 }
 springBoot { buildInfo() }
