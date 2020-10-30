@@ -5,7 +5,7 @@
         <file>${fileName}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${fileName}.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>15</maxHistory>
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%d{YYYY:MM:DD:HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
