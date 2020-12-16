@@ -46,10 +46,11 @@ dependencies {
     /****/
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     testImplementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     testImplementation("org.springframework.kafka:spring-kafka")
     testImplementation("org.springframework.kafka:spring-kafka-test")
+    testImplementation("org.scala-lang:scala-library:2.12.11")
+    testImplementation("org.scala-lang:scala-library:2.12.11")
     testImplementation("it.ozimov:embedded-redis:0.7.3") {
         exclude("commons-logging")
         exclude("org.slf4j")
