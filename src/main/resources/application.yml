@@ -39,7 +39,6 @@ server:
 management:
   endpoints.web:
     exposure.include: "*"
-    base-path: /att
   #makesure do not exposed all port to the internet
   security.enabled: false
   server.port: 0

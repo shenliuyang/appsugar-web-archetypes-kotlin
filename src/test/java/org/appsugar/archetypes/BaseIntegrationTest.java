@@ -9,7 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles({"test", "integration"})
@@ -17,8 +16,6 @@ import org.springframework.test.context.ActiveProfiles;
 @Import(FeignClientsConfiguration.class)
 //fix dataJpa and dataJdbc repository registry conflict
 @EnableJpaRepositories(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = BaseJpaRepository.class))
-@EmbeddedKafka(
-        bootstrapServersProperty = "spring.kafka.bootstrap-servers")
 public abstract class BaseIntegrationTest {
     protected Logger logger = LoggerFactory.getLogger(BaseIntegrationTest.class);
 }
