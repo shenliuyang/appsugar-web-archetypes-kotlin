@@ -8,14 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
 @RestController
 @Data
 public class UserController implements UserFacade {
-    
+
     @Autowired
     UserRepository userRepository;
 
 
+    @Override
     public List<User> list() {
         return getUserRepository().findAll();
     }

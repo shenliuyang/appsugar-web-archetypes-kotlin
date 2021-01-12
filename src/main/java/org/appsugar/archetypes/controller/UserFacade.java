@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * 用户访问接口
+ *
+ * @author shenl
  */
 public interface UserFacade {
     String BASE_URL = "/user";

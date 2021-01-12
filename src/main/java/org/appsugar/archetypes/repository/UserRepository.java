@@ -15,6 +15,7 @@ import java.util.List;
 public interface UserRepository extends BaseJpaRepository<User, Long> {
 
     List<User> findByName(String name);
+    
 
     default Predicate toPredicate(@NonNull UserCondition c) {
         val builder = new BooleanBuilder();
