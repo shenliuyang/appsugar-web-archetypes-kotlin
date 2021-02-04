@@ -7,8 +7,8 @@ spring:
     open-in-view: false
   datasource:
     hikari:
-      max-lifetime: 60000
-      idle-timeout: 10000
+      max-lifetime: 1800000
+      idle-timeout: 60000
       minimum-idle: 0
       maximum-pool-size: 2
       driver-class-name: org.h2.Driver

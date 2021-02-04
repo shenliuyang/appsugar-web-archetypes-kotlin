@@ -7,8 +7,12 @@ import lombok.Data;
  */
 @Data
 public class UserCondition {
+    /**
+     * 名称前值匹配
+     **/
     private String name;
-    private String nameOps = "STARTS_WITH";
+    /**
+     * 登录名全文匹配
+     **/
     private String loginName;
-    private String loginNameOps = "EQ";
 }
