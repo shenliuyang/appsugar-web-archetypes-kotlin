@@ -1,18 +1,7 @@
 spring:
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
-    #disable flyway we do it manually after jpa initialized
-  flyway:
-    table: flyway_${spring.application.name}
-    baselineOnMigrate: true
-    #classpath:db/migration/{vendor} for support multiple database type
-    locations: classpath:db/migration/
-  redis:
-    host: localhost
-    port: 6379
-  kafka:
-    consumer:
-      group-id: ${spring.application.name}
-      auto-offset-reset: earliest
+logging:
+  level:
+    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
