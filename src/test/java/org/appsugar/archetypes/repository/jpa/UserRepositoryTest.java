@@ -41,6 +41,12 @@ public class UserRepositoryTest extends BaseJpaRepositoryTest {
         users.subList(5, 10).forEach(e -> e.setAddress("xxx18"));
         userRepository.saveAll(users);
         userRepository.flush();
+
+        val u1 = new User();
+        u1.setId(users.get(0).getId());
+        u1.setEmail("xxx");
+        userRepository.save(u1);
+        userRepository.flush();
     }
 
     @Test

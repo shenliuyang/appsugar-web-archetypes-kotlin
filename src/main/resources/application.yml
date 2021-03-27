@@ -9,8 +9,11 @@ spring:
       hibernate:
         order_inserts: true
         order_updates: true
+        #default enabled in hibernate 5
         batch_versioned_data: true
         jdbc:
+          #config this when use oracle (default is 10)
+          fetch_size: 10000
           batch_size: 10000
   datasource:
     hikari:

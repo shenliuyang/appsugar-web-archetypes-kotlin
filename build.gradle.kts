@@ -28,7 +28,6 @@ dependencyManagement {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.querydsl:querydsl-jpa")
     implementation("com.h2database:h2")
