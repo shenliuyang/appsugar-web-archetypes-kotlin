@@ -4,13 +4,16 @@ import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import lombok.var;
 import org.appsugar.archetypes.domain.User;
 import org.appsugar.archetypes.domain.UserCondition;
+import org.appsugar.archetypes.domain.UserEntityGraph;
 import org.appsugar.archetypes.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,41 @@ import java.util.List;
 public class UserRepositoryTest extends BaseJpaRepositoryTest {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    EntityManager em;
+
+    
+    @SneakyThrows
+    @Test
+    public void testFindOneByName() {
+        val name = "newyoung";
+        var user = userRepository.findOneByName(name);
+        user.setName("123");
+        userRepository.flush();
+        em.clear();
+        user.setLoginName("xxx1");
+        user = userRepository.save(user);
+        userRepository.flush();
+        logger.debug("testFindOneByName classname is {} user is {}", user.getClass(), user);
+
+    }
+
+    @SneakyThrows
+    @Test
+    public void testFindAndDynamicFetch() {
+        UserCondition c = new UserCondition();
+        val result = userRepository.findAll(userRepository.toPredicate(c), UserEntityGraph.____().role().____.____());
+        logger.debug("testFindAndDynamicFetch user is {}", result);
+    }
+
+    @SneakyThrows
+    @Test
+    public void testFindAndWithoutFetch() {
+        UserCondition c = new UserCondition();
+        val result = userRepository.findAll(userRepository.toPredicate(c));
+        logger.debug("testFindAndDynamicFetch user is {}", result);
+    }
 
     @SneakyThrows
     @Test

@@ -1,14 +1,13 @@
 plugins {
-    val lombokVersion: String by System.getProperties()
-    val releaseVersion: String by System.getProperties()
-    val springBootVersion: String by System.getProperties()
-    val dependencyVersion: String by System.getProperties()
-    val dockerVersion: String by System.getProperties()
+    val sysProps = System.getProperties()
+    val lombokVersion: String by sysProps
+    val releaseVersion: String by sysProps
+    val springBootVersion: String by sysProps
+    val dependencyVersion: String by sysProps
     id("io.freefair.lombok") version lombokVersion
     id("net.researchgate.release") version releaseVersion
     id("org.springframework.boot") version springBootVersion
     id("io.spring.dependency-management") version dependencyVersion
-    id("com.bmuschko.docker-remote-api") version dockerVersion
     java
     idea
 }
@@ -17,18 +16,15 @@ val repos = listOf("https://maven.aliyun.com/nexus/content/groups/public", "http
 val springCloudVersion: String by project
 val springBootAdminVersion: String by project
 val springfoxVersion: String by project
+val entityGraphVersion: String by project
 
 repositories { repos.forEach { maven(it) } }
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
-        mavenBom("de.codecentric:spring-boot-admin-dependencies:$springBootAdminVersion")
-    }
-}
+dependencyManagement { imports { mavenBom("de.codecentric:spring-boot-admin-dependencies:$springBootAdminVersion") } }
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("com.cosium.spring.data:spring-data-jpa-entity-graph:$entityGraphVersion")
     implementation("com.querydsl:querydsl-jpa")
     implementation("com.h2database:h2")
     implementation("mysql:mysql-connector-java")
@@ -38,9 +34,11 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     developmentOnly(compileOnly("io.springfox:springfox-boot-starter:$springfoxVersion") as Any)
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    annotationProcessor("com.querydsl:querydsl-apt:4.3.1:jpa")
+    annotationProcessor("com.querydsl:querydsl-apt:4.4.0:jpa")
     annotationProcessor("javax.annotation:javax.annotation-api")
     annotationProcessor("javax.persistence:javax.persistence-api")
+    annotationProcessor("org.hibernate:hibernate-jpamodelgen")
+    annotationProcessor("com.cosium.spring.data:spring-data-jpa-entity-graph-generator:$entityGraphVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.apache.ant:ant:1.10.1")
     testImplementation("org.dbunit:dbunit:2.5.4")
@@ -62,6 +60,7 @@ tasks.withType(JavaCompile::class) { options.encoding = "UTF-8" }
 tasks {
     bootRun {
         sourceResources(sourceSets["main"])
+        systemProperty("spring.datasource.hikari.jdbc-url","jdbc:h2:./build/appsugar-integration-test")
         systemProperty("logging.config", "classpath:logback-console.xml")
         systemProperty("logging.level.ROOT", "INFO")
     }

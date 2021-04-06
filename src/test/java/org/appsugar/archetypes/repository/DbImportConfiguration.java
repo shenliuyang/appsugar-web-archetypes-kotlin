@@ -17,7 +17,7 @@ import java.sql.Connection;
 public class DbImportConfiguration {
 
     private static final String BASE_PAT = "src/test/resources/data/";
-    private static final String[] SAMPLE_FILES = new String[]{"sample-data.xml"};
+    private static final String[] SAMPLE_FILES = new String[]{"sample-data.xml", "other-module-data.xml"};
 
     /**
      * 保证每个test方法执行前,数据都是最新的
@@ -31,12 +31,14 @@ public class DbImportConfiguration {
         config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
         config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new H2DataTypeFactory());
         config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new DefaultMetadataHandler());
-        Operation operation = new Operation();
-        operation.setTransaction(true);
-        operation.setType("CLEAN_INSERT");
-        operation.setFormat("flat");
-        operation.setSrc(new File(BASE_PAT + SAMPLE_FILES[0]));
-        operation.execute(connection);
+        for (String fileName : SAMPLE_FILES) {
+            Operation operation = new Operation();
+            operation.setTransaction(true);
+            operation.setType("INSERT");
+            operation.setFormat("flat");
+            operation.setSrc(new File(BASE_PAT + fileName));
+            operation.execute(connection);
+        }
         connection.close();
     }
 }

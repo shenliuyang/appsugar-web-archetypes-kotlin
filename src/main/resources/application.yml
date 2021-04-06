@@ -3,7 +3,7 @@ spring:
   jpa:
     show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     open-in-view: false
     properties:
       hibernate:
@@ -22,7 +22,7 @@ spring:
       minimum-idle: 0
       maximum-pool-size: 2
       driver-class-name: org.h2.Driver
-      jdbc-url: jdbc:h2:~/tmp/appsugar
+      jdbc-url: jdbc:h2:mem:appsugar
       username: sa
       password:
   jackson:
