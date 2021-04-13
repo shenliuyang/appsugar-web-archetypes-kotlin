@@ -12,9 +12,9 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicUpdate
 @Entity
 @Table(name = User.TABLE_NAME)
-@DynamicUpdate
 public class User implements Serializable {
     public static final String TABLE_NAME = "APPSUGAR_USER";
     @Id
