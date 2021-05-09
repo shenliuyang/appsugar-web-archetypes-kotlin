@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.repository.jpa;
 
-import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -10,6 +9,7 @@ import org.appsugar.archetypes.domain.UserCondition;
 import org.appsugar.archetypes.domain.UserEntityGraph;
 import org.appsugar.archetypes.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +28,7 @@ public class UserRepositoryTest extends BaseJpaRepositoryTest {
     @Autowired
     EntityManager em;
 
-    
+
     @SneakyThrows
     @Test
     public void testFindOneByName() {
@@ -101,12 +101,13 @@ public class UserRepositoryTest extends BaseJpaRepositoryTest {
         Assertions.assertFalse(result.isEmpty());
     }
 
-    @Test
+    @RepeatedTest(200)
     public void testFindByCondition() {
         String name = "new";
         UserCondition condition = new UserCondition();
         condition.setName(name);
         Iterable<User> users = userRepository.findAll(userRepository.toPredicate(condition));
-        log.debug("testFindByCondition  name is {}  result is {}", name, Lists.newLinkedList(users));
+        Assertions.assertTrue(users != null);
+        // log.debug("testFindByCondition  name is {}  result is {}", name, Lists.newLinkedList(users));
     }
 }

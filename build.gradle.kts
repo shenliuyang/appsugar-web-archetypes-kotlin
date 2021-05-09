@@ -34,11 +34,13 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     developmentOnly(compileOnly("io.springfox:springfox-boot-starter:$springfoxVersion") as Any)
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+    annotationProcessor("org.springframework:spring-context-indexer")
     annotationProcessor("com.querydsl:querydsl-apt:4.4.0:jpa")
     annotationProcessor("javax.annotation:javax.annotation-api")
     annotationProcessor("javax.persistence:javax.persistence-api")
     annotationProcessor("org.hibernate:hibernate-jpamodelgen")
     annotationProcessor("com.cosium.spring.data:spring-data-jpa-entity-graph-generator:$entityGraphVersion")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.apache.ant:ant:1.10.1")
     testImplementation("org.dbunit:dbunit:2.5.4")

@@ -3,6 +3,8 @@ package org.appsugar.archetypes.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,6 +17,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Entity
 @Table(name = User.TABLE_NAME)
+@FieldNameConstants
 public class User implements Serializable {
     public static final String TABLE_NAME = "APPSUGAR_USER";
     @Id
@@ -30,5 +33,6 @@ public class User implements Serializable {
     private Integer age;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
+    @ToString.Exclude
     private Role role;
 }
