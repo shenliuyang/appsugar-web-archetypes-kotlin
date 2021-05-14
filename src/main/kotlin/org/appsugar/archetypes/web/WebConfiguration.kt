@@ -15,6 +15,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorResourceFactory
 import org.springframework.http.server.reactive.ServerHttpResponse
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.core.GrantedAuthority
@@ -34,6 +35,7 @@ import java.io.Serializable
 @EnableWebFlux
 @EnableWebFluxSecurity
 @Configuration
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 class WebConfiguration {
 
 

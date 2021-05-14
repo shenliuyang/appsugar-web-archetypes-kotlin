@@ -7,6 +7,7 @@ import org.appsugar.archetypes.repository.jpa.RoleJpaRepository
 import org.appsugar.archetypes.util.blockedMono
 import org.appsugar.archetypes.web.controller.BaseController
 import org.springframework.data.domain.PageRequest
+import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,7 +19,7 @@ import reactor.core.publisher.Mono
 class RoleController(val repository: RoleJpaRepository) : BaseController<Role>() {
 
 
-    @PreAuthorize("hasAuthority('role:view')")
+    @Secured("role:view")
     @RequestMapping(value = ["list", ""])
     fun list(pageable: PageRequest) = blockedMono {
         Response(repository.findAll(pageable))
