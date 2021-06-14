@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <APPSUGAR_ROLE id="-1" name="super_admin"/>
-    <APPSUGAR_USER id="-1" name="newyoung" login_name="admin" address="xxxx" email="ccp@china.cn" age="30"
-                   role_id="-1"/>
+    <APPSUGAR_ROLE id="-1" name="super_admin" permissions="*"/>
+    <APPSUGAR_USER id="-1" name="newyoung" login_name="admin" password="123456" permissions="user:list"/>
+    <APPSUGAR_USER_ROLE user_id="-1" role_id="-1"/>
 </dataset>

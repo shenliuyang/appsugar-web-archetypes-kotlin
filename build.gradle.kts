@@ -19,7 +19,9 @@ val springfoxVersion: String by project
 val entityGraphVersion: String by project
 
 repositories { repos.forEach { maven(it) } }
-dependencyManagement { imports { mavenBom("de.codecentric:spring-boot-admin-dependencies:$springBootAdminVersion") } }
+dependencyManagement { imports {
+    mavenBom("de.codecentric:spring-boot-admin-dependencies:$springBootAdminVersion")
+} }
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -32,7 +34,6 @@ dependencies {
     implementation("org.jolokia:jolokia-core")
     implementation("org.apache.commons:commons-lang3")
     compileOnly("org.projectlombok:lombok")
-    developmentOnly(compileOnly("io.springfox:springfox-boot-starter:$springfoxVersion") as Any)
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework:spring-context-indexer")
     annotationProcessor("com.querydsl:querydsl-apt:4.4.0:jpa")

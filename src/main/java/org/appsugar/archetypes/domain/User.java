@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,19 +20,17 @@ import java.io.Serializable;
 @FieldNameConstants
 public class User implements Serializable {
     public static final String TABLE_NAME = "APPSUGAR_USER";
+    public static final String USER_ROLE_TABLE_NAME = "APPSUGAR_USER_ROLE";
     @Id
     @org.springframework.data.annotation.Id
-    @GenericGenerator(name = "snowflake", strategy = "org.appsugar.archetypes.hibernate.SnowflakeIdGenerator")
-    @GeneratedValue(generator = "snowflake")
-    //@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     private Long id;
     private String name;
     private String loginName;
-    private String address;
-    private String email;
-    private Integer age;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
+    private String password;
+    private String permissions;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = User.USER_ROLE_TABLE_NAME, joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     @ToString.Exclude
-    private Role role;
+    private List<Role> role;
 }

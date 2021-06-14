@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,7 +40,6 @@ public class UserRepositoryTest extends BaseJpaRepositoryTest {
         user = userRepository.save(user);
         userRepository.flush();
         logger.debug("testFindOneByName classname is {} user is {}", user.getClass(), user);
-
     }
 
     @SneakyThrows
@@ -59,34 +57,7 @@ public class UserRepositoryTest extends BaseJpaRepositoryTest {
         val result = userRepository.findAll(userRepository.toPredicate(c));
         logger.debug("testFindAndDynamicFetch user is {}", result);
     }
-
-    @SneakyThrows
-    @Test
-    public void testBatchInsertAndUpdate() {
-        val users = new ArrayList<User>();
-        for (int i = 1; i <= 10; i++) {
-            val user = new User();
-            user.setName("z" + i);
-            user.setAddress("xxx" + i);
-            user.setAge(i);
-            user.setEmail("xxx" + i);
-            user.setLoginName("login" + i);
-            users.add(user);
-        }
-        userRepository.saveAll(users);
-        userRepository.flush();
-        users.subList(0, 5).forEach(e -> e.setAge(18));
-        users.subList(5, 10).forEach(e -> e.setAddress("xxx18"));
-        userRepository.saveAll(users);
-        userRepository.flush();
-
-        val u1 = new User();
-        u1.setId(users.get(0).getId());
-        u1.setEmail("xxx");
-        userRepository.save(u1);
-        userRepository.flush();
-    }
-
+    
     @Test
     public void testFindAll() {
         List<User> users = userRepository.findAll();

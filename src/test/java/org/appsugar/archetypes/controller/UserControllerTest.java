@@ -28,7 +28,7 @@ public class UserControllerTest extends BaseControllerTest {
     @Test
     @SneakyThrows
     public void testList() {
-        List<User> expectedUsers = Arrays.asList(new User(0l, "admin", "admin", "beijing", "admin@pronhub.com", 1, null));
+        List<User> expectedUsers = Arrays.asList(new User(1l, "admin", "admin", "admin", "123456", null));
         Mockito.when(userRepository.findAll())
                 .thenReturn(expectedUsers);
         MvcResult mvcResult = mockMvc.perform(get(UserController.LIST_URL).contentType(CONTENT_TYPE_JSON)).andExpect(status().isOk()).andReturn();

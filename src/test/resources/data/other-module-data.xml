@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <APPSUGAR_USER id="-2" name="newyoung1" login_name="admin1" address="xxxx" email="ccp@china.cn" age="30"
-                   role_id="-1"/>
+    <APPSUGAR_USER id="-2" name="newyoung1" login_name="admin1" password="123456" permissions="*"/>
+    <APPSUGAR_USER_ROLE user_id="-2" role_id="-1"/>
 </dataset>

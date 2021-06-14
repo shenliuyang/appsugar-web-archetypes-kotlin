@@ -1,6 +1,5 @@
 package org.appsugar.archetypes.controller;
 
-import lombok.Data;
 import org.appsugar.archetypes.domain.User;
 import org.appsugar.archetypes.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +9,13 @@ import java.util.List;
 
 
 @RestController
-@Data
 public class UserController implements UserFacade {
 
     @Autowired
     UserRepository userRepository;
 
-
     @Override
     public List<User> list() {
-        return getUserRepository().findAll();
+        return userRepository.findAll();
     }
 }
