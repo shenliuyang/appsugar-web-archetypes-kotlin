@@ -1,5 +1,6 @@
 package org.appsugar.archetypes.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.ant.Operation;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.sql.Connection;
 
 @Configuration
+@Slf4j
 public class DbImportConfiguration {
 
     private static final String BASE_PAT = "src/test/resources/data/";
@@ -24,6 +26,7 @@ public class DbImportConfiguration {
      */
     @Autowired
     public void dbunitCleanInstall(DataSource dataSource) throws Exception {
+        log.info("start to import test db");
         Connection con = dataSource.getConnection();
         DatabaseConnection connection = new DatabaseConnection(con);
         DatabaseConfig config = connection.getConfig();
@@ -40,5 +43,6 @@ public class DbImportConfiguration {
             operation.execute(connection);
         }
         connection.close();
+        log.info("success to import test db");
     }
 }

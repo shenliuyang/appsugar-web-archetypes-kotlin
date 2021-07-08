@@ -21,6 +21,7 @@ import java.util.List;
 public class User implements Serializable {
     public static final String TABLE_NAME = "APPSUGAR_USER";
     public static final String USER_ROLE_TABLE_NAME = "APPSUGAR_USER_ROLE";
+    public static final String PERMISSION_SPLIT_CHAR = ",";
     @Id
     @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

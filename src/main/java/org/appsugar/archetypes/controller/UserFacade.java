@@ -17,6 +17,6 @@ public interface UserFacade {
     /**
      * 查询所有用户
      */
-    @GetMapping(UserController.LIST_URL)
+    @GetMapping(LIST_URL)
     List<User> list();
 }

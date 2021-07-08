@@ -25,6 +25,7 @@ dependencyManagement { imports {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.cosium.spring.data:spring-data-jpa-entity-graph:$entityGraphVersion")
     implementation("com.querydsl:querydsl-jpa")
@@ -33,7 +34,10 @@ dependencies {
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.jolokia:jolokia-core")
     implementation("org.apache.commons:commons-lang3")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+
     compileOnly("org.projectlombok:lombok")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework:spring-context-indexer")
     annotationProcessor("com.querydsl:querydsl-apt:4.4.0:jpa")
@@ -42,6 +46,7 @@ dependencies {
     annotationProcessor("org.hibernate:hibernate-jpamodelgen")
     annotationProcessor("com.cosium.spring.data:spring-data-jpa-entity-graph-generator:$entityGraphVersion")
 
+    testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
     testImplementation("org.apache.ant:ant:1.10.1")
     testImplementation("org.dbunit:dbunit:2.5.4")
@@ -63,7 +68,7 @@ tasks.withType(JavaCompile::class) { options.encoding = "UTF-8" }
 tasks {
     bootRun {
         sourceResources(sourceSets["main"])
-        systemProperty("spring.datasource.hikari.jdbc-url","jdbc:h2:./build/appsugar-integration-test")
+        systemProperty("spring.datasource.hikari.jdbcUrl","jdbc:h2:./build/appsugar-integration-test")
         systemProperty("logging.config", "classpath:logback-console.xml")
         systemProperty("logging.level.ROOT", "INFO")
     }
