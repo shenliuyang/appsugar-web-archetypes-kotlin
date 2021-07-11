@@ -35,7 +35,7 @@ public class JwtUser {
         return om.convertValue(this, Map.class);
     }
 
-    public static JwtUser toJwtUser(Map<String, Object> map) {
+    public static JwtUser fromMap(Map<String, Object> map) {
         return om.convertValue(map, JwtUser.class);
     }
 }

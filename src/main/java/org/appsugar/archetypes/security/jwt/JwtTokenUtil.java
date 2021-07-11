@@ -2,6 +2,9 @@ package org.appsugar.archetypes.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +16,10 @@ import org.springframework.stereotype.Component;
  * @date 2021-07-07  16:09
  */
 @Component
+@ConfigurationProperties("spring.jwt.secret")
 public class JwtTokenUtil {
+    @Getter
+    @Setter
     private String secret = "test";
 
     public boolean validate(String token) {
@@ -22,7 +28,7 @@ public class JwtTokenUtil {
     }
 
     public UserDetails getLoginUserFromToken(String token) {
-        JwtUser jwtUser = JwtUser.toJwtUser(Jwts.parser()
+        JwtUser jwtUser = JwtUser.fromMap(Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody());
