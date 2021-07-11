@@ -3,11 +3,10 @@ package org.appsugar.archetypes.security;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.appsugar.archetypes.permission.Permissions;
+import org.appsugar.archetypes.security.jwt.JwtUser;
 import org.appsugar.archetypes.security.jwt.JwtUserAdapter;
+import org.appsugar.archetypes.service.UserService;
 import org.springframework.security.core.Authentication;
-
-import java.util.Base64;
 
 /**
  * @author shenliuyang
@@ -18,7 +17,6 @@ import java.util.Base64;
  */
 @Slf4j
 public class BitSecureExpressionRoot extends AbstractMethodSecureExpressionRoot {
-    protected BitSecure bitSecure;
     protected String permissionCode;
     @Getter
     @Setter
@@ -29,11 +27,13 @@ public class BitSecureExpressionRoot extends AbstractMethodSecureExpressionRoot 
 
     protected Object thisObject;
 
-    public BitSecureExpressionRoot(Authentication authentication, BitSecure bitSecure, Object thisObject) {
+    protected UserService userService;
+
+    public BitSecureExpressionRoot(Authentication authentication, String permissionCode, Object thisObject, UserService userService) {
         super(authentication);
-        this.bitSecure = bitSecure;
-        this.permissionCode = bitSecure.value();
+        this.permissionCode = permissionCode;
         this.thisObject = thisObject;
+        this.userService = userService;
     }
 
 
@@ -44,13 +44,10 @@ public class BitSecureExpressionRoot extends AbstractMethodSecureExpressionRoot 
 
     /**
      * 检测token中的bytearray是否存在指定的权限
-     *
-     * @return
      */
     public boolean hasPermissionByBit() {
         JwtUserAdapter loginUser = (JwtUserAdapter) authentication.getPrincipal();
-        String base64Permission = loginUser.getJwtUser().getP();
-        byte[] permissionByteArray = Base64.getDecoder().decode(base64Permission);
-        return Permissions.checkPermission(permissionCode, permissionByteArray);
+        JwtUser jwtUser = loginUser.getJwtUser();
+        return userService.bitCheck(jwtUser.getPm(), permissionCode, jwtUser.getP());
     }
 }

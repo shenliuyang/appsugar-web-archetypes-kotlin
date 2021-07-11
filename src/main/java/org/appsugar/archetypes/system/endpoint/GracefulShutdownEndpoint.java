@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.endpoint;
+package org.appsugar.archetypes.system.endpoint;
 
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;

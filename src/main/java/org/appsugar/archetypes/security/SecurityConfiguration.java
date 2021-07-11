@@ -1,5 +1,7 @@
 package org.appsugar.archetypes.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.appsugar.archetypes.domain.dto.Response;
 import org.appsugar.archetypes.security.jwt.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * @author shenliuyang
  * @version 1.0.0
@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private ObjectMapper om;
+
     @Autowired
     private JwtTokenFilter jwtTokenFilter;
 
@@ -37,16 +40,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and();
-
+        byte[] unAuthenticationMsg = om.writeValueAsBytes(Response.UN_AUTHENTICATION);
         // Set unauthorized requests exception handler
         http = http
                 .exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {
-                            response.sendError(
-                                    HttpServletResponse.SC_UNAUTHORIZED,
-                                    ex.getMessage()
-                            );
+                            response.getOutputStream().write(unAuthenticationMsg);
                         }
                 )
                 .and();

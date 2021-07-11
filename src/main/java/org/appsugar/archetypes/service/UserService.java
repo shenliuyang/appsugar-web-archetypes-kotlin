@@ -3,9 +3,12 @@ package org.appsugar.archetypes.service;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.appsugar.archetypes.security.AuthorizationExceptions;
 import org.appsugar.archetypes.security.LoginUser;
+import org.appsugar.archetypes.system.Permissions;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -38,10 +41,23 @@ public class UserService {
     public boolean check(String token, String permissionCode) {
         LoginUser loginUser = cache.getIfPresent(token);
         if (loginUser == null) {
-            return false;
+            //用户缓存信息不存在,需要二次授权
+            throw AuthorizationExceptions.RE_AUTHORIZATION_EXCEPTION;
         }
         log.debug("检测用户{} 是否存在权限{}", loginUser.getUserId(), permissionCode);
         return loginUser.getPermissions().contains(permissionCode);
     }
+
+    /**
+     * 查看用户是否用相应权限
+     */
+    public boolean bitCheck(int permissionModifyCount, String permissionCode, String base64PermissionByteArray) {
+        if (permissionModifyCount != Permissions.modifyCount) {
+            throw AuthorizationExceptions.AUTHORIZATION_EXPIRED_EXCEPTION;
+        }
+        byte[] permissionByteArray = Base64.getDecoder().decode(base64PermissionByteArray);
+        return Permissions.checkPermission(permissionCode, permissionByteArray);
+    }
+
 
 }

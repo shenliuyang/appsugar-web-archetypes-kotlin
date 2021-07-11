@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.permission;
+package org.appsugar.archetypes.system;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

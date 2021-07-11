@@ -29,5 +29,11 @@ public class UserController implements UserFacade {
         return list();
     }
 
+    @TwiceSecure("user:delete")
+    @Override
+    public void delete(Long id) {
+        userRepository.deleteById(id);
+    }
+
 
 }

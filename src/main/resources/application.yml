@@ -39,6 +39,7 @@ logging:
     name: ./build/logs/app.log
   level:
     org.appsugar: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation: ERROR
     ROOT: WARN
 server:
   port: 80

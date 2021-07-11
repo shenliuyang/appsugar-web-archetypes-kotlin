@@ -33,9 +33,9 @@ public class MethodAuthConfig extends GlobalMethodSecurityConfiguration {
                 BitSecure bitSecure = invocation.getMethod().getAnnotation(BitSecure.class);
                 TwiceSecure twiceSecure = invocation.getMethod().getAnnotation(TwiceSecure.class);
                 if (bitSecure != null) {
-                    root = new BitSecureExpressionRoot(authentication, bitSecure, invocation.getThis());
+                    root = new BitSecureExpressionRoot(authentication, bitSecure.value(), invocation.getThis(), userService);
                 } else if (twiceSecure != null) {
-                    root = new TwicePermissionSecureExpressionRoot(authentication, twiceSecure, invocation.getThis(), userService);
+                    root = new TwicePermissionSecureExpressionRoot(authentication, twiceSecure.value(), invocation.getThis(), userService);
                 } else {
                     return super.createSecurityExpressionRoot(authentication, invocation);
                 }
