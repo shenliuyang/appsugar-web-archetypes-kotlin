@@ -1,10 +1,11 @@
-package org.appsugar.archetypes.security;
+package org.appsugar.archetypes.security.jwt;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -43,7 +44,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        LoginUser user = jwtTokenUtil.getLoginUserFromToken(token);
+        UserDetails user = jwtTokenUtil.getLoginUserFromToken(token);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);

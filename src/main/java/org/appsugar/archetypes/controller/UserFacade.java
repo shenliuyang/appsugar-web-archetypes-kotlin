@@ -14,9 +14,14 @@ public interface UserFacade {
     String BASE_URL = "/user";
     String LIST_URL = BASE_URL + "/list";
 
+    String PRETTY_LIST_URL = BASE_URL + "/pretty_list";
+
     /**
      * 查询所有用户
      */
     @GetMapping(LIST_URL)
     List<User> list();
+
+    @GetMapping(PRETTY_LIST_URL)
+    List<User> prettyList();
 }

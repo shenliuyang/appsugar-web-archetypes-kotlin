@@ -1,5 +1,6 @@
 package org.appsugar.archetypes.security;
 
+import org.appsugar.archetypes.security.jwt.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -72,5 +73,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-   
+
 }

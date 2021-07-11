@@ -1,7 +1,8 @@
-package org.appsugar.archetypes.security;
+package org.appsugar.archetypes.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,14 +21,15 @@ public class JwtTokenUtil {
                 .setSigningKey(secret).isSigned(token);
     }
 
-    public LoginUser getLoginUserFromToken(String token) {
-        return LoginUser.fromMap(Jwts.parser()
+    public UserDetails getLoginUserFromToken(String token) {
+        JwtUser jwtUser = JwtUser.toJwtUser(Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody());
+        return new JwtUserAdapter(jwtUser);
     }
 
-    public String generateAccessToken(LoginUser user) {
+    public String generateAccessToken(JwtUser user) {
         String token = Jwts.builder()
                 .setClaims(user.toMap())
                 .signWith(SignatureAlgorithm.HS512, secret).compact();

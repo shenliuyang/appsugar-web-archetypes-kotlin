@@ -8,20 +8,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 位授权方式,检测客户端传上来的byte数组对应到权限表中. 是否存在该权限 (应为是客户端传上来,jwt 秘钥有可能被盗,所以危险操作需要二次授权)
+ * 二次授权,在服务端检查用户是否存在相应的权限
  *
  * @author shenliuyang
  * @version 1.0.0
  * @package org.appsugar.archetypes.security
- * @className BitSecure
- * @date 2021-07-08  14:02
+ * @className TwicePermissionCheck
+ * @date 2021-07-11  17:50
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasPermissionByBit()")
-public @interface BitSecure {
-    /**
-     * 权限
-     */
-    String value();
+@PreAuthorize("hasPermissionByServer()")
+public @interface TwiceSecure {
+    public String value();
 }

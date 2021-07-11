@@ -3,11 +3,9 @@ package org.appsugar.archetypes.security;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.appsugar.archetypes.permission.Permissions;
 import org.appsugar.archetypes.security.jwt.JwtUserAdapter;
+import org.appsugar.archetypes.service.UserService;
 import org.springframework.security.core.Authentication;
-
-import java.util.Base64;
 
 /**
  * @author shenliuyang
@@ -17,8 +15,8 @@ import java.util.Base64;
  * @date 2021-07-08  14:04
  */
 @Slf4j
-public class BitSecureExpressionRoot extends AbstractMethodSecureExpressionRoot {
-    protected BitSecure bitSecure;
+public class TwicePermissionSecureExpressionRoot extends AbstractMethodSecureExpressionRoot {
+    protected TwiceSecure bitSecure;
     protected String permissionCode;
     @Getter
     @Setter
@@ -29,13 +27,20 @@ public class BitSecureExpressionRoot extends AbstractMethodSecureExpressionRoot 
 
     protected Object thisObject;
 
-    public BitSecureExpressionRoot(Authentication authentication, BitSecure bitSecure, Object thisObject) {
+    protected UserService userService;
+
+    public TwicePermissionSecureExpressionRoot(Authentication authentication, TwiceSecure twicePermissionCheck, Object thisObject, UserService userService) {
         super(authentication);
-        this.bitSecure = bitSecure;
-        this.permissionCode = bitSecure.value();
+        this.bitSecure = twicePermissionCheck;
+        this.permissionCode = twicePermissionCheck.value();
         this.thisObject = thisObject;
+        this.userService = userService;
     }
 
+
+    public void setThis(Object thisObject) {
+        this.thisObject = thisObject;
+    }
 
     @Override
     public Object getThis() {
@@ -43,14 +48,10 @@ public class BitSecureExpressionRoot extends AbstractMethodSecureExpressionRoot 
     }
 
     /**
-     * 检测token中的bytearray是否存在指定的权限
-     *
-     * @return
+     * 检测当前用户在服务端是否存在对应权限
      */
-    public boolean hasPermissionByBit() {
+    public boolean hasPermissionByServer() {
         JwtUserAdapter loginUser = (JwtUserAdapter) authentication.getPrincipal();
-        String base64Permission = loginUser.getJwtUser().getP();
-        byte[] permissionByteArray = Base64.getDecoder().decode(base64Permission);
-        return Permissions.checkPermission(permissionCode, permissionByteArray);
+        return userService.check(loginUser.getJwtUser().getTk(), this.permissionCode);
     }
 }

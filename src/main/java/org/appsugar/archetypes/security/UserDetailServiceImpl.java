@@ -66,7 +66,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         for (String s : user.getPermissions().split(split)) {
             permissions.add(s);
         }
-        return new LoginUser(user.getId(), loginName, pwd, Permissions.permissionsToByteArray(permissions), Permissions.modifyCount);
+        return new LoginUser(user.getId(), loginName, pwd, permissions, Permissions.modifyCount, System.currentTimeMillis());
     }
 
     @PostConstruct
