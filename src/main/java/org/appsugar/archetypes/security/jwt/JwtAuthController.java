@@ -5,7 +5,6 @@ import org.appsugar.archetypes.domain.User;
 import org.appsugar.archetypes.domain.dto.Response;
 import org.appsugar.archetypes.security.LoginUser;
 import org.appsugar.archetypes.service.UserService;
-import org.appsugar.archetypes.system.Permissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Base64;
 
 /**
  * @author shenliuyang
@@ -56,11 +53,6 @@ public class JwtAuthController {
 
     private JwtUser fromLoginUser(LoginUser loginUser) {
         String token = userService.generateUserToken(loginUser);
-        JwtUser jwtUser = new JwtUser();
-        jwtUser.setI(loginUser.getUserId());
-        jwtUser.setP(Base64.getEncoder().encodeToString(Permissions.permissionsToByteArray(loginUser.getPermissions())));
-        jwtUser.setPm(loginUser.getPermissionModifyCount());
-        jwtUser.setTk(token);
-        return jwtUser;
+        return JwtUser.fromLoginUser(loginUser, token);
     }
 }

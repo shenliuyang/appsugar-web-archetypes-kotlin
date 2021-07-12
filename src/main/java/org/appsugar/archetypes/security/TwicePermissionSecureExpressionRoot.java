@@ -1,7 +1,6 @@
 package org.appsugar.archetypes.security;
 
 import lombok.extern.slf4j.Slf4j;
-import org.appsugar.archetypes.security.jwt.JwtUserAdapter;
 import org.appsugar.archetypes.service.UserService;
 import org.springframework.security.core.Authentication;
 
@@ -27,7 +26,7 @@ public class TwicePermissionSecureExpressionRoot extends BitSecureExpressionRoot
      * 先检测token中是否拥有对应权限
      */
     public boolean hasPermissionByServer() {
-        JwtUserAdapter loginUser = (JwtUserAdapter) authentication.getPrincipal();
-        return super.hasPermissionByBit() ? userService.check(loginUser.getJwtUser().getTk(), this.permissionCode) : false;
+        UserInfo loginUser = (UserInfo) authentication.getPrincipal();
+        return super.hasPermissionByBit() ? userService.check(loginUser.token(), this.permissionCode) : false;
     }
 }

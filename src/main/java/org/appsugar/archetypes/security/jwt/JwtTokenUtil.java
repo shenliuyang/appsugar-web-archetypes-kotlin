@@ -5,7 +5,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,7 +26,7 @@ public class JwtTokenUtil {
                 .setSigningKey(secret).isSigned(token);
     }
 
-    public UserDetails getLoginUserFromToken(String token) {
+    public JwtUserAdapter getLoginUserFromToken(String token) {
         JwtUser jwtUser = JwtUser.fromMap(Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)

@@ -8,7 +8,6 @@ import org.appsugar.archetypes.security.LoginUser;
 import org.appsugar.archetypes.system.Permissions;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -51,11 +50,10 @@ public class UserService {
     /**
      * 查看用户是否用相应权限
      */
-    public boolean bitCheck(int permissionModifyCount, String permissionCode, String base64PermissionByteArray) {
+    public boolean bitCheck(int permissionModifyCount, String permissionCode, byte[] permissionByteArray) {
         if (permissionModifyCount != Permissions.modifyCount) {
             throw AuthorizationExceptions.AUTHORIZATION_EXPIRED_EXCEPTION;
         }
-        byte[] permissionByteArray = Base64.getDecoder().decode(base64PermissionByteArray);
         return Permissions.checkPermission(permissionCode, permissionByteArray);
     }
 

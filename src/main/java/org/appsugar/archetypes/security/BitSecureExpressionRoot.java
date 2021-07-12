@@ -3,8 +3,6 @@ package org.appsugar.archetypes.security;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.appsugar.archetypes.security.jwt.JwtUser;
-import org.appsugar.archetypes.security.jwt.JwtUserAdapter;
 import org.appsugar.archetypes.service.UserService;
 import org.springframework.security.core.Authentication;
 
@@ -46,8 +44,7 @@ public class BitSecureExpressionRoot extends AbstractMethodSecureExpressionRoot 
      * 检测token中的bytearray是否存在指定的权限
      */
     public boolean hasPermissionByBit() {
-        JwtUserAdapter loginUser = (JwtUserAdapter) authentication.getPrincipal();
-        JwtUser jwtUser = loginUser.getJwtUser();
-        return userService.bitCheck(jwtUser.getPm(), permissionCode, jwtUser.getP());
+        UserInfo u = (UserInfo) authentication.getPrincipal();
+        return userService.bitCheck(u.permissionModifyCount(), permissionCode, u.permissionByteArray());
     }
 }

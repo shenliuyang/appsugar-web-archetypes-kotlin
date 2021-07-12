@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.appsugar.archetypes.security.LoginUser;
+import org.appsugar.archetypes.system.Permissions;
 
+import java.util.Base64;
 import java.util.Map;
 
 /**
@@ -22,13 +25,15 @@ import java.util.Map;
 public class JwtUser {
     private static ObjectMapper om = new ObjectMapper();
     //用户id
-    private Long i;
+    private long i;
     //用户权限
     private String p;
     //用户权限状态号
     private int pm;
     //后端用户映射token值
     private String tk;
+    //创建时间
+    private long ct;
 
 
     public Map<String, Object> toMap() {
@@ -38,4 +43,19 @@ public class JwtUser {
     public static JwtUser fromMap(Map<String, Object> map) {
         return om.convertValue(map, JwtUser.class);
     }
+
+    public static JwtUser fromLoginUser(LoginUser loginUser, String token) {
+        JwtUser jwtUser = new JwtUser();
+        jwtUser.setI(loginUser.getUserId());
+        jwtUser.setP(Base64.getEncoder().encodeToString(Permissions.permissionsToByteArray(loginUser.getPermissions())));
+        jwtUser.setPm(loginUser.getPermissionModifyCount());
+        jwtUser.setTk(token);
+        jwtUser.setCt(loginUser.getLoginAt());
+        return jwtUser;
+    }
+
+    public byte[] getPermissionByteArray() {
+        return Base64.getDecoder().decode(p);
+    }
+
 }

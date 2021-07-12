@@ -20,7 +20,7 @@ import org.springframework.security.core.Authentication;
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, proxyTargetClass = true)
-public class MethodAuthConfig extends GlobalMethodSecurityConfiguration {
+public class MethodAuthorizationConfig extends GlobalMethodSecurityConfiguration {
     @Autowired
     private UserService userService;
 
