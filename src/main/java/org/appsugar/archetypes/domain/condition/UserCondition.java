@@ -1,4 +1,4 @@
-package org.appsugar.archetypes.domain;
+package org.appsugar.archetypes.domain.condition;
 
 import lombok.Data;
 

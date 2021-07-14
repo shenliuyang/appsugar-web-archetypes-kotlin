@@ -13,7 +13,7 @@
     </appender>
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="FILE"/>
-        <queueSize>65535</queueSize>
+        <queueSize>65536</queueSize>
         <neverBlock>true</neverBlock>
     </appender>
 

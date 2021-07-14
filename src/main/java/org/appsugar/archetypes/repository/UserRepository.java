@@ -8,7 +8,7 @@ import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.appsugar.archetypes.domain.QUser;
 import org.appsugar.archetypes.domain.User;
-import org.appsugar.archetypes.domain.UserCondition;
+import org.appsugar.archetypes.domain.condition.UserCondition;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

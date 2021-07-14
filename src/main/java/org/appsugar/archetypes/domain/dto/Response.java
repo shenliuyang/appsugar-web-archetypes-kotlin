@@ -16,10 +16,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Response<T> {
-    public static final Response<Void> UN_AUTHENTICATION = new Response<>(null, -200, "请先登录");
-    public static final Response<Void> RE_AUTHENTICATION = new Response<>(null, -201, "授权信息已过期,请重新授权");
-    public static final Response<Void> RE_AUTHORIZATION = new Response<>(null, -202, "需要您二次授权认证");
-    public static final Response<Void> UN_AUTHORIZATION = new Response<>(null, -203, "您的权限不足");
+    public static final int UN_AUTHENTICATION_CODE = -200;
+    public static final int RE_AUTHENTICATION_CODE = -201;
+    public static final int RE_AUTHORIZATION_CODE = -202;
+    public static final int UN_AUTHORIZATION_CODE = -203;
+
+    public static final Response<Void> UN_AUTHENTICATION = new Response<>(null, UN_AUTHENTICATION_CODE, "请先登录");
+    public static final Response<Void> RE_AUTHENTICATION = new Response<>(null, RE_AUTHENTICATION_CODE, "授权信息已过期,请重新授权");
+    public static final Response<Void> RE_AUTHORIZATION = new Response<>(null, RE_AUTHORIZATION_CODE, "需要您二次授权认证");
+    public static final Response<Void> UN_AUTHORIZATION = new Response<>(null, UN_AUTHORIZATION_CODE, "您的权限不足");
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Object result = null;

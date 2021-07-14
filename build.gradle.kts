@@ -27,6 +27,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.cosium.spring.data:spring-data-jpa-entity-graph:$entityGraphVersion")
     implementation("com.querydsl:querydsl-jpa")
     implementation("com.h2database:h2")
@@ -34,7 +35,10 @@ dependencies {
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.jolokia:jolokia-core")
     implementation("org.apache.commons:commons-lang3")
+    implementation("com.lmax:disruptor:3.4.4")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("net.logstash.logback:logstash-logback-encoder:6.6")
+
 
     compileOnly("org.projectlombok:lombok")
 

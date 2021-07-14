@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty name="fileName" scope="context" source="logging.file.name" defaultValue="./build/logs/app.log"/>
+
+    <appender name="ASYNC" class="net.logstash.logback.appender.LoggingEventAsyncDisruptorAppender">
+        <waitStrategyType>blocking</waitStrategyType>
+        <ringBufferSize>65536</ringBufferSize>
+        <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${fileName}</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${fileName}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        </appender>
+    </appender>
+
+    <root level="WARN">
+        <appender-ref ref="ASYNC"/>
+    </root>
+</configuration>
