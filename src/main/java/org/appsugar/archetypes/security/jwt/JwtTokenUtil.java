@@ -26,12 +26,12 @@ public class JwtTokenUtil {
                 .setSigningKey(secret).isSigned(token);
     }
 
-    public JwtUserAdapter getLoginUserFromToken(String token) {
+    public JwtUser getLoginUserFromToken(String token) {
         JwtUser jwtUser = JwtUser.fromMap(Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody());
-        return new JwtUserAdapter(jwtUser);
+        return jwtUser;
     }
 
     public String generateAccessToken(JwtUser user) {

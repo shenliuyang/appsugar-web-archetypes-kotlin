@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.appsugar.archetypes.security.LoginUser;
+import org.appsugar.archetypes.security.UserInfo;
 import org.appsugar.archetypes.system.Permissions;
 
 import java.util.Base64;
@@ -22,7 +23,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtUser {
+public class JwtUser implements UserInfo {
     private static ObjectMapper om = new ObjectMapper();
     //用户id
     private long i;
@@ -58,4 +59,28 @@ public class JwtUser {
         return Base64.getDecoder().decode(p);
     }
 
+    @Override
+    public long id() {
+        return i;
+    }
+
+    @Override
+    public byte[] permissionByteArray() {
+        return getPermissionByteArray();
+    }
+
+    @Override
+    public int permissionModifyCount() {
+        return pm;
+    }
+
+    @Override
+    public String token() {
+        return tk;
+    }
+
+    @Override
+    public long createAt() {
+        return ct;
+    }
 }

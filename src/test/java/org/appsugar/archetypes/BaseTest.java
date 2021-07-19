@@ -10,4 +10,5 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ActiveProfiles("test")
 public abstract class BaseTest {
     protected Logger logger = LoggerFactory.getLogger(getClass());
+    
 }
