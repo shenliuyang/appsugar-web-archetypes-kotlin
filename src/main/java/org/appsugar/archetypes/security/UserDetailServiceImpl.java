@@ -62,7 +62,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         String loginName = username;
         String pwd = encoder.encode(user.getPassword());
         String split = User.PERMISSION_SPLIT_CHAR;
-        Set<String> permissions = user.getRole().stream().flatMap(e -> Arrays.stream(e.getPermissions().split(","))).collect(Collectors.toSet());
+        Set<String> permissions = user.getRoles().stream().flatMap(e -> Arrays.stream(e.getPermissions().split(","))).collect(Collectors.toSet());
         for (String s : user.getPermissions().split(split)) {
             permissions.add(s);
         }

@@ -24,7 +24,7 @@ public interface UserRepository extends BaseJpaRepository<User, Long> {
     //@EntityGraph(attributePaths = "role")
     User findOneByName(String name);
 
-    @EntityGraph(attributePaths = User.Fields.role)
+    @EntityGraph(attributePaths = User.Fields.roles)
     User findOneByLoginName(String loginName);
 
     @Modifying

@@ -1,7 +1,7 @@
 package org.appsugar.archetypes.controller;
 
+import com.cosium.spring.data.jpa.entity.graph.domain.EntityGraphUtils;
 import org.appsugar.archetypes.domain.User;
-import org.appsugar.archetypes.domain.UserEntityGraph;
 import org.appsugar.archetypes.repository.UserRepository;
 import org.appsugar.archetypes.security.BitSecure;
 import org.appsugar.archetypes.security.TwiceSecure;
@@ -20,7 +20,7 @@ public class UserController implements UserFacade {
     @BitSecure("user:list")
     @Override
     public List<User> list() {
-        return (List<User>) userRepository.findAll(UserEntityGraph.____().role().____.____());
+        return (List<User>) userRepository.findAll(EntityGraphUtils.fromAttributePaths(User.Fields.roles));
     }
 
     @TwiceSecure("user:list")

@@ -33,5 +33,5 @@ public class User implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = User.USER_ROLE_TABLE_NAME, joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     @ToString.Exclude
-    private List<Role> role;
+    private List<Role> roles;
 }

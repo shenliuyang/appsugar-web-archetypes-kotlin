@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import lombok.var;
 import org.appsugar.archetypes.domain.User;
-import org.appsugar.archetypes.domain.UserEntityGraph;
 import org.appsugar.archetypes.domain.condition.UserCondition;
 import org.appsugar.archetypes.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -46,7 +45,7 @@ public class UserRepositoryTest extends BaseJpaRepositoryTest {
     @Test
     public void testFindAndDynamicFetch() {
         UserCondition c = new UserCondition();
-        val result = userRepository.findAll(userRepository.toPredicate(c), UserEntityGraph.____().role().____.____());
+        val result = userRepository.findAll(userRepository.toPredicate(c), userRepository.fromPaths(User.Fields.roles));
         logger.debug("testFindAndDynamicFetch user is {}", result);
     }
 

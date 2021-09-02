@@ -39,6 +39,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("net.logstash.logback:logstash-logback-encoder:6.6")
 
+    implementation("io.netty:netty-all")
 
     compileOnly("org.projectlombok:lombok")
 
@@ -47,8 +48,7 @@ dependencies {
     annotationProcessor("com.querydsl:querydsl-apt:4.4.0:jpa")
     annotationProcessor("javax.annotation:javax.annotation-api")
     annotationProcessor("javax.persistence:javax.persistence-api")
-    annotationProcessor("org.hibernate:hibernate-jpamodelgen")
-    annotationProcessor("com.cosium.spring.data:spring-data-jpa-entity-graph-generator:$entityGraphVersion")
+
 
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
