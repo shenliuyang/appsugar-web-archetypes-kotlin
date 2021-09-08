@@ -33,24 +33,29 @@ export default {
 			},
 		});
 	  },
-	  xxx(){
-	    console.log("do nothing")
-	    this.tableData = [{}]
-	  },
   },
   mounted() {
     this.pageChange()
   },
   template: `
-    <el-table :data="tableData" style="width: 100%">
-	  <el-table-column prop="id" label="编号" width="180"> </el-table-column>
-	  <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
-	  <el-table-column prop="loginName" label="登录账号" width="180"> </el-table-column>
-	  <el-table-column prop="password" label="密码"> </el-table-column>
-	</el-table>
+    <table>
+        <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>登录账号</th>
+            <th>密码</th>
+        </tr>
+        <tr v-for="item in tableData">
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.loginName}}</td>
+            <td>{{item.password}}</td>
+        </tr>
+    </table>
+
 	<el-pagination background layout="prev, pager, next, sizes" :total="page.total" 
 		v-model:pageSize="page.pageSize" v-model:currentPage="page.currentPage"  
-		@size-change="xxx" @current-change="pageChange">
+		@size-change="pageChange" @current-change="pageChange">
 	</el-pagination>
 	 <el-button type="primary" @click="pageChange">刷新</el-button>
   `,
