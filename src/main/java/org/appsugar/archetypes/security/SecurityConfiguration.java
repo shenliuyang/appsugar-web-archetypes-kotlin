@@ -3,6 +3,7 @@ package org.appsugar.archetypes.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.appsugar.archetypes.domain.dto.Response;
 import org.appsugar.archetypes.security.jwt.JwtTokenFilter;
+import org.appsugar.archetypes.system.advice.SystemControllerAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,12 +47,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {
+                            SystemControllerAdvice.setErrorResponseHeader(response);
                             response.getOutputStream().write(unAuthenticationMsg);
                         }
                 )
                 .and();
         http.authorizeRequests()
-                .antMatchers("/api/public/**").permitAll()
+                .antMatchers("/*.html", "/*.js", "/components/**", "/directives/**", "/layout/**"
+                        , "/utils/**", "/api/public/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic(Customizer.withDefaults());

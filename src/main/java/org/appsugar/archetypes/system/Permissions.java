@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author shenliuyang
@@ -85,6 +86,17 @@ public enum Permissions {
             }
         }
         return permissions;
+    }
+
+    public static List<String> decodeStringPermission(String permissions) {
+        if (StringUtils.isBlank(permissions)) {
+            return new ArrayList<>();
+        }
+        return Arrays.stream(permissions.split(",")).collect(Collectors.toList());
+    }
+
+    public static String encodeToStringPermission(Collection<String> permissions) {
+        return permissions.stream().collect(Collectors.joining(","));
     }
 
     private String groupName;

@@ -55,7 +55,7 @@ public class JwtUser implements UserInfo {
         return jwtUser;
     }
 
-    public byte[] getPermissionByteArray() {
+    private byte[] getPermissionByteArray() {
         return Base64.getDecoder().decode(p);
     }
 

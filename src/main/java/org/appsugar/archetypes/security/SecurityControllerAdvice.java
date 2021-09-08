@@ -2,13 +2,15 @@ package org.appsugar.archetypes.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.appsugar.archetypes.domain.dto.Response;
+import org.appsugar.archetypes.system.advice.SystemControllerAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,13 +22,10 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2021-07-11  21:21
  */
 @ControllerAdvice
+@Slf4j
 public class SecurityControllerAdvice {
     @Autowired
     private ObjectMapper objectMapper;
-
-    private byte[] unAuthorizationMsg;
-    private byte[] reAuthorizationMsg;
-    private byte[] reAuthenticationMsg;
 
 
     /**
@@ -34,8 +33,10 @@ public class SecurityControllerAdvice {
      */
     @SneakyThrows
     @ExceptionHandler(AccessDeniedException.class)
-    public void processAccessDenied(HttpServletRequest req, HttpServletResponse res) {
-        res.getOutputStream().write(unAuthorizationMsg);
+    @ResponseBody
+    public Response processAccessDenied(HttpServletRequest req, HttpServletResponse res) {
+        SystemControllerAdvice.setErrorResponseHeader(res);
+        return Response.UN_AUTHORIZATION;
     }
 
     /**
@@ -43,8 +44,10 @@ public class SecurityControllerAdvice {
      */
     @SneakyThrows
     @ExceptionHandler(AuthorizationExceptions.ReAuthorizationException.class)
-    public void processReAuthorizationException(HttpServletRequest req, HttpServletResponse res) {
-        res.getOutputStream().write(reAuthorizationMsg);
+    @ResponseBody
+    public Response processReAuthorizationException(HttpServletRequest req, HttpServletResponse res) {
+        SystemControllerAdvice.setErrorResponseHeader(res);
+        return Response.RE_AUTHORIZATION;
     }
 
     /**
@@ -52,16 +55,9 @@ public class SecurityControllerAdvice {
      */
     @SneakyThrows
     @ExceptionHandler(AuthorizationExceptions.AuthorizationExpiredException.class)
-    public void processReAuthenticationException(HttpServletRequest req, HttpServletResponse res) {
-        res.getOutputStream().write(reAuthenticationMsg);
-    }
-
-
-    @PostConstruct
-    @SneakyThrows
-    public void postConstruct() {
-        unAuthorizationMsg = objectMapper.writeValueAsBytes(Response.UN_AUTHORIZATION);
-        reAuthorizationMsg = objectMapper.writeValueAsBytes(Response.RE_AUTHORIZATION);
-        reAuthenticationMsg = objectMapper.writeValueAsBytes(Response.RE_AUTHENTICATION);
+    @ResponseBody
+    public Response processReAuthenticationException(HttpServletRequest req, HttpServletResponse res) {
+        SystemControllerAdvice.setErrorResponseHeader(res);
+        return Response.RE_AUTHENTICATION;
     }
 }

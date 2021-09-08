@@ -72,7 +72,7 @@ tasks.withType(JavaCompile::class) { options.encoding = "UTF-8" }
 tasks {
     bootRun {
         sourceResources(sourceSets["main"])
-        systemProperty("spring.datasource.hikari.jdbcUrl","jdbc:h2:./build/appsugar-integration-test")
+        systemProperty("spring.datasource.hikari.jdbcUrl","jdbc:h2:~/tmp/appsugar-integration-test")
         systemProperty("logging.config", "classpath:logback-console.xml")
         systemProperty("logging.level.ROOT", "INFO")
     }

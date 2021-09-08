@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author shenliuyang
@@ -22,13 +23,20 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 @Slf4j
 public class SystemControllerAdvice {
+    private static final String ERROR_KEY = "error";
+    private static final String ERROR_VALUE = "1";
+
+    public final static void setErrorResponseHeader(HttpServletResponse res) {
+        res.addHeader(ERROR_KEY, ERROR_VALUE);
+    }
 
     /**
      * 参数验证异常直接通知客户端
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public Response<Void> argumentValidHandler(MethodArgumentNotValidException ex) {
+    public Response argumentValidHandler(MethodArgumentNotValidException ex, HttpServletResponse res) {
+        SystemControllerAdvice.setErrorResponseHeader(res);
         BindingResult br = ex.getBindingResult();
         StringBuilder sb = new StringBuilder();
         for (FieldError error : br.getFieldErrors()) {
@@ -43,8 +51,19 @@ public class SystemControllerAdvice {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public Response<Void> exceptionHandler(HttpServletRequest req, Exception exception) {
+    public Response exceptionHandler(HttpServletRequest req, Exception exception, HttpServletResponse res) {
+        SystemControllerAdvice.setErrorResponseHeader(res);
         log.error("process request cause exception uri {} ", req.getRequestURI(), exception);
+        return Response.error(ExceptionUtils.getRootCauseMessage(exception));
+    }
+
+    /**
+     * 业务异常
+     */
+    @ExceptionHandler(BusinessException.class)
+    @ResponseBody
+    public Response busExceptionHandler(HttpServletRequest req, BusinessException exception, HttpServletResponse res) {
+        SystemControllerAdvice.setErrorResponseHeader(res);
         return Response.error(ExceptionUtils.getRootCauseMessage(exception));
     }
 }

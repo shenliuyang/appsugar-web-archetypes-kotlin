@@ -5,4 +5,4 @@ spring:
       ddl-auto: create
   datasource:
     hikari:
-      jdbc-url: jdbc:h2:./build/appsugar-integration-test
+      jdbc-url: jdbc:h2:~/tmp/appsugar-integration-test
