@@ -10,6 +10,6 @@ export default {
     };
   },
   template: `
-	  <Layout></Layout> 
+	   <router-view></router-view>
   `,
 };

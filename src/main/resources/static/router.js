@@ -1,11 +1,14 @@
-const Home = { template: '<div>Home</div>' }
-const About = { template: '<div>About</div>' }
+const appRoute = {
+    path: "/",component:()=> import('./layout/layout.js'),
+    children:[
+        { path: '', component: { template: '<div>Home</div>' } },
+        { path: 'user',component:()=> import('./components/user/user_list.js')},
+    ]
+}
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/about', component: About },
-  { path: '/user',component:()=> import('./components/user/user_list.js')},
-  { path: '/login',component:()=> import('./components/login.js')}
+  appRoute,
+  { path: '/login',component:()=> import('./components/login.js')},
 ]
 export default{
 	name:"Router",

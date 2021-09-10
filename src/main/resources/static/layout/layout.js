@@ -14,7 +14,7 @@ export default {
     };
   },
   template: `
-    <el-container style="height: 700px; border: 1px solid #eee;">
+    <el-container style="height: 730px; border: 1px solid #eee;">
 		<Menu></Menu>
 		<el-container class="is-vertical">
 			<Header></Header>

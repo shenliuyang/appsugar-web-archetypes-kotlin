@@ -14,7 +14,8 @@ app.directive("can",PermissionDirective)
 app.mixin({
 	methods:{hasChildPerm(v){return PermissionUtil.anyOfChildPermission(v)} }
 })
-Api.router = router
 app.use(router)
-app.use(Element3)
+app.use(ElementPlus)
+Api.router = router
+Api.vm = app
 app.mount('#app');
