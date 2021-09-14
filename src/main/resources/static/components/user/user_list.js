@@ -1,4 +1,4 @@
-import {postJson} from '../../api.js'
+import {postJson,pageUtil} from '../../api.js'
 export default {
   name: 'UserList',
   components: {
@@ -6,31 +6,19 @@ export default {
   },
   data() {
     return {
-       tableData: [
-
-        ],
+        data: pageUtil.initPage(),
         c:{
             name: "",
             loginName: ""
-        },
-		page:{
-			pageSize : 25,
-			total: 0,
-			currentPage : 1
-		}
+        }
     };
   },
   methods: {
 	  pageChange(){
 		postJson({
-			url:"user/list/"+(this.page.currentPage-1)+"/"+this.page.pageSize,
+			url: this.data.pageUrl("user/list"),
 			data: this.c,
-			success:data => {
-			    this.page.pageSize = data.pageable.pageSize
-			    this.page.currentPage = data.pageable.pageNumber + 1
-			    this.total = data.totalElements
-			    this.tableData = data.content
-			}
+			success:data => pageUtil.setPageData(this.data,data)
 		});
 	  },
   },
@@ -50,14 +38,14 @@ export default {
           </el-form-item>
         </el-form>
 
-     <el-table :data="tableData" style="width: 100%">
+     <el-table :data="data.content" style="width: 100%">
         <el-table-column prop="id" label="编号" width="180"> </el-table-column>
         <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
         <el-table-column prop="loginName" label="账号"> </el-table-column>
       </el-table>
 
-	<el-pagination background layout="prev, pager, next, sizes" :total="page.total" 
-		v-model:pageSize="page.pageSize" v-model:currentPage="page.currentPage"  
+	<el-pagination background layout="prev, pager, next, sizes" :total="data.totalElements"
+		v-model:pageSize="data.pageable.pageSize" v-model:currentPage="data.pageable.pageNumber"
 		@size-change="pageChange" @current-change="pageChange">
 	</el-pagination>
 

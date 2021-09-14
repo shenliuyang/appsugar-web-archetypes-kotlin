@@ -65,6 +65,30 @@ function handleException(res,vm){
     }
     return false;
 }
+//分页辅助
+export const pageUtil = {
+    initPage(){
+        return {
+            pageable:{
+                pageSize: 20,
+                pageNumber: 1
+            },
+            content: [],
+            totalElements: 0,
+            pageUrl(url){
+                return url+"/"+(this.pageable.pageNumber-1)+"/"+this.pageable.pageSize
+            }
+        };
+    },
+    setPageData(oldPage,newPage){
+        oldPage.content = newPage.content
+        oldPage.totalElements = newPage.totalElements
+        oldPage.pageable = newPage.pageable;
+        oldPage.pageable.pageNumber = oldPage.pageable.pageNumber + 1
+    }
+}
+
+
 const INSTANCE = {
     name:"Api"
 }
