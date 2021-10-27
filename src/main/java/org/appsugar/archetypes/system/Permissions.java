@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public enum Permissions {
     SUPER_ADMIN("超级管理员", new Permission("超能力", "*")),
     USER("用户权限", new Permission("查看列表", "user:list"));
-    //权限有改变是,modifyCount+1;
+    //权限有改变时,modifyCount+1;
     public static final int modifyCount = 1;
     public static final List<Permissions> permissionGroups = Arrays.asList(Permissions.values());
     public static final Map<String, Integer> permissionBit = new HashMap<>();

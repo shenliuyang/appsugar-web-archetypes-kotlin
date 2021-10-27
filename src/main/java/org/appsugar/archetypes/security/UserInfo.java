@@ -15,7 +15,7 @@ public interface UserInfo {
     byte[] permissionByteArray();
 
     int permissionModifyCount();
-
+    
     String token();
 
     long createAt();

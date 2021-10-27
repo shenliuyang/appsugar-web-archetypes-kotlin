@@ -16,10 +16,17 @@ public class LambdaTest {
 
     @Test
     public void testLambdaInstance() {
+        brige();
+        brige();
+    }
+
+    public void brige() {
+      
         receiveLambdaInstance(LambdaTest::getName, LambdaTest::getName);
     }
 
     public <T, R> void receiveLambdaInstance(SFunction<T, R> lambda, SFunction<T, R> b) {
+        log.debug("xxx class {} b class {}", lambda.hashCode(), b.hashCode());
         try {
             log.debug("method is {}", Arrays.asList(lambda.getClass().getDeclaredMethods()));
             Method m = lambda.getClass().getDeclaredMethod("writeReplace");
