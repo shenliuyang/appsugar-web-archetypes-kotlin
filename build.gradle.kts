@@ -39,10 +39,9 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("net.logstash.logback:logstash-logback-encoder:6.6")
 
-
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework:spring-context-indexer")
-    annotationProcessor("com.querydsl:querydsl-apt:4.4.0:jpa")
+    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jpa")
     annotationProcessor("javax.annotation:javax.annotation-api")
     annotationProcessor("javax.persistence:javax.persistence-api")
 

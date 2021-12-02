@@ -7,7 +7,6 @@ import org.appsugar.archetypes.domain.dto.Response;
 import org.appsugar.archetypes.system.advice.SystemControllerAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  * @className SecurityControllerAdvice
  * @date 2021-07-11  21:21
  */
-@ControllerAdvice
+//@ControllerAdvice
 @Slf4j
 public class SecurityControllerAdvice {
     @Autowired

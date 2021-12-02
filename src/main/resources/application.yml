@@ -20,7 +20,7 @@ spring:
       max-lifetime: 1800000
       idle-timeout: 60000
       minimum-idle: 0
-      maximum-pool-size: 2
+      maximum-pool-size: 17
       driver-class-name: org.h2.Driver
       jdbc-url: jdbc:h2:mem:appsugar
       username: sa
@@ -41,7 +41,12 @@ logging:
     org.appsugar: DEBUG
     org.springframework.web.servlet.mvc.method.annotation: ERROR
     ROOT: WARN
+
 server:
+  tomcat:
+    threads:
+      max: 17
+      min-spare: 1
   port: 80
   compression:
     enabled: true

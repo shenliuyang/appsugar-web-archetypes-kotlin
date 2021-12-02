@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -24,7 +23,7 @@ import java.io.IOException;
  * @className JwtTokenFilter
  * @date 2021-07-07  16:06
  */
-@Component
+//@Component
 public class JwtTokenFilter extends OncePerRequestFilter {
     public static final String startWith = "Bearer ";
     @Autowired

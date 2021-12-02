@@ -3,11 +3,9 @@ package org.appsugar.archetypes.security;
 import org.aopalliance.intercept.MethodInvocation;
 import org.appsugar.archetypes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.core.Authentication;
 
@@ -18,8 +16,8 @@ import org.springframework.security.core.Authentication;
  * @className MethodAuthConfig
  * @date 2021-07-08  14:00
  */
-@Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, proxyTargetClass = true)
+//@Configuration
+//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, proxyTargetClass = true)
 public class MethodAuthorizationConfig extends GlobalMethodSecurityConfiguration {
     @Autowired
     private UserService userService;

@@ -27,7 +27,7 @@ import javax.validation.Valid;
  * @className JwtAuthController
  * @date 2021-07-07  17:00
  */
-@RestController
+//@RestController
 @RequestMapping("api/public")
 @Slf4j
 public class JwtAuthController {

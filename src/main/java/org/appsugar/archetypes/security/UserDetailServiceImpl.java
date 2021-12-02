@@ -8,12 +8,10 @@ import org.appsugar.archetypes.domain.User;
 import org.appsugar.archetypes.repository.UserRepository;
 import org.appsugar.archetypes.system.Permissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -31,9 +29,9 @@ import java.util.stream.Collectors;
  * @className UserDetailServiceImpl
  * @date 2021-07-06  19:31
  */
-@Service
+//@Service
 @Slf4j
-@ConfigurationProperties("management.security")
+//@ConfigurationProperties("management.security")
 public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     UserRepository userRepository;

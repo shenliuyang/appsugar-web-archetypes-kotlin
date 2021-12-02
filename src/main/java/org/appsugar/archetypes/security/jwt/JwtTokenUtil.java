@@ -4,8 +4,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author shenliuyang
@@ -14,8 +12,8 @@ import org.springframework.stereotype.Component;
  * @className JwtUtil
  * @date 2021-07-07  16:09
  */
-@Component
-@ConfigurationProperties("spring.jwt.secret")
+//@Component
+//@ConfigurationProperties("spring.jwt.secret")
 public class JwtTokenUtil {
     @Getter
     @Setter
