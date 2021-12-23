@@ -1,5 +1,9 @@
 spring:
   application.name: archetypes
+  security:
+    user:
+      name: admin
+      password: 123456
   jpa:
     show-sql: false
     hibernate:
@@ -43,6 +47,8 @@ logging:
     ROOT: WARN
 
 server:
+  http2:
+    enabled: true
   tomcat:
     threads:
       max: 17
@@ -54,32 +60,32 @@ server:
 
 #开放所有exposure,在生产不允许暴露server.port以外的端口
 management:
-  security:
-    #在启动命令行里生成随机数来限制账号密码的改变
-    username: xxxx
-    password: xxxx
   endpoints.web:
     exposure.include: "*"
   #makesure do not exposed all port to the internet
   security.enabled: false
-  server.port: 0
+  server:
+    port: 0
+    address: localhost
   endpoint:
-    logfile:
-      external-file: ${logging.file.name}
     shutdown:
+      enabled: true
+    restart:
       enabled: true
     env:
       post:
         enabled: true
 #在微服务方式下, 使用被动发现.
+spring.boot.admin:
+  context-path: monitor
 spring.boot.admin.client:
   enabled: true
-  url: http://localhost:8081/
-  username: admin
-  password: admin
+  url: http://localhost:${server.port}/monitor
+  username: ${spring.security.user.name}
+  password: ${spring.security.user.password}
   instance:
     prefer-ip: true
     metadata:
       user:
-        name: ${management.security.username}
-        password: ${management.security.username}
+        name: ${spring.security.user.name}
+        password: ${spring.security.user.password}

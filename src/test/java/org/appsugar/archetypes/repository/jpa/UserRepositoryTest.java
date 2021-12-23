@@ -80,4 +80,14 @@ public class UserRepositoryTest extends BaseJpaRepositoryTest {
         Assertions.assertTrue(users != null);
         // log.debug("testFindByCondition  name is {}  result is {}", name, Lists.newLinkedList(users));
     }
+
+    @Test
+    public void testSave(){
+        User u = new User();
+        //u.setId(-1l);
+        u.setName("test");
+        u.setLoginName("test");
+        u.setPassword("test");
+        userRepository.save(u);
+    }
 }

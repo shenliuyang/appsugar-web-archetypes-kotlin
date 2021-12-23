@@ -1,19 +1,15 @@
 package org.appsugar.archetypes.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.appsugar.archetypes.domain.dto.Response;
-import org.appsugar.archetypes.security.jwt.JwtTokenFilter;
-import org.appsugar.archetypes.system.advice.SystemControllerAdvice;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
+import de.codecentric.boot.admin.server.config.AdminServerProperties;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+import java.util.UUID;
 
 /**
  * @author shenliuyang
@@ -22,57 +18,40 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @className SecurityConfiguration
  * @date 2021-07-06  20:01
  */
-//@EnableWebSecurity
+@Configuration(proxyBeanMethods = false)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private ObjectMapper om;
+    private final AdminServerProperties adminServer;
 
-    @Autowired
-    private JwtTokenFilter jwtTokenFilter;
+    private final SecurityProperties security;
+
+    public SecurityConfiguration(AdminServerProperties adminServer, SecurityProperties security) {
+        this.adminServer = adminServer;
+        this.security = security;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // Enable CORS and disable CSRF
-        http = http.cors().and().csrf().disable();
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        successHandler.setTargetUrlParameter("redirectTo");
+        successHandler.setDefaultTargetUrl(this.adminServer.path("/"));
 
-        // Set session management to stateless
-        http = http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
-        byte[] unAuthenticationMsg = om.writeValueAsBytes(Response.UN_AUTHENTICATION);
-        // Set unauthorized requests exception handler
-        http = http
-                .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> {
-                            SystemControllerAdvice.setErrorResponseHeader(response);
-                            response.getOutputStream().write(unAuthenticationMsg);
-                        }
-                )
-                .and();
-        http.authorizeRequests()
-                .antMatchers("/*.html", "/*.js", "/components/**", "/directives/**", "/layout/**"
-                        , "/utils/**", "/api/public/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic(Customizer.withDefaults());
-        // Add JWT token filter
-        http.addFilterBefore(
-                jwtTokenFilter,
-                UsernamePasswordAuthenticationFilter.class
-        );
+        http.authorizeRequests(
+                        (authorizeRequests) -> authorizeRequests.antMatchers(this.adminServer.path("/assets/**")).permitAll()
+                                .antMatchers(this.adminServer.path("/actuator/info")).permitAll()
+                                .antMatchers(this.adminServer.path("/actuator/health")).permitAll()
+                                .antMatchers(this.adminServer.path("/login")).permitAll().anyRequest().authenticated()
+                ).formLogin(
+                        (formLogin) -> formLogin.loginPage(this.adminServer.path("/login")).successHandler(successHandler).and()
+                ).logout((logout) -> logout.logoutUrl(this.adminServer.path("/logout"))).httpBasic(Customizer.withDefaults())
+                .csrf().disable()
+                .rememberMe((rememberMe) -> rememberMe.key(UUID.randomUUID().toString()).tokenValiditySeconds(1209600));
     }
 
+    // Required to provide UserDetailsService for "remember functionality"
     @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser(security.getUser().getName())
+                .password("{noop}" + security.getUser().getPassword()).roles("USER");
     }
 
 

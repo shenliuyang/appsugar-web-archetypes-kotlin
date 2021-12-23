@@ -19,9 +19,11 @@ val springfoxVersion: String by project
 val entityGraphVersion: String by project
 
 repositories { repos.forEach { maven(it) } }
-dependencyManagement { imports {
-    mavenBom("de.codecentric:spring-boot-admin-dependencies:$springBootAdminVersion")
-} }
+dependencyManagement {
+    imports {
+        mavenBom("de.codecentric:spring-boot-admin-dependencies:$springBootAdminVersion")
+    }
+}
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -30,24 +32,31 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.cosium.spring.data:spring-data-jpa-entity-graph:$entityGraphVersion")
     implementation("com.querydsl:querydsl-jpa")
-    implementation("com.h2database:h2")
-    implementation("mysql:mysql-connector-java")
-    implementation("de.codecentric:spring-boot-admin-starter-client")
-    implementation("org.jolokia:jolokia-core")
     implementation("org.apache.commons:commons-lang3")
-    implementation("com.lmax:disruptor:3.4.4")
-    implementation("io.jsonwebtoken:jjwt:0.9.1")
-    implementation("net.logstash.logback:logstash-logback-encoder:6.6")
+    //cloud for env restart
+    implementation("org.springframework.cloud:spring-cloud-starter:3.1.0")
+    implementation("de.codecentric:spring-boot-admin-starter-client")
+    implementation("de.codecentric:spring-boot-admin-starter-server")
+    implementation("org.jolokia:jolokia-core")
 
+    runtimeOnly("com.h2database:h2")
+    runtimeOnly("mysql:mysql-connector-java")
+
+    val versions = dependencyManagement.importedProperties
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework:spring-context-indexer")
-    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jpa")
+    annotationProcessor("com.querydsl:querydsl-apt:${versions["querydsl.version"]}:jpa")
     annotationProcessor("javax.annotation:javax.annotation-api")
     annotationProcessor("javax.persistence:javax.persistence-api")
 
 
     testImplementation("org.springframework.security:spring-security-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude("org.junit.vintage", "junit-vintage-engine") }
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(
+            "org.junit.vintage",
+            "junit-vintage-engine"
+        )
+    }
     testImplementation("org.apache.ant:ant:1.10.1")
     testImplementation("org.dbunit:dbunit:2.5.4")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
@@ -68,7 +77,7 @@ tasks.withType(JavaCompile::class) { options.encoding = "UTF-8" }
 tasks {
     bootRun {
         sourceResources(sourceSets["main"])
-        systemProperty("spring.datasource.hikari.jdbcUrl","jdbc:h2:~/tmp/appsugar-integration-test")
+        systemProperty("spring.datasource.hikari.jdbcUrl", "jdbc:h2:~/tmp/appsugar-integration-test")
         systemProperty("logging.config", "classpath:logback-console.xml")
         systemProperty("logging.level.ROOT", "INFO")
     }
@@ -90,7 +99,13 @@ tasks {
                 }
                 intoLayer("dependencies")
             }
-            layerOrder = listOf("dependencies", "spring-boot-loader", "frequency-change-dependencies","snapshot-dependencies", "application")
+            layerOrder = listOf(
+                "dependencies",
+                "spring-boot-loader",
+                "frequency-change-dependencies",
+                "snapshot-dependencies",
+                "application"
+            )
         }
     }
     test {

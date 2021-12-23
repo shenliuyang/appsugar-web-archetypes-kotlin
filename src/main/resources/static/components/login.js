@@ -43,6 +43,5 @@ export default {
               </el-form-item>
           </el-form>
       </el-card>
-
   `,
 };

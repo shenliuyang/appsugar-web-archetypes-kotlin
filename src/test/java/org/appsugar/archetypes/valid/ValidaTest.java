@@ -1,8 +1,6 @@
 package org.appsugar.archetypes.valid;
 
-import lombok.val;
 import org.appsugar.archetypes.BaseIntegrationTest;
-import org.appsugar.archetypes.security.jwt.RequestUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,9 +19,7 @@ public class ValidaTest extends BaseIntegrationTest {
 
     @Test
     public void testValidate() {
-        RequestUser u = new RequestUser();
-        val err = v.validate(u);
-        logger.debug("error is {}", err);
+
     }
 
 }
